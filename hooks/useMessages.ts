@@ -12,6 +12,7 @@ import {
 import { messagesApi } from "@/lib/api/messages.api";
 import { SendMessagePayload, Message } from "@/types/message";
 import toast from "react-hot-toast";
+import { APP_CONFIG } from "@/lib/constants/config";
 
 export function useMessages(conversationId?: string | null) {
   const dispatch = useAppDispatch();
@@ -56,26 +57,28 @@ export function useMessages(conversationId?: string | null) {
         dispatch(addMessage(sentMsg));
         dispatch(setReplyToMessage(null));
 
-        // Trigger an automated mock reply if mock is active for realistic demo
-        setTimeout(() => {
-          const mockReplies = [
-            "Sounds good! Let's ship it. 🚀",
-            "Got it! I will review the updates now.",
-            "That looks super clean! Great work.",
-            "Thanks for the update! 💯",
-          ];
-          const randomReply = mockReplies[Math.floor(Math.random() * mockReplies.length)];
-          const replyMsg: Message = {
-            id: `msg-reply-${Date.now()}`,
-            conversationId: currentConvId,
-            senderId: "user-002",
-            content: randomReply,
-            contentType: "text",
-            status: "delivered",
-            createdAt: new Date().toISOString(),
-          };
-          dispatch(addMessage(replyMsg));
-        }, 1800);
+        if (APP_CONFIG.enableMock) {
+          // Trigger an automated mock reply if mock is active for realistic demo
+          setTimeout(() => {
+            const mockReplies = [
+              "Sounds good! Let's ship it. 🚀",
+              "Got it! I will review the updates now.",
+              "That looks super clean! Great work.",
+              "Thanks for the update! 💯",
+            ];
+            const randomReply = mockReplies[Math.floor(Math.random() * mockReplies.length)];
+            const replyMsg: Message = {
+              id: `msg-reply-${Date.now()}`,
+              conversationId: currentConvId,
+              senderId: "user-002",
+              content: randomReply,
+              contentType: "text",
+              status: "delivered",
+              createdAt: new Date().toISOString(),
+            };
+            dispatch(addMessage(replyMsg));
+          }, 1800);
+        }
 
         return sentMsg;
       } catch (error: any) {

@@ -14,7 +14,7 @@ export default function LoginPage() {
       <section className="hidden lg:flex lg:w-[55%] xl:w-[56%] relative h-screen overflow-hidden shrink-0">
         {/* Full-Height 3D Background Image */}
         <Image
-          src="/images/login-hero.png"
+          src="/images/ChatGPT Image Aug 21, 2026, 10_53_28 PM copy.png"
           alt="Chatter 3D Showcase"
           fill
           priority

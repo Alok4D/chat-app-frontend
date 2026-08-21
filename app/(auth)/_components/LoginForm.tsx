@@ -57,12 +57,7 @@ export const LoginForm: React.FC = () => {
             Phone Number
           </label>
           <div className="flex items-center h-[46px] border border-[#E2E8F0] rounded-lg bg-white focus-within:border-[#5844ED] transition-colors overflow-hidden">
-            {/* Country Dropdown */}
-            <div className="flex items-center gap-1.5 px-3 h-full bg-white border-r border-[#E2E8F0] text-[13px] text-[#0F172A] shrink-0 select-none">
-              <span className="text-sm leading-none">🇧🇩</span>
-              <span className="font-medium">+880</span>
-              <ChevronDown className="w-3 h-3 text-[#94A3B8]" />
-            </div>
+           
             <input
               type="tel"
               placeholder="Enter your phone number"
@@ -70,11 +65,6 @@ export const LoginForm: React.FC = () => {
               {...register("phone")}
             />
           </div>
-          {errors.phone ? (
-            <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone.message}</p>
-          ) : (
-            <p className="mt-1 text-[11px] text-[#94A3B8]">We'll send you a verification code</p>
-          )}
         </div>
 
         {/* Your Name Field */}

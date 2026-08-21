@@ -1,174 +1,111 @@
 import { apiClient } from "./client";
 import { Conversation, ConversationFilterParams } from "@/types/conversation";
-import { MOCK_USERS } from "./users.api";
-import { MOCK_CURRENT_USER } from "./auth.api";
 import { APP_CONFIG } from "../constants/config";
+import { mapUser } from "./auth.api";
+import { Message } from "@/types/message";
 
-export let MOCK_CONVERSATIONS: any[] = [
-  {
-    id: "conv-001",
-    type: "direct",
-    participants: [MOCK_CURRENT_USER, MOCK_USERS[0]], // Sarah Chen
-    unreadCount: 2,
-    isPinned: true,
-    lastMessage: {
-      id: "msg-101",
-      conversationId: "conv-001",
-      senderId: MOCK_USERS[0].id,
-      content: "Hey Alex! Just checked out the new design system components. They look pristine! 🌟",
-      contentType: "text",
-      status: "delivered",
-      createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-    },
-    createdAt: "2024-02-01T10:00:00Z",
-    updatedAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-  },
-  {
-    id: "conv-002",
-    type: "group",
-    name: "Design & Frontend Core",
-    avatarUrl: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=150&auto=format&fit=crop&q=80",
-    description: "Coordination between UI design and frontend architecture",
-    participants: [MOCK_CURRENT_USER, MOCK_USERS[0], MOCK_USERS[1], MOCK_USERS[3]],
-    unreadCount: 0,
-    isPinned: true,
-    lastMessage: {
-      id: "msg-201",
-      conversationId: "conv-002",
-      senderId: MOCK_USERS[1].id,
-      content: "Marcus: We'll push the real-time websocket microservice updates by EOD.",
+export function mapConversation(apiConv: any, currentUserId: string): Conversation {
+  if (!apiConv) return null as any;
+  const id = apiConv.id || apiConv._id;
+
+  let participants = (apiConv.participants || []).map(mapUser);
+  if (apiConv.participant) {
+    participants = [mapUser(apiConv.participant)];
+  }
+
+  let lastMessage: Message | undefined;
+  if (apiConv.lastMessage && apiConv.lastMessage.text !== undefined) {
+    lastMessage = {
+      id: apiConv.lastMessage._id || `last-msg-${id}`,
+      conversationId: id,
+      senderId: apiConv.lastMessage.sender,
+      content: apiConv.lastMessage.text || "",
       contentType: "text",
       status: "read",
-      createdAt: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
-    },
-    createdAt: "2024-02-03T10:00:00Z",
-    updatedAt: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
-  },
-  {
-    id: "conv-003",
-    type: "direct",
-    participants: [MOCK_CURRENT_USER, MOCK_USERS[1]], // Marcus Vance
-    unreadCount: 0,
-    isPinned: false,
-    lastMessage: {
-      id: "msg-301",
-      conversationId: "conv-003",
-      senderId: MOCK_CURRENT_USER.id,
-      content: "Got it, I will prepare the client-side event handlers.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
-    },
-    createdAt: "2024-02-05T12:00:00Z",
-    updatedAt: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
-  },
-  {
-    id: "conv-004",
-    type: "direct",
-    participants: [MOCK_CURRENT_USER, MOCK_USERS[2]], // Elena Rostova
-    unreadCount: 1,
-    isPinned: false,
-    lastMessage: {
-      id: "msg-401",
-      conversationId: "conv-004",
-      senderId: MOCK_USERS[2].id,
-      content: "Sent over the benchmark comparison charts for the latency audit.",
-      contentType: "text",
-      status: "delivered",
-      createdAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
-    },
-    createdAt: "2024-02-06T14:00:00Z",
-    updatedAt: new Date(Date.now() - 5 * 3600 * 1000).toISOString(),
-  },
-  {
-    id: "conv-005",
-    type: "direct",
-    participants: [MOCK_CURRENT_USER, MOCK_USERS[3]], // David Kim
-    unreadCount: 0,
-    isPinned: false,
-    lastMessage: {
-      id: "msg-501",
-      conversationId: "conv-005",
-      senderId: MOCK_USERS[3].id,
-      content: "Let me know when you're free for a quick code review.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
-    },
-    createdAt: "2024-02-07T09:00:00Z",
-    updatedAt: new Date(Date.now() - 24 * 3600 * 1000).toISOString(),
-  },
-];
+      createdAt: apiConv.lastMessage.createdAt || apiConv.updatedAt || new Date().toISOString(),
+    };
+  }
+
+  // Ensure conversation has a default name if it is group and none is set
+  const name = apiConv.name || (apiConv.type === "group" ? "Group Conversation" : undefined);
+
+  return {
+    id,
+    type: apiConv.type || "direct",
+    name,
+    description: apiConv.description || "",
+    participants,
+    lastMessage,
+    unreadCount: apiConv.unreadCount || 0,
+    createdBy: apiConv.createdBy,
+    createdAt: apiConv.createdAt || new Date().toISOString(),
+    updatedAt: apiConv.updatedAt || new Date().toISOString(),
+  };
+}
 
 export const conversationsApi = {
-  async getConversations(params?: ConversationFilterParams): Promise<any[]> {
+  async getConversations(params?: ConversationFilterParams): Promise<Conversation[]> {
     if (APP_CONFIG.enableMock) {
-      await new Promise((res) => setTimeout(res, 200));
-      let list = [...MOCK_CONVERSATIONS];
-      if (params?.type && params.type !== "all") {
-        list = list.filter((c) => c.type === params.type);
-      }
-      if (params?.search) {
-        const q = params.search.toLowerCase();
-        list = list.filter((c) => {
-          if (c.type === "group") {
-            return c.name?.toLowerCase().includes(q);
-          }
-          const other = c.participants.find((p: any) => p.id !== MOCK_CURRENT_USER.id);
-          return other?.name.toLowerCase().includes(q) || other?.phone.includes(q);
-        });
-      }
-      return list;
+      return [];
     }
 
-    const query = new URLSearchParams();
-    if (params?.type && params.type !== "all") query.set("type", params.type);
-    if (params?.search) query.set("search", params.search);
+    const currentStoredUser = typeof window !== "undefined" ? localStorage.getItem("auth_user") : null;
+    const currentUserId = currentStoredUser ? JSON.parse(currentStoredUser).id : "";
 
-    const response = await apiClient.get<any[]>(`/conversations?${query.toString()}`);
-    return response.data;
+    // The backend lists conversations at GET /conversations
+    const response = await apiClient.get<any>("/conversations");
+    const rawList = response.data?.data || [];
+    
+    let list = rawList.map((c: any) => mapConversation(c, currentUserId));
+
+    // Client-side filtering by type and search query
+    if (params?.type && params.type !== "all") {
+      list = list.filter((c: any) => c.type === params.type);
+    }
+
+    if (params?.search) {
+      const q = params.search.toLowerCase();
+      list = list.filter((c: any) => {
+        if (c.type === "group") {
+          return c.name?.toLowerCase().includes(q);
+        }
+        return c.participants.some((p: any) => p.name.toLowerCase().includes(q) || p.phone.includes(q));
+      });
+    }
+
+    return list;
   },
 
-  async getConversationById(id: string): Promise<any | null> {
+  async getConversationById(id: string): Promise<Conversation | null> {
     if (APP_CONFIG.enableMock) {
-      return MOCK_CONVERSATIONS.find((c) => c.id === id) || null;
+      return null;
     }
-    const response = await apiClient.get<any>(`/conversations/${id}`);
-    return response.data;
+    const currentStoredUser = typeof window !== "undefined" ? localStorage.getItem("auth_user") : null;
+    const currentUserId = currentStoredUser ? JSON.parse(currentStoredUser).id : "";
+
+    // The backend does not have GET /conversations/:id directly in the routes list (or does it? yes, the swagger documents /conversations/{id}/messages and PATCH /conversations/{id}).
+    // Let's fetch all and find the matching one, or call GET /conversations.
+    const conversations = await this.getConversations();
+    return conversations.find((c) => c.id === id) || null;
   },
 
-  async createDirectConversation(userId: string): Promise<any> {
+  async createDirectConversation(userId: string): Promise<Conversation> {
     if (APP_CONFIG.enableMock) {
-      const existing = MOCK_CONVERSATIONS.find(
-        (c) => c.type === "direct" && c.participants.some((p: any) => p.id === userId)
-      );
-      if (existing) return existing;
-
-      const targetUser = MOCK_USERS.find((u) => u.id === userId);
-      if (!targetUser) throw new Error("User not found");
-
-      const newConv = {
-        id: `conv-direct-${Date.now()}`,
-        type: "direct" as const,
-        participants: [MOCK_CURRENT_USER, targetUser],
-        unreadCount: 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      };
-      MOCK_CONVERSATIONS.unshift(newConv);
-      return newConv;
+      throw new Error("Mock direct conversation not supported");
     }
 
-    const response = await apiClient.post<any>("/conversations/direct", { userId });
-    return response.data;
+    const currentStoredUser = typeof window !== "undefined" ? localStorage.getItem("auth_user") : null;
+    const currentUserId = currentStoredUser ? JSON.parse(currentStoredUser).id : "";
+
+    // Start direct conversation: POST /conversations with { userId }
+    const response = await apiClient.post<any>("/conversations", { userId });
+    return mapConversation(response.data, currentUserId);
   },
 
   async markAsRead(conversationId: string): Promise<void> {
     if (APP_CONFIG.enableMock) {
-      const conv = MOCK_CONVERSATIONS.find((c) => c.id === conversationId);
-      if (conv) conv.unreadCount = 0;
       return;
     }
-    await apiClient.put(`/conversations/${conversationId}/read`);
+    // Note: Swagger doesn't list an explicit markAsRead PUT endpoint. Let's make it a no-op to prevent exceptions.
   },
 };

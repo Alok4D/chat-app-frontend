@@ -1,165 +1,77 @@
 import { apiClient } from "./client";
 import { Message, SendMessagePayload } from "@/types/message";
-import { MOCK_CURRENT_USER } from "./auth.api";
-import { MOCK_USERS } from "./users.api";
-import { MOCK_CONVERSATIONS } from "./conversations.api";
 import { APP_CONFIG } from "../constants/config";
+import { mapUser } from "./auth.api";
 
-const INITIAL_MESSAGES: Record<string, Message[]> = {
-  "conv-001": [
-    {
-      id: "m-001",
-      conversationId: "conv-001",
-      senderId: MOCK_CURRENT_USER.id,
-      content: "Hi Sarah! Have you checked the new design mockup for the chat layout?",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 25 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "m-002",
-      conversationId: "conv-001",
-      senderId: MOCK_USERS[0].id,
-      sender: MOCK_USERS[0],
-      content: "Yes! The glassmorphism accents and dark mode contrast are looking super clean.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 18 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "m-003",
-      conversationId: "conv-001",
-      senderId: MOCK_CURRENT_USER.id,
-      content: "Awesome! I'm adding typing indicators and smooth auto-scroll hooks as well.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "m-004",
-      conversationId: "conv-001",
-      senderId: MOCK_USERS[0].id,
-      sender: MOCK_USERS[0],
-      content: "Hey Alex! Just checked out the new design system components. They look pristine! 🌟",
-      contentType: "text",
-      status: "delivered",
-      reactions: [{ emoji: "🔥", count: 2, users: [MOCK_CURRENT_USER.id, MOCK_USERS[0].id] }],
-      createdAt: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
-    },
-  ],
-  "conv-002": [
-    {
-      id: "m-101",
-      conversationId: "conv-002",
-      senderId: MOCK_USERS[0].id,
-      sender: MOCK_USERS[0],
-      content: "Team, we should align on the real-time websocket packet schemas.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 90 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "m-102",
-      conversationId: "conv-002",
-      senderId: MOCK_USERS[1].id,
-      sender: MOCK_USERS[1],
-      content: "Agreed. I have documented the events: 'message:send', 'typing:start', 'user:status'.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "m-103",
-      conversationId: "conv-002",
-      senderId: MOCK_CURRENT_USER.id,
-      content: "Great, I will ensure Redux state updates optimistically upon emit.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 45 * 60 * 1000).toISOString(),
-    },
-    {
-      id: "m-104",
-      conversationId: "conv-002",
-      senderId: MOCK_USERS[1].id,
-      sender: MOCK_USERS[1],
-      content: "Marcus: We'll push the real-time websocket microservice updates by EOD.",
-      contentType: "text",
-      status: "read",
-      createdAt: new Date(Date.now() - 35 * 60 * 1000).toISOString(),
-    },
-  ],
-};
+export function mapMessage(apiMsg: any, participants: any[] = []): Message {
+  if (!apiMsg) return null as any;
+  const id = apiMsg.id || apiMsg._id;
+  const senderId = apiMsg.sender;
+  
+  // Find sender object in participants list
+  const senderUser = participants.find((p) => p.id === senderId || p._id === senderId);
 
-const mockMessageStore: Record<string, Message[]> = { ...INITIAL_MESSAGES };
+  return {
+    id,
+    conversationId: apiMsg.conversation,
+    senderId,
+    sender: senderUser ? mapUser(senderUser) : {
+      id: senderId,
+      name: "User",
+      phone: "",
+      avatarUrl: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(senderId)}`,
+      isOnline: false,
+      createdAt: new Date().toISOString(),
+    },
+    content: apiMsg.text || "",
+    contentType: "text",
+    status: "read",
+    createdAt: apiMsg.createdAt || new Date().toISOString(),
+  };
+}
 
 export const messagesApi = {
   async getMessages(conversationId: string): Promise<Message[]> {
     if (APP_CONFIG.enableMock) {
-      await new Promise((res) => setTimeout(res, 180));
-      return mockMessageStore[conversationId] || [];
+      return [];
     }
 
-    const response = await apiClient.get<Message[]>(`/conversations/${conversationId}/messages`);
-    return response.data;
+    // Get conversation details first to retrieve participants list for mapping sender info
+    const conversationsRes = await apiClient.get<any>("/conversations");
+    const rawConversations = conversationsRes.data?.data || [];
+    const conversation = rawConversations.find(
+      (c: any) => c._id === conversationId || c.id === conversationId
+    );
+
+    let participants: any[] = [];
+    if (conversation) {
+      participants = conversation.participants || [];
+      if (conversation.participant) {
+        participants = [conversation.participant];
+      }
+    }
+
+    const response = await apiClient.get<any>(`/conversations/${conversationId}/messages`);
+    const apiMessages = response.data?.messages || [];
+    
+    return apiMessages.map((m: any) => mapMessage(m, participants));
   },
 
   async sendMessage(payload: SendMessagePayload): Promise<Message> {
     if (APP_CONFIG.enableMock) {
-      await new Promise((res) => setTimeout(res, 200));
-      const newMessage: Message = {
-        id: `msg-${Date.now()}`,
-        conversationId: payload.conversationId,
-        senderId: MOCK_CURRENT_USER.id,
-        content: payload.content,
-        contentType: payload.contentType || "text",
-        attachments: payload.attachments,
-        replyToId: payload.replyToId,
-        status: "sent",
-        createdAt: new Date().toISOString(),
-      };
-
-      if (!mockMessageStore[payload.conversationId]) {
-        mockMessageStore[payload.conversationId] = [];
-      }
-      mockMessageStore[payload.conversationId].push(newMessage);
-
-      // Update last message in mock conversation
-      const conv = MOCK_CONVERSATIONS.find((c) => c.id === payload.conversationId);
-      if (conv) {
-        conv.lastMessage = newMessage;
-        conv.updatedAt = newMessage.createdAt;
-      }
-
-      return newMessage;
+      throw new Error("Mock message sending not supported");
     }
 
-    const response = await apiClient.post<Message>(
-      `/conversations/${payload.conversationId}/messages`,
-      payload
-    );
-    return response.data;
+    // Send via POST /messages with { conversationId, text }
+    const response = await apiClient.post<any>("/messages", {
+      conversationId: payload.conversationId,
+      text: payload.content,
+    });
+
+    return mapMessage(response.data);
   },
 
   async reactToMessage(messageId: string, emoji: string): Promise<void> {
-    if (APP_CONFIG.enableMock) {
-      for (const convId of Object.keys(mockMessageStore)) {
-        const msg = mockMessageStore[convId].find((m) => m.id === messageId);
-        if (msg) {
-          if (!msg.reactions) msg.reactions = [];
-          const existing = msg.reactions.find((r) => r.emoji === emoji);
-          if (existing) {
-            if (!existing.users.includes(MOCK_CURRENT_USER.id)) {
-              existing.users.push(MOCK_CURRENT_USER.id);
-              existing.count += 1;
-            }
-          } else {
-            msg.reactions.push({ emoji, count: 1, users: [MOCK_CURRENT_USER.id] });
-          }
-          break;
-        }
-      }
-      return;
-    }
-    await apiClient.post(`/messages/${messageId}/reactions`, { emoji });
+    // Note: Render backend does not support reaction endpoint. No-op to avoid crashing UI.
   },
 };

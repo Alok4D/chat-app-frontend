@@ -73,3 +73,27 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```bash
 npm run build
 ```
+
+---
+
+## 🧠 Part 3: Thought Process Write-up
+
+### 1. Architecture, Libraries & Approach (Part 1)
+- **Framework (Next.js App Router)**: We leveraged Next.js App Router for strict path-based route management, optimizing loading performance, and clean component nesting.
+- **State Management (Redux Toolkit)**: Global Redux slices are utilized to synchronize the logged-in profile, conversation metadata, unread counts, and active message streams. This ensures consistency when WebSocket events are received in the background.
+- **Form Management & Validation**: Used `react-hook-form` paired with `zod` schema resolvers. Madagascar. This ensures strong input type safety and validates phone number rules before dispatching any API requests.
+- **Trade-offs**: We chose client-side state mapping helpers instead of modifying the existing high-fidelity UI components. This minimizes regression risks and maps the backend's MongoDB `_id` schemas cleanly to standard frontend model parameters.
+
+### 2. Design Choices & Visual Aesthetics (Part 2)
+- Built a premium glassmorphic dark-mode palette utilizing tailored Slate-HSL values instead of default browser styles.
+- Integrated rich Lucide icons, pulsing presence indicators, and interactive micro-animations (scale active state, slide-down banners) to establish a premium SaaS vibe.
+- Implemented responsive sidebars for mobile screens with backdrop overlays.
+
+### 3. AI Tools Usage & Collaboration
+- **Boilerplate & Directory Scaffolding**: Utilized AI commands to cleanly structure base folders and create reusable UI tokens (`Button.tsx`, `Input.tsx`, `Avatar.tsx`).
+- **Swagger Documentation Extraction**: Used AI to parse the live REST and WebSocket endpoints, identifying properties (such as `/users/search?q=`) and return schemas.
+- **Manual Additions**: All API mapping routines, real-time debounce search controls, Redux state synchronization, and Socket.IO event mapping handlers were customized and thoroughly refined to ensure seamless execution.
+
+### 4. Future Improvements
+- Implement paginated virtualized list renders (`react-virtual`) for conversation histories containing thousands of messages.
+- Enable end-to-end media compression before sending attachments.

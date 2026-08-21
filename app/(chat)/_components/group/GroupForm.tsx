@@ -15,6 +15,7 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
   const [error, setError] = useState<string | null>(null);
 
   const handleToggle = (userId: string) => {
+    setError(null);
     setSelectedIds((prev) =>
       prev.includes(userId) ? prev.filter((id) => id !== userId) : [...prev, userId]
     );
@@ -26,12 +27,16 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
       setError("Please enter a group name");
       return;
     }
-    if (selectedIds.length === 0) {
-      setError("Please select at least one participant");
+    if (selectedIds.length < 2) {
+      setError("Please select at least 2 participants (groups require at least 3 members total)");
       return;
     }
     setError(null);
-    await onSubmit({ name: name.trim(), description: description.trim(), participantIds: selectedIds });
+    try {
+      await onSubmit({ name: name.trim(), description: description.trim(), participantIds: selectedIds });
+    } catch (err: any) {
+      setError(err?.message || "Failed to create group");
+    }
   };
 
   return (
@@ -47,7 +52,11 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
             type="text"
             placeholder="Enter group name..."
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              if (error) setError(null);
+            }}
+            maxLength={59}
             className="flex-1 bg-transparent text-[13.5px] text-[#E6EDF3] placeholder-[#8B949E] outline-none"
           />
           <span className="text-[11px] text-[#8B949E]">{name.length}/59</span>
@@ -57,7 +66,7 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
       {/* Participant Selector */}
       <div>
         <label className="block text-[12.5px] font-semibold text-[#8B949E] mb-1.5 uppercase tracking-wider">
-          Add Participants
+          Add Participants (minimum 2)
         </label>
         <ParticipantSelector
           users={[]}
@@ -66,7 +75,11 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
         />
       </div>
 
-      {error && <p className="text-xs text-[#FF7070] font-medium">{error}</p>}
+      {error && (
+        <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-400 font-medium">
+          {error}
+        </div>
+      )}
 
       {/* Action Buttons */}
       <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#30363D]">
@@ -79,8 +92,8 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
         </button>
         <button
           type="submit"
-          disabled={isLoading}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-bold bg-[#6C63FF] text-white hover:bg-[#5a52e8] disabled:opacity-60 shadow-md shadow-[#6C63FF]/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
+          disabled={isLoading || !name.trim() || selectedIds.length < 2}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[13px] font-bold bg-[#6C63FF] text-white hover:bg-[#5a52e8] disabled:opacity-50 disabled:cursor-not-allowed shadow-md shadow-[#6C63FF]/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
         >
           {isLoading ? (
             <>

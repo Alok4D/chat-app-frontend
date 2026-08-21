@@ -11,8 +11,7 @@ export interface AuthUser {
 
 export interface LoginCredentials {
   phone: string;
-  password?: string;
-  otp?: string;
+  name?: string;
 }
 
 export interface AuthResponse {

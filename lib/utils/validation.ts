@@ -8,8 +8,7 @@ export const phoneSchema = z
 
 export const loginFormSchema = z.object({
   phone: phoneSchema,
-  password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
-  otp: z.string().length(6, "OTP must be 6 digits").optional().or(z.literal("")),
+  name: z.string().min(2, "Name must be at least 2 characters").max(40, "Name is too long"),
 });
 
 export type LoginFormData = z.infer<typeof loginFormSchema>;

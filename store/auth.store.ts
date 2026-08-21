@@ -1,16 +1,30 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AuthState, AuthUser } from "@/types/auth";
-import { MOCK_CURRENT_USER } from "@/lib/api/auth.api";
 
-const initialState: AuthState = {
-  user: typeof window !== "undefined" && localStorage.getItem("auth_user")
-    ? JSON.parse(localStorage.getItem("auth_user")!)
-    : MOCK_CURRENT_USER,
-  token: typeof window !== "undefined" ? localStorage.getItem("auth_token") : "mock_token",
-  isAuthenticated: true,
-  isLoading: false,
-  error: null,
+const getInitialState = (): AuthState => {
+  if (typeof window === "undefined") {
+    return { user: null, token: null, isAuthenticated: false, isLoading: false, error: null };
+  }
+  const token = localStorage.getItem("auth_token");
+  const storedUser = localStorage.getItem("auth_user");
+  let user = null;
+  if (storedUser) {
+    try {
+      user = JSON.parse(storedUser);
+    } catch {
+      // ignore
+    }
+  }
+  return {
+    user,
+    token,
+    isAuthenticated: !!token,
+    isLoading: false,
+    error: null,
+  };
 };
+
+const initialState: AuthState = getInitialState();
 
 export const authSlice = createSlice({
   name: "auth",

@@ -7,18 +7,17 @@ import {
   addConversation,
   setActiveConversationId,
   setIsLoadingConversations,
-  setFilterType,
   setSearchQuery,
 } from "@/store/chat.store";
 import { conversationsApi } from "@/lib/api/conversations.api";
-import { Conversation, ConversationFilterParams } from "@/types/conversation";
+import { ConversationFilterParams } from "@/types/conversation";
+import toast from "react-hot-toast";
 
 export function useConversations() {
   const dispatch = useAppDispatch();
   const {
     conversations,
     activeConversationId,
-    filterType,
     searchQuery,
     isLoadingConversations,
   } = useAppSelector((state) => state.chat);
@@ -28,18 +27,17 @@ export function useConversations() {
       dispatch(setIsLoadingConversations(true));
       try {
         const data = await conversationsApi.getConversations({
-          type: filterType,
           search: searchQuery,
           ...params,
         });
         dispatch(setConversations(data));
-      } catch (error) {
-        console.error("Failed to fetch conversations:", error);
+      } catch (error: any) {
+        toast.error(error?.message || "Failed to load conversations");
       } finally {
         dispatch(setIsLoadingConversations(false));
       }
     },
-    [dispatch, filterType, searchQuery]
+    [dispatch, searchQuery]
   );
 
   useEffect(() => {
@@ -60,17 +58,15 @@ export function useConversations() {
 
   const startDirectConversation = useCallback(
     async (userId: string) => {
-      const conv = await conversationsApi.createDirectConversation(userId);
-      dispatch(addConversation(conv));
-      dispatch(setActiveConversationId(conv.id));
-      return conv;
-    },
-    [dispatch]
-  );
-
-  const changeFilter = useCallback(
-    (filter: "all" | "direct" | "group") => {
-      dispatch(setFilterType(filter));
+      try {
+        const conv = await conversationsApi.createDirectConversation(userId);
+        dispatch(addConversation(conv));
+        dispatch(setActiveConversationId(conv.id));
+        return conv;
+      } catch (error: any) {
+        toast.error(error?.message || "Failed to start conversation");
+        throw error;
+      }
     },
     [dispatch]
   );
@@ -87,12 +83,10 @@ export function useConversations() {
     activeConversation,
     activeConversationId,
     isLoading: isLoadingConversations,
-    filterType,
     searchQuery,
     selectConversation,
     startDirectConversation,
     refreshConversations: fetchConversations,
-    setFilter: changeFilter,
     setSearch: searchConversations,
   };
 }

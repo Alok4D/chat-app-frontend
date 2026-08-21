@@ -1,29 +1,20 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Message } from "@/types/message";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatTime } from "@/lib/utils/formatTime";
-import { Check, CheckCheck, Smile, Reply } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 export interface MessageBubbleProps {
   message: Message;
   isCurrentUser: boolean;
-  onReact?: (messageId: string, emoji: string) => void;
-  onReply?: (message: Message) => void;
 }
-
-const COMMON_EMOJIS = ["👍", "❤️", "🔥", "🚀", "😂", "🎉"];
 
 export const MessageBubble: React.FC<MessageBubbleProps> = ({
   message,
   isCurrentUser,
-  onReact,
-  onReply,
 }) => {
-  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
-
   return (
     <div
       className={cn(
@@ -49,21 +40,6 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
           </span>
         )}
 
-        {/* Reply quote */}
-        {message.replyTo && (
-          <div
-            className={cn(
-              "text-[11px] px-3 py-1.5 rounded-lg border-l-2 truncate",
-              isCurrentUser
-                ? "border-[#6C63FF] bg-[#6C63FF]/20 text-[#C8C3FF]"
-                : "border-[#30363D] bg-[#21262D] text-[#8B949E]"
-            )}
-          >
-            <span className="font-semibold">{message.replyTo.senderName}: </span>
-            {message.replyTo.content}
-          </div>
-        )}
-
         {/* Main Bubble */}
         <div
           className={cn(
@@ -75,7 +51,7 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
         >
           <p>{message.content}</p>
 
-          {/* Timestamp + read receipt */}
+          {/* Timestamp */}
           <div
             className={cn(
               "flex items-center gap-1 mt-1 text-[10.5px] select-none",
@@ -83,68 +59,8 @@ export const MessageBubble: React.FC<MessageBubbleProps> = ({
             )}
           >
             <span>{formatTime(message.createdAt)}</span>
-            {isCurrentUser && (
-              message.status === "read" ? (
-                <CheckCheck className="w-3.5 h-3.5 text-[#C8C3FF]" />
-              ) : message.status === "delivered" ? (
-                <CheckCheck className="w-3.5 h-3.5 text-[#C8C3FF]/60" />
-              ) : (
-                <Check className="w-3.5 h-3.5 text-[#C8C3FF]/60" />
-              )
-            )}
           </div>
         </div>
-
-        {/* Reactions */}
-        {message.reactions && message.reactions.length > 0 && (
-          <div className={cn("flex flex-wrap gap-1", isCurrentUser ? "justify-end" : "justify-start")}>
-            {message.reactions.map((reaction, i) => (
-              <button
-                key={i}
-                onClick={() => onReact?.(message.id, reaction.emoji)}
-                className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-[#21262D] border border-[#30363D] text-[#E6EDF3] hover:border-[#6C63FF]/50 hover:bg-[#6C63FF]/10 transition-colors"
-              >
-                <span>{reaction.emoji}</span>
-                <span className="text-[10px] font-semibold text-[#8B949E]">{reaction.count}</span>
-              </button>
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* Floating actions */}
-      <div
-        className={cn(
-          "absolute top-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center gap-0.5 bg-[#161B22] border border-[#30363D] rounded-xl px-1.5 py-1 shadow-lg z-20",
-          isCurrentUser ? "-left-[4.5rem]" : "-right-[4.5rem]"
-        )}
-      >
-        <button
-          onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-          className="p-1 rounded-lg text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-colors"
-        >
-          <Smile className="w-3.5 h-3.5" />
-        </button>
-        <button
-          onClick={() => onReply?.(message)}
-          className="p-1 rounded-lg text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-colors"
-        >
-          <Reply className="w-3.5 h-3.5" />
-        </button>
-
-        {showEmojiPicker && (
-          <div className="absolute bottom-full mb-1 left-0 flex items-center gap-1 p-1.5 bg-[#161B22] border border-[#30363D] rounded-xl shadow-xl z-30 animate-scaleUp">
-            {COMMON_EMOJIS.map((emoji) => (
-              <button
-                key={emoji}
-                onClick={() => { onReact?.(message.id, emoji); setShowEmojiPicker(false); }}
-                className="hover:scale-125 transition-transform p-0.5 text-sm"
-              >
-                {emoji}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ export const CTA: React.FC = () => {
                 <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href={ROUTES.API_DOCS}
+                href="#features"
                 className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-white border-2 border-white/40 px-5 py-3 rounded-xl hover:bg-white/10 transition-all whitespace-nowrap"
               >
                 Learn More

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { MessageSquareMore, ArrowRight, Menu, X } from "lucide-react";
+import { MessageSquareMore, Menu, X } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 
 export const Navbar: React.FC = () => {
@@ -35,9 +35,7 @@ export const Navbar: React.FC = () => {
         <nav className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#444466]">
           <a href="#features" className="hover:text-[#6C63FF] transition-colors">Features</a>
           <a href="#howit" className="hover:text-[#6C63FF] transition-colors">How it works</a>
-          <a href="#" className="hover:text-[#6C63FF] transition-colors">For Developers</a>
-          <a href={ROUTES.API_DOCS} className="hover:text-[#6C63FF] transition-colors">API Docs</a>
-          <a href="#" className="hover:text-[#6C63FF] transition-colors">Pricing</a>
+          <a href="#preview" className="hover:text-[#6C63FF] transition-colors">Live Preview</a>
         </nav>
 
         {/* Action Buttons - Desktop */}
@@ -68,10 +66,10 @@ export const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-[#EEEEFC] px-4 py-4 space-y-2 animate-slideDown shadow-lg">
-          {["Features", "How it works", "For Developers", "API Docs", "Pricing"].map((item) => (
+          {["Features", "How it works", "Live Preview"].map((item) => (
             <a
               key={item}
-              href="#"
+              href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
               className="block px-3 py-2 text-sm font-medium text-[#444466] hover:text-[#6C63FF] hover:bg-[#F4F3FF] rounded-lg transition-colors"
               onClick={() => setMenuOpen(false)}
             >

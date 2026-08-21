@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addMessage, setConversations, setTyping, updateUserStatus } from "@/store/chat.store";
+import { addMessage, setConversations, updateUserStatus } from "@/store/chat.store";
 import { APP_CONFIG } from "@/lib/constants/config";
 import { mapMessage } from "@/lib/api/messages.api";
 import { conversationsApi } from "@/lib/api/conversations.api";
@@ -11,7 +11,6 @@ import { conversationsApi } from "@/lib/api/conversations.api";
 export function useRealtimeMessages() {
   const dispatch = useAppDispatch();
   const socketRef = useRef<Socket | null>(null);
-  const activeConversationId = useAppSelector((state) => state.chat.activeConversationId);
   const currentUser = useAppSelector((state) => state.auth.user);
   const conversations = useAppSelector((state) => state.chat.conversations);
 
@@ -25,10 +24,6 @@ export function useRealtimeMessages() {
       });
 
       socketRef.current = socket;
-
-      socket.on("connect", () => {
-        console.log("WebSocket connected cleanly");
-      });
 
       // Live event: message:new
       socket.on("message:new", (apiMessage: any) => {
@@ -50,7 +45,7 @@ export function useRealtimeMessages() {
         }
       });
 
-      // Optional status indicators fallback
+      // Status indicator update
       socket.on("user:status", (data: { userId: string; isOnline: boolean; lastSeen?: string }) => {
         dispatch(updateUserStatus(data));
       });
@@ -61,19 +56,7 @@ export function useRealtimeMessages() {
     }
   }, [currentUser, conversations, dispatch]);
 
-  const sendTypingEvent = (isTyping: boolean) => {
-    if (socketRef.current && activeConversationId && currentUser) {
-      socketRef.current.emit("typing", {
-        conversationId: activeConversationId,
-        userId: currentUser.id,
-        userName: currentUser.name,
-        isTyping,
-      });
-    }
-  };
-
   return {
     socket: socketRef.current,
-    sendTypingEvent,
   };
 }

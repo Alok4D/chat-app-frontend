@@ -3,9 +3,9 @@ import { MessageSquareMore, Twitter, Github, Send } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 
 const FOOTER_LINKS = {
-  Product: ["Features", "How it works", "Pricing", "Changelog"],
-  Resources: ["API Docs", "Guides", "Help Center", "Blog"],
-  Company: ["About Us", "Careers", "Contact", "Privacy Policy"],
+  Product: ["Features", "How it works", "Live Preview"],
+  Resources: ["Documentation", "Guides", "Help Center"],
+  Company: ["About Us", "Careers", "Privacy Policy"],
 };
 
 export const Footer: React.FC = () => {

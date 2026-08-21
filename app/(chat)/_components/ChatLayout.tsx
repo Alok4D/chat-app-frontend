@@ -18,11 +18,8 @@ import { setIsMobileSidebarOpen, setIsCreateGroupModalOpen } from "@/store/chat.
 import {
   MessageSquareMore,
   LogOut,
-  BookOpen,
   X,
   UserPlus,
-  Settings,
-  Users,
   Plus,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
@@ -42,9 +39,8 @@ export const ChatLayout: React.FC = () => {
     searchQuery,
     isLoading,
   } = useConversations();
-  const { messages, isLoading: isMessagesLoading, replyTo, sendMessage, reactToMessage, setReplyTo } =
-    useMessages();
-  const { sendTypingEvent } = useRealtimeMessages();
+  const { messages, isLoading: isMessagesLoading, sendMessage } = useMessages();
+  useRealtimeMessages();
   const isMobileSidebarOpen = useAppSelector((s) => s.chat.isMobileSidebarOpen);
 
   const [globalContacts, setGlobalContacts] = useState<User[]>([]);
@@ -76,7 +72,6 @@ export const ChatLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-[#0D1117] text-[#E6EDF3]">
-
       {/* ── ICON RAIL (leftmost, dark) ── */}
       <aside className="hidden sm:flex w-[60px] bg-[#0D1117] border-r border-[#21262D] flex-col items-center justify-between py-4 z-40 shrink-0">
         {/* Top: Brand + Nav icons */}
@@ -92,31 +87,13 @@ export const ChatLayout: React.FC = () => {
 
           {/* Nav icons */}
           <div className="flex flex-col items-center gap-2 mt-2">
-            <button
+            <a
+              href={ROUTES.CHAT}
               title="Messages"
               className="p-2.5 rounded-xl bg-[#6C63FF]/15 text-[#6C63FF] border border-[#6C63FF]/25 hover:bg-[#6C63FF]/25 transition-all"
             >
               <MessageSquareMore className="w-5 h-5" />
-            </button>
-            <button
-              title="Contacts"
-              className="p-2.5 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#161B22] transition-all"
-            >
-              <Users className="w-5 h-5" />
-            </button>
-            <a
-              href={ROUTES.API_DOCS}
-              title="API Docs"
-              className="p-2.5 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#161B22] transition-all"
-            >
-              <BookOpen className="w-5 h-5" />
             </a>
-            <button
-              title="Settings"
-              className="p-2.5 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#161B22] transition-all"
-            >
-              <Settings className="w-5 h-5" />
-            </button>
           </div>
         </div>
 
@@ -128,7 +105,7 @@ export const ChatLayout: React.FC = () => {
             size="sm"
             isOnline={true}
             showStatus
-            className="ring-2 ring-[#6C63FF]/30 cursor-pointer hover:ring-[#6C63FF]/60 transition-all"
+            className="ring-2 ring-[#6C63FF]/30 cursor-pointer"
           />
           <button
             onClick={logout}
@@ -160,7 +137,7 @@ export const ChatLayout: React.FC = () => {
           </button>
         </div>
 
-        {/* Search & Tabs */}
+        {/* Search */}
         <ChatSearch />
 
         {/* Conversation List */}
@@ -172,18 +149,20 @@ export const ChatLayout: React.FC = () => {
             onSelectConversation={handleSelectConv}
           />
 
-          {/* Global Contacts from Search */}
-          {(globalContacts.length > 0 || loadingContacts) && (
+          {/* Global Contacts from Search (Start a conversation feature) */}
+          {(globalContacts.length > 0 || loadingContacts || (searchQuery.trim().length > 0 && globalContacts.length === 0)) && (
             <div className="border-t border-[#21262D] pt-2 pb-4">
               <div className="px-4 py-2 flex items-center gap-1.5">
                 <UserPlus className="w-3 h-3 text-[#6C63FF]" />
                 <span className="text-[10.5px] uppercase tracking-wider font-bold text-[#8B949E]">
-                  Global Contacts
+                  Directory Search
                 </span>
               </div>
               <div className="space-y-0 px-2">
                 {loadingContacts ? (
                   <p className="text-[12px] text-[#8B949E] text-center py-4">Searching...</p>
+                ) : globalContacts.length === 0 ? (
+                  <p className="text-[12px] text-[#8B949E] text-center py-4">No users found</p>
                 ) : (
                   globalContacts.map((contact) => (
                     <div
@@ -211,14 +190,14 @@ export const ChatLayout: React.FC = () => {
           )}
         </div>
 
-        {/* Bottom: New Conversation Button */}
+        {/* Bottom: New Group Conversation Button */}
         <div className="p-3 border-t border-[#21262D]">
           <button
             onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#6C63FF] hover:bg-[#5a52e8] text-white text-[13px] font-semibold shadow-md shadow-[#6C63FF]/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
           >
             <Plus className="w-4 h-4" />
-            New Conversation
+            New Group
           </button>
         </div>
       </div>
@@ -239,16 +218,11 @@ export const ChatLayout: React.FC = () => {
             <MessageList
               messages={messages}
               isLoading={isMessagesLoading}
-              onReact={reactToMessage}
-              onReply={(msg) => setReplyTo(msg)}
             />
             <MessageInput
               onSendMessage={async (text) => {
                 await sendMessage({ content: text, contentType: "text" });
               }}
-              replyTo={replyTo}
-              onCancelReply={() => setReplyTo(null)}
-              onTyping={sendTypingEvent}
             />
           </>
         ) : (

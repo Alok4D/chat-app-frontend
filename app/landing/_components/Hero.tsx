@@ -68,7 +68,7 @@ export const Hero: React.FC = () => {
                 <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href={ROUTES.API_DOCS}
+                href="#preview"
                 className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#1A1A2E] px-6 py-3 rounded-xl border border-[#E0DFFE] bg-white hover:bg-[#F4F3FF] transition-all"
               >
                 View Demo

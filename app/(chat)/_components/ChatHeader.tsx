@@ -4,7 +4,7 @@ import React from "react";
 import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatLastSeen } from "@/lib/utils/formatTime";
-import { Phone, Video, MoreVertical, Menu, Search } from "lucide-react";
+import { Menu } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setIsMobileSidebarOpen } from "@/store/chat.store";
 
@@ -42,6 +42,7 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation }) => {
         <button
           onClick={() => dispatch(setIsMobileSidebarOpen(true))}
           className="md:hidden p-2 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-colors"
+          aria-label="Toggle sidebar"
         >
           <Menu className="w-5 h-5" />
         </button>
@@ -64,21 +65,6 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation }) => {
             {subtitle}
           </p>
         </div>
-      </div>
-
-      {/* Right: Action icons */}
-      <div className="flex items-center gap-1">
-        {[Phone, Video, Search].map((Icon, i) => (
-          <button
-            key={i}
-            className="p-2 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-all"
-          >
-            <Icon className="w-4 h-4" />
-          </button>
-        ))}
-        <button className="p-2 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-all">
-          <MoreVertical className="w-4 h-4" />
-        </button>
       </div>
     </div>
   );

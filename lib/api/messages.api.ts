@@ -36,7 +36,6 @@ export const messagesApi = {
       return [];
     }
 
-    // Get conversation details first to retrieve participants list for mapping sender info
     const conversationsRes = await apiClient.get<any>("/conversations");
     const rawConversations = conversationsRes.data?.data || [];
     const conversation = rawConversations.find(
@@ -62,16 +61,11 @@ export const messagesApi = {
       throw new Error("Mock message sending not supported");
     }
 
-    // Send via POST /messages with { conversationId, text }
     const response = await apiClient.post<any>("/messages", {
       conversationId: payload.conversationId,
       text: payload.content,
     });
 
     return mapMessage(response.data);
-  },
-
-  async reactToMessage(messageId: string, emoji: string): Promise<void> {
-    // Note: Render backend does not support reaction endpoint. No-op to avoid crashing UI.
   },
 };

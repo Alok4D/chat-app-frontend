@@ -2,7 +2,6 @@ import React from "react";
 import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatDate } from "@/lib/utils/formatDate";
-import { Pin, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useAppSelector } from "@/store/hooks";
 
@@ -39,9 +38,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
       onClick={onClick}
       className={cn(
         "group relative flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-150 select-none",
-        isActive
-          ? "bg-[#21262D]"
-          : "hover:bg-[#161B22]"
+        isActive ? "bg-[#21262D]" : "hover:bg-[#161B22]"
       )}
     >
       {/* Active indicator */}
@@ -75,15 +72,11 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
             {conversation.lastMessage?.content || "Started a new conversation"}
           </p>
 
-          <div className="flex items-center gap-1 shrink-0 ml-2">
-            {conversation.isPinned && <Pin className="w-3 h-3 text-[#8B949E] fill-[#8B949E]" />}
-            {conversation.isMuted && <VolumeX className="w-3 h-3 text-[#8B949E]" />}
-            {conversation.unreadCount > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6C63FF] text-white font-bold text-[10px]">
-                {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
-              </span>
-            )}
-          </div>
+          {conversation.unreadCount > 0 && (
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6C63FF] text-white font-bold text-[10px]">
+              {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
+            </span>
+          )}
         </div>
       </div>
     </div>

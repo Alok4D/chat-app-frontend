@@ -92,9 +92,9 @@ export const Avatar: React.FC<AvatarProps> = ({
       {showStatus && !isGroup && (
         <span
           className={cn(
-            "absolute bottom-0 right-0 rounded-full ring-slate-900",
+            "absolute bottom-0 right-0 rounded-full ring-white",
             statusSizeStyles[size],
-            isOnline ? "bg-emerald-500" : "bg-slate-500"
+            isOnline ? "bg-emerald-500" : "bg-slate-400"
           )}
           title={isOnline ? "Online" : "Offline"}
         />

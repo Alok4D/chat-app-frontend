@@ -8,6 +8,7 @@ import {
   setActiveConversationId,
   setIsLoadingConversations,
   setSearchQuery,
+  setFilterType,
 } from "@/store/chat.store";
 import { conversationsApi } from "@/lib/api/conversations.api";
 import { ConversationFilterParams } from "@/types/conversation";
@@ -19,6 +20,7 @@ export function useConversations() {
     conversations,
     activeConversationId,
     searchQuery,
+    filterType,
     isLoadingConversations,
   } = useAppSelector((state) => state.chat);
 
@@ -52,6 +54,13 @@ export function useConversations() {
     [dispatch]
   );
 
+  // Filter conversations by filterType
+  const filteredConversations = conversations.filter((c) => {
+    if (filterType === "direct") return c.type === "direct";
+    if (filterType === "group") return c.type === "group";
+    return true;
+  });
+
   const activeConversation = conversations.find(
     (c) => c.id === activeConversationId
   );
@@ -79,9 +88,12 @@ export function useConversations() {
   );
 
   return {
-    conversations,
+    conversations: filteredConversations,
+    allConversations: conversations,
     activeConversation,
     activeConversationId,
+    filterType,
+    setFilterType: (type: "all" | "direct" | "group") => dispatch(setFilterType(type)),
     isLoading: isLoadingConversations,
     searchQuery,
     selectConversation,

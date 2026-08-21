@@ -21,7 +21,7 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-[#0D1117]">
+      <div className="flex-1 flex items-center justify-center bg-white">
         <LoadingSpinner size="lg" label="Loading messages..." />
       </div>
     );
@@ -30,11 +30,18 @@ export const MessageList: React.FC<MessageListProps> = ({
   return (
     <div
       ref={scrollRef}
-      className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-[#0D1117]"
+      className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-white"
     >
+      {/* Date Chip */}
+      <div className="flex justify-center my-2">
+        <span className="bg-[#F1F5F9] text-[#64748B] text-[11px] font-semibold px-3 py-1 rounded-full shadow-2xs select-none">
+          Today
+        </span>
+      </div>
+
       {messages.length === 0 ? (
-        <div className="h-full flex flex-col items-center justify-center text-center text-[#8B949E] py-12">
-          <p className="text-xs">No messages yet. Send a message to start the conversation! 👋</p>
+        <div className="h-48 flex flex-col items-center justify-center text-center text-[#94A3B8] py-8">
+          <p className="text-xs font-medium">No messages yet. Send a message to start the conversation! 👋</p>
         </div>
       ) : (
         messages.map((message) => (

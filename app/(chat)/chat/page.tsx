@@ -19,7 +19,7 @@ export default function ChatPage() {
 
   if (isLoading || !isAuthenticated) {
     return (
-      <div className="h-screen w-screen bg-slate-950 flex items-center justify-center">
+      <div className="h-screen w-screen bg-[#F8FAFC] flex items-center justify-center">
         <LoadingSpinner size="lg" label="Synchronizing session..." />
       </div>
     );

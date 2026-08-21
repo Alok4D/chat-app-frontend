@@ -43,29 +43,29 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
     <form onSubmit={handleSubmit} className="space-y-4">
       {/* Group Name */}
       <div>
-        <label className="block text-[12.5px] font-semibold text-[#8B949E] mb-1.5 uppercase tracking-wider">
+        <label className="block text-[12.5px] font-semibold text-[#475569] mb-1.5 uppercase tracking-wider">
           Group Name
         </label>
-        <div className="flex items-center gap-2.5 bg-[#0D1117] border border-[#30363D] rounded-xl px-3.5 py-2.5 focus-within:border-[#6C63FF]/60 focus-within:ring-1 focus-within:ring-[#6C63FF]/20 transition-all">
-          <Users className="w-4 h-4 text-[#8B949E] shrink-0" />
+        <div className="flex items-center gap-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 focus-within:border-[#6C63FF] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#6C63FF]/10 transition-all">
+          <Users className="w-4 h-4 text-[#94A3B8] shrink-0" />
           <input
             type="text"
-            placeholder="Enter group name..."
+            placeholder="e.g. Design Team 🎨"
             value={name}
             onChange={(e) => {
               setName(e.target.value);
               if (error) setError(null);
             }}
             maxLength={59}
-            className="flex-1 bg-transparent text-[13.5px] text-[#E6EDF3] placeholder-[#8B949E] outline-none"
+            className="flex-1 bg-transparent text-[13.5px] text-[#0F172A] placeholder-[#94A3B8] outline-none"
           />
-          <span className="text-[11px] text-[#8B949E]">{name.length}/59</span>
+          <span className="text-[11px] text-[#94A3B8]">{name.length}/59</span>
         </div>
       </div>
 
       {/* Participant Selector */}
       <div>
-        <label className="block text-[12.5px] font-semibold text-[#8B949E] mb-1.5 uppercase tracking-wider">
+        <label className="block text-[12.5px] font-semibold text-[#475569] mb-1.5 uppercase tracking-wider">
           Add Participants (minimum 2)
         </label>
         <ParticipantSelector
@@ -76,17 +76,17 @@ export const GroupForm: React.FC<GroupFormProps> = ({ onSubmit, isLoading = fals
       </div>
 
       {error && (
-        <div className="p-2.5 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-400 font-medium">
+        <div className="p-2.5 rounded-xl bg-red-50 border border-red-200 text-xs text-red-600 font-medium">
           {error}
         </div>
       )}
 
       {/* Action Buttons */}
-      <div className="flex items-center justify-end gap-3 pt-2 border-t border-[#30363D]">
+      <div className="flex items-center justify-end gap-3 pt-3 border-t border-[#F1F5F9]">
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-all"
+          className="px-4 py-2.5 rounded-xl text-[13px] font-semibold text-[#64748B] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-all"
         >
           Cancel
         </button>

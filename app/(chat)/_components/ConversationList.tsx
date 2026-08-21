@@ -21,7 +21,7 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 }) => {
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center p-6">
+      <div className="flex-1 flex items-center justify-center p-6 bg-white">
         <LoadingSpinner size="md" label="Loading chats..." />
       </div>
     );
@@ -29,15 +29,15 @@ export const ConversationList: React.FC<ConversationListProps> = ({
 
   if (conversations.length === 0) {
     return (
-      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-slate-500">
-        <MessageSquareDashed className="w-8 h-8 mb-2 opacity-50" />
-        <p className="text-xs">No conversations found</p>
+      <div className="flex-1 flex flex-col items-center justify-center p-6 text-center text-[#94A3B8] bg-white">
+        <MessageSquareDashed className="w-9 h-9 mb-2 text-[#CBD5E1]" />
+        <p className="text-xs font-medium">No conversations found</p>
       </div>
     );
   }
 
   return (
-    <div className="flex-1 overflow-y-auto py-2 space-y-1 custom-scrollbar">
+    <div className="flex-1 overflow-y-auto py-2 space-y-0.5 custom-scrollbar bg-white">
       {conversations.map((conv) => (
         <ConversationItem
           key={conv.id}

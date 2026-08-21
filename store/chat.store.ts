@@ -9,10 +9,12 @@ interface ChatState {
   messages: Record<string, Message[]>; // keyed by conversationId
   users: User[];
   searchQuery: string;
+  filterType: "all" | "direct" | "group";
   isLoadingConversations: boolean;
   isLoadingMessages: boolean;
   isCreateGroupModalOpen: boolean;
   isMobileSidebarOpen: boolean;
+  isInfoPanelOpen: boolean;
 }
 
 const initialState: ChatState = {
@@ -21,10 +23,12 @@ const initialState: ChatState = {
   messages: {},
   users: [],
   searchQuery: "",
+  filterType: "all",
   isLoadingConversations: false,
   isLoadingMessages: false,
   isCreateGroupModalOpen: false,
   isMobileSidebarOpen: true,
+  isInfoPanelOpen: false,
 };
 
 export const chatSlice = createSlice({
@@ -102,6 +106,9 @@ export const chatSlice = createSlice({
     setSearchQuery(state, action: PayloadAction<string>) {
       state.searchQuery = action.payload;
     },
+    setFilterType(state, action: PayloadAction<"all" | "direct" | "group">) {
+      state.filterType = action.payload;
+    },
     setIsLoadingConversations(state, action: PayloadAction<boolean>) {
       state.isLoadingConversations = action.payload;
     },
@@ -113,6 +120,12 @@ export const chatSlice = createSlice({
     },
     setIsMobileSidebarOpen(state, action: PayloadAction<boolean>) {
       state.isMobileSidebarOpen = action.payload;
+    },
+    setIsInfoPanelOpen(state, action: PayloadAction<boolean>) {
+      state.isInfoPanelOpen = action.payload;
+    },
+    toggleInfoPanel(state) {
+      state.isInfoPanelOpen = !state.isInfoPanelOpen;
     },
   },
 });
@@ -126,10 +139,13 @@ export const {
   setUsers,
   updateUserStatus,
   setSearchQuery,
+  setFilterType,
   setIsLoadingConversations,
   setIsLoadingMessages,
   setIsCreateGroupModalOpen,
   setIsMobileSidebarOpen,
+  setIsInfoPanelOpen,
+  toggleInfoPanel,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

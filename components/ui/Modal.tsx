@@ -50,7 +50,7 @@ export const Modal: React.FC<ModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-black/70 backdrop-blur-sm transition-opacity animate-fadeIn"
+        className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity animate-fadeIn"
         onClick={onClose}
       />
 
@@ -59,21 +59,21 @@ export const Modal: React.FC<ModalProps> = ({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative w-full bg-[#161B22] border border-[#30363D] rounded-2xl shadow-2xl overflow-hidden z-10 animate-scaleUp",
+          "relative w-full bg-white border border-[#E2E8F0] rounded-3xl shadow-2xl overflow-hidden z-10 animate-scaleUp",
           maxWidthStyles[maxWidth],
           className
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-[#30363D]">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#F1F5F9] bg-[#F8FAFC]/50">
           <div>
-            {title && <h3 className="text-[16px] font-bold text-[#E6EDF3]">{title}</h3>}
-            {description && <p className="text-[12px] text-[#8B949E] mt-0.5">{description}</p>}
+            {title && <h3 className="text-[17px] font-bold text-[#0F172A]">{title}</h3>}
+            {description && <p className="text-[12.5px] text-[#64748B] mt-0.5">{description}</p>}
           </div>
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 rounded-lg text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-colors"
+            className="p-1.5 rounded-full text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

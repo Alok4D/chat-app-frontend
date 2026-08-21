@@ -74,31 +74,31 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
   });
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-2.5">
       {/* Search Bar */}
-      <div className="flex items-center gap-2 bg-[#0D1117] border border-[#30363D] rounded-xl px-3 py-2.5 focus-within:border-[#6C63FF]/60 transition-all">
-        <Search className="w-3.5 h-3.5 text-[#8B949E] shrink-0" />
+      <div className="flex items-center gap-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 focus-within:border-[#6C63FF] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#6C63FF]/10 transition-all">
+        <Search className="w-4 h-4 text-[#94A3B8] shrink-0" />
         <input
           type="text"
           placeholder="Search by phone (e.g. 1555) or name..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 bg-transparent text-[13px] text-[#E6EDF3] placeholder-[#8B949E] outline-none"
+          className="flex-1 bg-transparent text-[13px] text-[#0F172A] placeholder-[#94A3B8] outline-none"
         />
       </div>
 
       {/* List */}
-      <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-xl border border-[#30363D] bg-[#161B22]">
+      <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC]/50 p-1">
         {loading ? (
           <div className="flex items-center justify-center py-6">
             <span className="w-5 h-5 border-2 border-[#6C63FF]/30 border-t-[#6C63FF] rounded-full animate-spin" />
           </div>
         ) : displayedUsers.length === 0 ? (
-          <p className="text-[12px] text-[#8B949E] text-center py-6">
+          <p className="text-[12px] text-[#94A3B8] text-center py-6 font-medium">
             {search.trim() ? "No users found" : "Type a phone number or name to find members"}
           </p>
         ) : (
-          <div className="divide-y divide-[#21262D]">
+          <div className="space-y-1">
             {displayedUsers.map((user) => (
               <ParticipantItem
                 key={user.id}
@@ -112,18 +112,18 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
       </div>
 
       {/* Counter & Help text */}
-      <div className="flex items-center justify-between text-[11.5px]">
+      <div className="flex items-center justify-between text-[11.5px] px-1">
         <span
           className={
             selectedUserIds.length >= 2
-              ? "text-emerald-400 font-medium"
-              : "text-[#8B949E]"
+              ? "text-[#10B981] font-semibold"
+              : "text-[#64748B] font-medium"
           }
         >
           {selectedUserIds.length} participant{selectedUserIds.length === 1 ? "" : "s"} selected
         </span>
         {selectedUserIds.length < 2 && (
-          <span className="text-[#8B949E] text-[11px]">(minimum 2 required)</span>
+          <span className="text-[#94A3B8] font-medium">(minimum 2 required)</span>
         )}
       </div>
     </div>

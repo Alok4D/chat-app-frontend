@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Send } from "lucide-react";
+import { Send, Paperclip, Smile } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 export interface MessageInputProps {
@@ -42,10 +42,19 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   return (
-    <div className="px-4 py-3 bg-[#111827] border-t border-[#21262D] shrink-0">
-      <div className="flex items-end gap-2">
-        {/* Main Input Box */}
-        <div className="flex-1 flex items-end gap-2 bg-[#161B22] border border-[#30363D] rounded-2xl px-4 py-2.5 focus-within:border-[#6C63FF]/60 focus-within:ring-1 focus-within:ring-[#6C63FF]/20 transition-all">
+    <div className="px-6 py-4 bg-white border-t border-[#F1F5F9] shrink-0">
+      <div className="flex items-center gap-3">
+        {/* Main Pill Input Box */}
+        <div className="flex-1 flex items-center gap-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl px-4 py-2.5 focus-within:border-[#6C63FF] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#6C63FF]/10 transition-all shadow-2xs">
+          {/* Attachment Icon */}
+          <button
+            type="button"
+            title="Attach file"
+            className="text-[#94A3B8] hover:text-[#64748B] transition-colors shrink-0"
+          >
+            <Paperclip className="w-5 h-5 rotate-45" />
+          </button>
+
           <textarea
             ref={textareaRef}
             value={content}
@@ -54,20 +63,29 @@ export const MessageInput: React.FC<MessageInputProps> = ({
             disabled={disabled}
             placeholder="Type a message..."
             rows={1}
-            className="flex-1 max-h-32 min-h-[24px] bg-transparent text-[13.5px] text-[#E6EDF3] placeholder-[#8B949E] outline-none resize-none custom-scrollbar leading-relaxed py-0.5"
+            className="flex-1 max-h-32 min-h-[24px] bg-transparent text-[13.5px] text-[#0F172A] placeholder-[#94A3B8] outline-none resize-none custom-scrollbar leading-relaxed py-0.5"
           />
+
+          {/* Emoji Icon */}
+          <button
+            type="button"
+            title="Emoji"
+            className="text-[#94A3B8] hover:text-[#64748B] transition-colors shrink-0"
+          >
+            <Smile className="w-5 h-5" />
+          </button>
         </div>
 
-        {/* Send Button */}
+        {/* Circular Purple Send Button */}
         <button
           onClick={handleSubmit}
           disabled={!content.trim() || isSending || disabled}
           aria-label="Send message"
           className={cn(
-            "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0",
+            "w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 shrink-0",
             content.trim() && !disabled && !isSending
-              ? "bg-[#6C63FF] text-white shadow-lg shadow-[#6C63FF]/30 hover:bg-[#5a52e8] hover:scale-105 active:scale-95 cursor-pointer"
-              : "bg-[#21262D] text-[#8B949E] opacity-50 cursor-not-allowed"
+              ? "bg-[#6C63FF] text-white shadow-md shadow-[#6C63FF]/30 hover:bg-[#5a52e8] hover:scale-105 active:scale-95 cursor-pointer"
+              : "bg-[#6C63FF]/60 text-white/80 cursor-not-allowed"
           )}
         >
           {isSending ? (

@@ -37,15 +37,12 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-150 select-none",
-        isActive ? "bg-[#21262D]" : "hover:bg-[#161B22]"
+        "group relative flex items-center gap-3 px-4 py-3 mx-2 my-0.5 rounded-2xl cursor-pointer transition-all duration-150 select-none",
+        isActive
+          ? "bg-[#F4F3FF] border border-[#6C63FF]/20 shadow-xs"
+          : "hover:bg-[#F8FAFC] border border-transparent"
       )}
     >
-      {/* Active indicator */}
-      {isActive && (
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-7 bg-[#6C63FF] rounded-r-full" />
-      )}
-
       <Avatar
         src={displayAvatar}
         name={displayName}
@@ -57,23 +54,28 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
-          <h4 className="text-[13px] font-semibold truncate text-[#E6EDF3]">
+          <h4
+            className={cn(
+              "text-[13.5px] font-bold truncate transition-colors",
+              isActive ? "text-[#6C63FF]" : "text-[#0F172A]"
+            )}
+          >
             {displayName}
           </h4>
           {conversation.lastMessage?.createdAt && (
-            <span className="text-[10.5px] text-[#8B949E] shrink-0 ml-2">
+            <span className="text-[11px] text-[#94A3B8] shrink-0 font-medium ml-1">
               {formatDate(conversation.lastMessage.createdAt)}
             </span>
           )}
         </div>
 
-        <div className="flex items-center justify-between">
-          <p className="text-[12px] text-[#8B949E] truncate max-w-[150px]">
+        <div className="flex items-center justify-between gap-1">
+          <p className="text-[12px] text-[#64748B] truncate max-w-[155px]">
             {conversation.lastMessage?.content || "Started a new conversation"}
           </p>
 
           {conversation.unreadCount > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6C63FF] text-white font-bold text-[10px]">
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6C63FF] text-white font-bold text-[10px] shadow-sm shadow-[#6C63FF]/30 shrink-0">
               {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
             </span>
           )}

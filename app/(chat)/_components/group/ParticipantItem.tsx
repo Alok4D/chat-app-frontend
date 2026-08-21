@@ -15,17 +15,17 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({ user, isSelect
     <div
       onClick={() => onToggle(user.id)}
       className={cn(
-        "flex items-center justify-between px-3 py-2.5 rounded-xl cursor-pointer transition-all",
+        "flex items-center justify-between px-3.5 py-2.5 rounded-xl cursor-pointer transition-all",
         isSelected
-          ? "bg-[#6C63FF]/15"
-          : "hover:bg-[#21262D]"
+          ? "bg-[#F4F3FF] border border-[#6C63FF]/30"
+          : "hover:bg-[#F8FAFC] border border-transparent"
       )}
     >
       <div className="flex items-center gap-3 min-w-0 flex-1">
         <Avatar src={user.avatarUrl} name={user.name} isOnline={user.isOnline} showStatus size="sm" />
         <div className="min-w-0">
-          <p className="text-[13px] font-semibold truncate text-[#E6EDF3]">{user.name}</p>
-          <p className="text-[11.5px] text-[#8B949E] truncate">{user.statusMessage || user.phone}</p>
+          <p className="text-[13px] font-bold truncate text-[#0F172A]">{user.name}</p>
+          <p className="text-[11.5px] text-[#64748B] truncate">{user.statusMessage || user.phone}</p>
         </div>
       </div>
 
@@ -34,8 +34,8 @@ export const ParticipantItem: React.FC<ParticipantItemProps> = ({ user, isSelect
         className={cn(
           "w-5 h-5 rounded-full flex items-center justify-center transition-all border shrink-0",
           isSelected
-            ? "bg-[#6C63FF] border-[#6C63FF] text-white"
-            : "border-[#30363D] bg-[#21262D]"
+            ? "bg-[#6C63FF] border-[#6C63FF] text-white shadow-2xs"
+            : "border-[#CBD5E1] bg-white"
         )}
       >
         {isSelected && <Check className="w-3 h-3 stroke-[3]" />}

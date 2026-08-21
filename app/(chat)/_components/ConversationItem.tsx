@@ -2,7 +2,7 @@ import React from "react";
 import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatDate } from "@/lib/utils/formatDate";
-import { Pin, CheckCheck, VolumeX } from "lucide-react";
+import { Pin, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 import { useAppSelector } from "@/store/hooks";
 
@@ -19,7 +19,6 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 }) => {
   const currentUser = useAppSelector((s) => s.auth.user);
 
-  // In direct chat, find the recipient user
   const otherParticipant =
     conversation.type === "direct"
       ? conversation.participants.find((p) => p.id !== currentUser?.id) || conversation.participants[0]
@@ -31,9 +30,7 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
       : otherParticipant?.name || "User";
 
   const displayAvatar =
-    conversation.type === "group"
-      ? conversation.avatarUrl
-      : otherParticipant?.avatarUrl;
+    conversation.type === "group" ? conversation.avatarUrl : otherParticipant?.avatarUrl;
 
   const isOnline = otherParticipant?.isOnline || false;
 
@@ -41,12 +38,17 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-3 p-3 mx-2 rounded-2xl cursor-pointer transition-all duration-200 select-none border",
+        "group relative flex items-center gap-3 px-4 py-3 cursor-pointer transition-all duration-150 select-none",
         isActive
-          ? "bg-blue-600/10 border-blue-500/30 text-white shadow-sm"
-          : "bg-transparent border-transparent hover:bg-slate-900/80 hover:border-slate-800 text-slate-300"
+          ? "bg-[#21262D]"
+          : "hover:bg-[#161B22]"
       )}
     >
+      {/* Active indicator */}
+      {isActive && (
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-7 bg-[#6C63FF] rounded-r-full" />
+      )}
+
       <Avatar
         src={displayAvatar}
         name={displayName}
@@ -57,37 +59,28 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
       />
 
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1">
-          <h4
-            className={cn(
-              "text-xs font-semibold truncate transition-colors",
-              isActive ? "text-blue-400" : "text-slate-100 group-hover:text-white"
-            )}
-          >
+        <div className="flex items-center justify-between mb-0.5">
+          <h4 className="text-[13px] font-semibold truncate text-[#E6EDF3]">
             {displayName}
           </h4>
           {conversation.lastMessage?.createdAt && (
-            <span className="text-[10px] text-slate-500 group-hover:text-slate-400 font-mono">
+            <span className="text-[10.5px] text-[#8B949E] shrink-0 ml-2">
               {formatDate(conversation.lastMessage.createdAt)}
             </span>
           )}
         </div>
 
-        <div className="flex items-center justify-between text-xs">
-          <p className="text-[11px] text-slate-400 truncate max-w-[180px]">
+        <div className="flex items-center justify-between">
+          <p className="text-[12px] text-[#8B949E] truncate max-w-[150px]">
             {conversation.lastMessage?.content || "Started a new conversation"}
           </p>
 
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            {conversation.isPinned && (
-              <Pin className="w-3 h-3 text-slate-500 fill-slate-500" />
-            )}
-            {conversation.isMuted && (
-              <VolumeX className="w-3 h-3 text-slate-500" />
-            )}
+          <div className="flex items-center gap-1 shrink-0 ml-2">
+            {conversation.isPinned && <Pin className="w-3 h-3 text-[#8B949E] fill-[#8B949E]" />}
+            {conversation.isMuted && <VolumeX className="w-3 h-3 text-[#8B949E]" />}
             {conversation.unreadCount > 0 && (
-              <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-blue-600 text-white font-bold text-[10px] shadow-sm shadow-blue-500/50">
-                {conversation.unreadCount}
+              <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6C63FF] text-white font-bold text-[10px]">
+                {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
               </span>
             )}
           </div>

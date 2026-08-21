@@ -1,122 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --background: 222 47% 4%;
-  --foreground: 210 40% 98%;
+  /* Chatter Design Tokens */
+  --primary: 250 84% 54%;       /* #5B4FD9 violet */
+  --primary-light: 250 84% 60%;
+  --primary-dark: 250 84% 45%;
+  --primary-bg: 250 100% 97%;   /* very light violet tint */
 
-  --card: 222 47% 7%;
-  --card-foreground: 210 40% 98%;
+  --surface: 0 0% 100%;         /* white */
+  --surface-2: 240 20% 97%;     /* off-white / lavender */
+  --surface-3: 240 20% 94%;
 
-  --popover: 222 47% 6%;
-  --popover-foreground: 210 40% 98%;
+  --text-primary: 240 15% 12%;  /* near black */
+  --text-secondary: 240 8% 40%; /* mid gray */
+  --text-muted: 240 6% 60%;
 
-  --primary: 221 83% 53%;
-  --primary-foreground: 210 40% 98%;
-  --primary-hover: 221 83% 45%;
+  --border: 240 15% 90%;
 
-  --secondary: 217 33% 17%;
-  --secondary-foreground: 210 40% 98%;
-
-  --muted: 217 33% 14%;
-  --muted-foreground: 215 20% 65%;
-
-  --accent: 217 33% 17%;
-  --accent-foreground: 210 40% 98%;
-
-  --destructive: 0 84% 60%;
-  --destructive-foreground: 210 40% 98%;
-
-  --border: 217 33% 15%;
-  --input: 217 33% 15%;
-  --ring: 221 83% 53%;
+  /* Chat dark panel */
+  --chat-bg: 224 47% 8%;        /* #0D1117 */
+  --chat-sidebar: 224 40% 11%;  /* #111827 */
+  --chat-surface: 224 35% 14%;
+  --chat-border: 224 30% 18%;
+  --chat-text: 220 14% 90%;
+  --chat-text-muted: 220 10% 55%;
 
   --radius: 0.75rem;
-
-  --chat-bubble-sent: 221 83% 53%;
-  --chat-bubble-sent-fg: 210 40% 98%;
-  --chat-bubble-received: 222 47% 10%;
-  --chat-bubble-received-fg: 210 40% 98%;
-  --chat-sidebar: 222 47% 5%;
-  --chat-active-item: 222 47% 12%;
+  --radius-lg: 1rem;
+  --radius-xl: 1.25rem;
 }
 
 * {
-  border-color: hsl(var(--border));
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
-  overflow-x: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  background: hsl(var(--surface));
+  color: hsl(var(--text-primary));
 }
 
-/* Custom Sleek Scrollbar */
+/* ===== CHATTER PRIMARY CLASSES ===== */
+.chatter-primary {
+  background: hsl(var(--primary));
+}
+
+.chatter-primary-text {
+  color: hsl(var(--primary));
+}
+
+.chatter-surface {
+  background: hsl(var(--surface-2));
+}
+
+/* ===== CUSTOM SCROLLBAR ===== */
 .custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
-  height: 5px;
+  width: 4px;
+  height: 4px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(100, 100, 120, 0.3);
   border-radius: 9999px;
 }
-
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(100, 100, 120, 0.55);
 }
 
+/* ===== ANIMATIONS ===== */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(4px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleUp {
-  from {
-    opacity: 0;
-    transform: scale(0.96);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
 @keyframes slideDown {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
-.animate-scaleUp {
-  animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
 }
 
-.animate-slideDown {
-  animation: slideDown 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
 }
-button, a{
-  cursor: pointer;
+
+.animate-fadeIn    { animation: fadeIn    0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-scaleUp   { animation: scaleUp   0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-slideDown { animation: slideDown 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-slideUp   { animation: slideUp   0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.animate-float     { animation: float 4s ease-in-out infinite; }
+
+/* ===== GRADIENT TEXT ===== */
+.gradient-text {
+  background: linear-gradient(135deg, #6C63FF 0%, #8B5CF6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== CURSOR ===== */
+button, a { cursor: pointer; }
+
+/* ===== CHAT LAYOUT OVERRIDES (dark panel) ===== */
+.chat-dark {
+  background: hsl(var(--chat-bg));
+  color: hsl(var(--chat-text));
+}
+
+.sidebar-dark {
+  background: hsl(var(--chat-sidebar));
+  border-color: hsl(var(--chat-border));
+}
+
+/* ===== LANDING PAGE LIGHT BG ===== */
+.landing-bg {
+  background: hsl(var(--surface));
+}
+
+/* ===== GLASS CARD ===== */
+.glass-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.7);
+  box-shadow: 0 8px 40px rgba(108, 99, 255, 0.08);
 }

@@ -42,7 +42,7 @@ export const MessageList: React.FC<MessageListProps> = ({
   return (
     <div
       ref={scrollRef}
-      className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 custom-scrollbar bg-slate-950/40"
+      className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4 custom-scrollbar bg-[#0D1117]"
     >
       {messages.length === 0 ? (
         <div className="h-full flex flex-col items-center justify-center text-center text-slate-500 py-12">

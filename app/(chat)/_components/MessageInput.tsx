@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
-import { Send, Paperclip, Smile, Image as ImageIcon, X } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { Send, Paperclip, Smile, X } from "lucide-react";
 import { Message } from "@/types/message";
 import { cn } from "@/lib/utils/cn";
 
@@ -27,14 +27,10 @@ export const MessageInput: React.FC<MessageInputProps> = ({
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
-
-    // Typing notification trigger
     if (onTyping) {
       onTyping(true);
       if (typingTimerRef.current) clearTimeout(typingTimerRef.current);
-      typingTimerRef.current = setTimeout(() => {
-        onTyping(false);
-      }, 2000);
+      typingTimerRef.current = setTimeout(() => onTyping(false), 2000);
     }
   };
 
@@ -51,78 +47,81 @@ export const MessageInput: React.FC<MessageInputProps> = ({
     setContent("");
     setIsSending(true);
     if (onTyping) onTyping(false);
-
     try {
       await onSendMessage(text);
     } finally {
       setIsSending(false);
-      if (textareaRef.current) {
-        textareaRef.current.focus();
-      }
+      textareaRef.current?.focus();
     }
   };
 
   return (
-    <div className="p-4 bg-slate-950/80 border-t border-slate-800/80 backdrop-blur-xl">
+    <div className="px-4 py-3 bg-[#111827] border-t border-[#21262D] shrink-0">
       {/* Reply Banner */}
       {replyTo && (
-        <div className="flex items-center justify-between px-3.5 py-2 mb-2 bg-slate-900/90 border border-slate-800 rounded-xl animate-slideDown text-xs text-slate-300">
+        <div className="flex items-center justify-between px-3 py-2 mb-2 bg-[#21262D] border-l-2 border-[#6C63FF] rounded-lg animate-slideDown">
           <div className="flex items-center gap-2 truncate">
-            <span className="text-blue-400 font-semibold">Replying to:</span>
-            <span className="truncate max-w-xs">{replyTo.content}</span>
+            <span className="text-[11.5px] text-[#6C63FF] font-semibold shrink-0">Replying to:</span>
+            <span className="text-[11.5px] text-[#8B949E] truncate">{replyTo.content}</span>
           </div>
           <button
             onClick={onCancelReply}
-            aria-label="Cancel reply"
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-0.5 rounded text-[#8B949E] hover:text-[#E6EDF3] transition-colors shrink-0 ml-2"
           >
             <X className="w-3.5 h-3.5" />
           </button>
         </div>
       )}
 
-      {/* Input controls container */}
-      <div className="flex items-end gap-2 bg-slate-900/90 border border-slate-800 rounded-2xl p-2 focus-within:border-blue-500/50 focus-within:ring-1 focus-within:ring-blue-500/20 transition-all shadow-lg">
-        <div className="flex items-center gap-1 text-slate-400 pb-1 pl-1">
+      {/* Input Row */}
+      <div className="flex items-end gap-2">
+        {/* Attachment */}
+        <button
+          type="button"
+          title="Attach file"
+          className="p-2 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-all shrink-0"
+        >
+          <Paperclip className="w-4.5 h-4.5" />
+        </button>
+
+        {/* Main Input Box */}
+        <div className="flex-1 flex items-end gap-2 bg-[#161B22] border border-[#30363D] rounded-2xl px-4 py-2.5 focus-within:border-[#6C63FF]/60 focus-within:ring-1 focus-within:ring-[#6C63FF]/20 transition-all">
+          <textarea
+            ref={textareaRef}
+            value={content}
+            onChange={handleChange}
+            onKeyDown={handleKeyDown}
+            disabled={disabled}
+            placeholder="Type a message..."
+            rows={1}
+            className="flex-1 max-h-32 min-h-[24px] bg-transparent text-[13.5px] text-[#E6EDF3] placeholder-[#8B949E] outline-none resize-none custom-scrollbar leading-relaxed py-0.5"
+          />
           <button
             type="button"
-            title="Attach file"
-            className="p-2 rounded-xl hover:text-white hover:bg-slate-800 transition-colors"
+            title="Emoji"
+            className="text-[#8B949E] hover:text-[#E6EDF3] transition-colors shrink-0 pb-0.5"
           >
-            <Paperclip className="w-4 h-4" />
-          </button>
-          <button
-            type="button"
-            title="Add photo"
-            className="p-2 rounded-xl hover:text-white hover:bg-slate-800 transition-colors hidden sm:inline-flex"
-          >
-            <ImageIcon className="w-4 h-4" />
+            <Smile className="w-4.5 h-4.5" />
           </button>
         </div>
 
-        <textarea
-          ref={textareaRef}
-          value={content}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          disabled={disabled}
-          placeholder="Type your message... (Enter to send, Shift+Enter for newline)"
-          rows={1}
-          className="flex-1 max-h-32 min-h-[40px] bg-transparent text-slate-100 placeholder-slate-500 text-sm py-2 px-1 focus:outline-none resize-none custom-scrollbar"
-        />
-
+        {/* Send Button */}
         <button
           onClick={handleSubmit}
           disabled={!content.trim() || isSending || disabled}
           aria-label="Send message"
           className={cn(
-            "p-2.5 rounded-xl flex items-center justify-center transition-all duration-200 shadow-md",
+            "w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-200 shrink-0",
             content.trim()
-              ? "bg-gradient-to-tr from-blue-600 to-indigo-600 text-white shadow-blue-500/20 hover:scale-105 active:scale-95"
-              : "bg-slate-800 text-slate-500 opacity-50 cursor-not-allowed"
+              ? "bg-[#6C63FF] text-white shadow-lg shadow-[#6C63FF]/30 hover:bg-[#5a52e8] hover:scale-105 active:scale-95"
+              : "bg-[#21262D] text-[#8B949E] cursor-not-allowed"
           )}
         >
-          <Send className="w-4 h-4" />
+          {isSending ? (
+            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+            <Send className="w-4 h-4" />
+          )}
         </button>
       </div>
     </div>

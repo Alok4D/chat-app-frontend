@@ -2,24 +2,26 @@ import React from "react";
 import { Navbar } from "./_components/Navbar";
 import { Hero } from "./_components/Hero";
 import { Features } from "./_components/Features";
+import { HowItWorks } from "./_components/HowItWorks";
 import { ChatPreview } from "./_components/ChatPreview";
 import { CTA } from "./_components/CTA";
 import { Footer } from "./_components/Footer";
 
 export const metadata = {
-  title: "PulseChat — High-Performance Real-Time Team Messaging",
+  title: "Chatter — Real-time Chat Made Simple",
   description:
-    "Experience next-generation sub-millisecond real-time communication with rich channels, instant group chats, and state-of-the-art UI/UX.",
+    "Connect with friends, colleagues, and communities instantly with our real-time chat application. Secure, fast, and developer friendly.",
 };
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-500 selection:text-white">
+    <div className="min-h-screen bg-white text-[#1A1A2E] flex flex-col selection:bg-[#6C63FF] selection:text-white">
       <Navbar />
-      <main className="flex-1">
+      <main className="flex-1 pt-16">
         <Hero />
-        <ChatPreview />
         <Features />
+        <HowItWorks />
+        <ChatPreview />
         <CTA />
       </main>
       <Footer />

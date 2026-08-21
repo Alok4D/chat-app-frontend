@@ -1,46 +1,37 @@
 import React from "react";
-import { MessageSquare, Sparkles, Shield, Zap } from "lucide-react";
+import { MessageSquareMore } from "lucide-react";
 
 export const EmptyChat: React.FC = () => {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-slate-950/60 relative overflow-hidden">
-      {/* Background soft gradients */}
-      <div className="absolute w-72 h-72 bg-blue-600/10 rounded-full blur-3xl pointer-events-none" />
+    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center bg-[#0D1117] relative overflow-hidden">
+      {/* Decorative soft blobs */}
+      <div className="absolute w-80 h-80 bg-[#6C63FF]/8 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="relative z-10 max-w-md space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-3xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-xl shadow-blue-500/20">
-          <MessageSquare className="w-8 h-8" />
+      <div className="relative z-10 max-w-sm space-y-5">
+        {/* Icon */}
+        <div className="w-20 h-20 mx-auto rounded-3xl bg-[#6C63FF]/15 border border-[#6C63FF]/25 flex items-center justify-center">
+          <MessageSquareMore className="w-10 h-10 text-[#6C63FF]" />
         </div>
 
-        <div className="space-y-2">
-          <h3 className="text-xl font-bold text-white tracking-tight">
-            Your Messages & Channels
+        <div>
+          <h3 className="text-[17px] font-bold text-[#E6EDF3] mb-2">
+            Select a conversation
           </h3>
-          <p className="text-sm text-slate-400 leading-relaxed">
-            Select a conversation from the sidebar or start a new group to collaborate with teammates in real-time.
+          <p className="text-[13px] text-[#8B949E] leading-relaxed">
+            Choose a conversation from the sidebar, or start a new one to begin chatting in real-time.
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 pt-4 text-left">
-          <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-            <div className="flex items-center gap-2 text-blue-400 font-semibold text-xs mb-1">
-              <Zap className="w-3.5 h-3.5" />
-              <span>Instant Sync</span>
-            </div>
-            <p className="text-[11px] text-slate-400">
-              Sub-millisecond real-time communication powered by WebSockets.
-            </p>
-          </div>
-
-          <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800/80">
-            <div className="flex items-center gap-2 text-indigo-400 font-semibold text-xs mb-1">
-              <Shield className="w-3.5 h-3.5" />
-              <span>End-to-End</span>
-            </div>
-            <p className="text-[11px] text-slate-400">
-              Modern client-side encryption and strict token verification.
-            </p>
-          </div>
+        {/* Feature mini-chips */}
+        <div className="flex flex-wrap items-center justify-center gap-2 pt-2">
+          {["Real-time Messaging", "Group Chats", "Secure & Private"].map((label) => (
+            <span
+              key={label}
+              className="inline-flex items-center px-3 py-1 rounded-full bg-[#6C63FF]/12 border border-[#6C63FF]/20 text-[11.5px] text-[#A89CFF] font-medium"
+            >
+              {label}
+            </span>
+          ))}
         </div>
       </div>
     </div>

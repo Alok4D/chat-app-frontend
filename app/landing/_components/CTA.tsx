@@ -1,37 +1,41 @@
 import React from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Send } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 
 export const CTA: React.FC = () => {
   return (
-    <section className="py-20 relative">
+    <section className="py-16 md:py-20 bg-white">
       <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        <div className="relative rounded-3xl p-8 sm:p-14 overflow-hidden border border-blue-500/30 bg-gradient-to-r from-blue-900/40 via-indigo-950/60 to-purple-950/40 backdrop-blur-2xl shadow-2xl text-center">
-          {/* Subtle Glows */}
-          <div className="absolute -top-20 -left-20 w-60 h-60 bg-blue-500/20 rounded-full blur-3xl" />
-          <div className="absolute -bottom-20 -right-20 w-60 h-60 bg-purple-500/20 rounded-full blur-3xl" />
+        <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#6C63FF] to-[#8B5CF6] px-8 sm:px-14 py-12 sm:py-14">
+          {/* Decorative elements */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full translate-y-1/2 -translate-x-1/2" />
+          <div className="absolute right-12 bottom-8 opacity-10">
+            <Send className="w-24 h-24 text-white rotate-45" />
+          </div>
 
-          <div className="relative z-10 max-w-2xl mx-auto space-y-6">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-semibold">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Get Started In Seconds</span>
+          <div className="relative z-10 flex flex-col sm:flex-row items-center justify-between gap-8">
+            <div className="flex-1 text-left">
+              <h2 className="text-2xl sm:text-3xl font-extrabold text-white leading-snug mb-2">
+                Ready to start chatting?
+              </h2>
+              <p className="text-[14.5px] text-white/80 max-w-md">
+                Join thousands of users who trust Chatter for their daily conversations.
+              </p>
             </div>
-
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-              Ready to Upgrade Your Team&apos;s Real-Time Communication?
-            </h2>
-
-            <p className="text-sm sm:text-base text-slate-300">
-              Experience zero-lag messaging, instant group channel creation, and a seamless developer-friendly API.
-            </p>
-
-            <div className="pt-2">
+            <div className="flex items-center gap-3 shrink-0">
               <a
-                href={ROUTES.LOGIN}
-                className="inline-flex items-center gap-2 text-sm font-bold text-white px-8 py-4 rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 shadow-xl shadow-blue-500/30 hover:scale-105 active:scale-95 transition-all"
+                href={ROUTES.CHAT}
+                className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-[#6C63FF] bg-white px-5 py-3 rounded-xl hover:bg-[#F4F3FF] shadow-md transition-all hover:scale-105 active:scale-95 whitespace-nowrap"
               >
-                <span>Launch Chat App Now</span>
+                Get Started Now
                 <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href={ROUTES.API_DOCS}
+                className="inline-flex items-center gap-2 text-[13.5px] font-semibold text-white border-2 border-white/40 px-5 py-3 rounded-xl hover:bg-white/10 transition-all whitespace-nowrap"
+              >
+                Learn More
               </a>
             </div>
           </div>

@@ -14,8 +14,17 @@ import { useMessages } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealtimeMessages } from "@/hooks/useRealtimeMessages";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsMobileSidebarOpen } from "@/store/chat.store";
-import { MessageSquare, LogOut, Code, BookOpen, Sparkles, X, UserPlus } from "lucide-react";
+import { setIsMobileSidebarOpen, setIsCreateGroupModalOpen } from "@/store/chat.store";
+import {
+  MessageSquareMore,
+  LogOut,
+  BookOpen,
+  X,
+  UserPlus,
+  Settings,
+  Users,
+  Plus,
+} from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
 import { usersApi } from "@/lib/api/users.api";
@@ -46,21 +55,17 @@ export const ChatLayout: React.FC = () => {
       setGlobalContacts([]);
       return;
     }
-
     const delayDebounce = setTimeout(async () => {
       setLoadingContacts(true);
       try {
         const res = await usersApi.getUsers({ search: searchQuery });
-        // Filter out current user from results (handled by api, but double check)
-        const filtered = res.filter((u) => u.id !== user?.id);
-        setGlobalContacts(filtered);
+        setGlobalContacts(res.filter((u) => u.id !== user?.id));
       } catch (err) {
         console.error("Global search error:", err);
       } finally {
         setLoadingContacts(false);
       }
     }, 400);
-
     return () => clearTimeout(delayDebounce);
   }, [searchQuery, user]);
 
@@ -70,37 +75,52 @@ export const ChatLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full bg-slate-950 text-slate-100 overflow-hidden select-none">
-      {/* LEFT PRIMARY MINI NAV BAR */}
-      <aside className="w-16 bg-slate-950 border-r border-slate-800/80 flex flex-col items-center justify-between py-4 z-40 hidden sm:flex">
-        <div className="flex flex-col items-center gap-6">
+    <div className="flex h-screen w-full overflow-hidden bg-[#0D1117] text-[#E6EDF3]">
+
+      {/* ── ICON RAIL (leftmost, dark) ── */}
+      <aside className="hidden sm:flex w-[60px] bg-[#0D1117] border-r border-[#21262D] flex-col items-center justify-between py-4 z-40 shrink-0">
+        {/* Top: Brand + Nav icons */}
+        <div className="flex flex-col items-center gap-5">
+          {/* Brand */}
           <a
             href={ROUTES.LANDING}
-            title="PulseChat Home"
-            className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-lg shadow-blue-500/20 hover:scale-105 transition-transform"
+            title="Chatter"
+            className="w-10 h-10 rounded-2xl bg-[#6C63FF] flex items-center justify-center text-white shadow-lg shadow-[#6C63FF]/30 hover:scale-105 transition-transform"
           >
-            <Sparkles className="w-5 h-5" />
+            <MessageSquareMore className="w-5 h-5" />
           </a>
 
-          <div className="flex flex-col items-center gap-2">
-            <a
-              href={ROUTES.CHAT}
-              title="Chat Workspace"
-              className="p-2.5 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 hover:bg-blue-600/20 transition-all"
+          {/* Nav icons */}
+          <div className="flex flex-col items-center gap-2 mt-2">
+            <button
+              title="Messages"
+              className="p-2.5 rounded-xl bg-[#6C63FF]/15 text-[#6C63FF] border border-[#6C63FF]/25 hover:bg-[#6C63FF]/25 transition-all"
             >
-              <MessageSquare className="w-5 h-5" />
-            </a>
+              <MessageSquareMore className="w-5 h-5" />
+            </button>
+            <button
+              title="Contacts"
+              className="p-2.5 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#161B22] transition-all"
+            >
+              <Users className="w-5 h-5" />
+            </button>
             <a
               href={ROUTES.API_DOCS}
-              title="API Documentation Explorer"
-              className="p-2.5 rounded-xl text-slate-400 hover:text-white hover:bg-slate-900 transition-all"
+              title="API Docs"
+              className="p-2.5 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#161B22] transition-all"
             >
               <BookOpen className="w-5 h-5" />
             </a>
+            <button
+              title="Settings"
+              className="p-2.5 rounded-xl text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#161B22] transition-all"
+            >
+              <Settings className="w-5 h-5" />
+            </button>
           </div>
         </div>
 
-        {/* User Profile & Logout */}
+        {/* Bottom: User avatar + logout */}
         <div className="flex flex-col items-center gap-3">
           <Avatar
             src={user?.avatarUrl}
@@ -108,40 +128,33 @@ export const ChatLayout: React.FC = () => {
             size="sm"
             isOnline={true}
             showStatus
-            className="ring-2 ring-blue-500/30 cursor-pointer"
+            className="ring-2 ring-[#6C63FF]/30 cursor-pointer hover:ring-[#6C63FF]/60 transition-all"
           />
           <button
             onClick={logout}
             title="Sign Out"
-            className="p-2 rounded-xl text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+            className="p-2 rounded-xl text-[#8B949E] hover:text-[#FF7070] hover:bg-[#FF7070]/10 transition-all"
           >
             <LogOut className="w-4 h-4" />
           </button>
         </div>
       </aside>
 
-      {/* CONVERSATION LIST SIDEBAR */}
+      {/* ── CONVERSATIONS SIDEBAR ── */}
       <div
         className={cn(
-          "fixed inset-y-0 left-0 z-30 w-80 bg-slate-950 border-r border-slate-800/80 flex flex-col transition-transform duration-300 md:static md:translate-x-0",
+          "fixed inset-y-0 left-0 z-30 w-[280px] bg-[#111827] border-r border-[#21262D] flex flex-col transition-transform duration-300 md:static md:translate-x-0 shrink-0",
           isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
         )}
       >
-        {/* Header inside sidebar */}
-        <div className="p-4 border-b border-slate-800/80 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold sm:hidden">
-              <MessageSquare className="w-4 h-4" />
-            </div>
-            <div>
-              <h2 className="text-sm font-bold text-white tracking-tight">Messages</h2>
-              <p className="text-[11px] text-slate-400">All Conversations</p>
-            </div>
+        {/* Sidebar Header */}
+        <div className="px-4 pt-4 pb-2 border-b border-[#21262D] flex items-center justify-between">
+          <div>
+            <h2 className="text-[15px] font-bold text-[#E6EDF3]">Conversations</h2>
           </div>
-
           <button
             onClick={() => dispatch(setIsMobileSidebarOpen(false))}
-            className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800"
+            className="md:hidden p-1.5 rounded-lg text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-all"
           >
             <X className="w-4 h-4" />
           </button>
@@ -151,86 +164,75 @@ export const ChatLayout: React.FC = () => {
         <ChatSearch />
 
         {/* Conversation List */}
-        <ConversationList
-          conversations={conversations}
-          activeConversationId={activeConversationId}
-          isLoading={isLoading}
-          onSelectConversation={handleSelectConv}
-        />
+        <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <ConversationList
+            conversations={conversations}
+            activeConversationId={activeConversationId}
+            isLoading={isLoading}
+            onSelectConversation={handleSelectConv}
+          />
 
-        {/* Global Contacts Search Results */}
-        {(globalContacts.length > 0 || loadingContacts) && (
-          <div className="border-t border-slate-800/60 bg-slate-900/10 backdrop-blur-md pt-2 pb-4">
-            <h3 className="px-4 py-2 text-[10px] uppercase tracking-wider font-bold text-slate-500 font-mono flex items-center gap-1.5">
-              <UserPlus className="w-3 h-3 text-blue-400" />
-              <span>Global Contacts Found</span>
-            </h3>
-            <div className="space-y-1 max-h-48 overflow-y-auto px-2 custom-scrollbar">
-              {loadingContacts ? (
-                <p className="text-xs text-slate-500 text-center py-4">Searching database...</p>
-              ) : (
-                globalContacts.map((contact) => (
-                  <div
-                    key={contact.id}
-                    onClick={async () => {
-                      try {
-                        const newConv = await startDirectConversation(contact.id);
-                        handleSelectConv(newConv.id);
-                      } catch (e) {
-                        console.error("Failed to start chat:", e);
-                      }
-                    }}
-                    className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-900 transition-colors border border-transparent hover:border-slate-800/60"
-                  >
-                    <Avatar src={contact.avatarUrl} name={contact.name} size="sm" />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-xs font-semibold text-slate-200 truncate">{contact.name}</p>
-                      <p className="text-[10px] text-slate-400 truncate">{contact.phone}</p>
+          {/* Global Contacts from Search */}
+          {(globalContacts.length > 0 || loadingContacts) && (
+            <div className="border-t border-[#21262D] pt-2 pb-4">
+              <div className="px-4 py-2 flex items-center gap-1.5">
+                <UserPlus className="w-3 h-3 text-[#6C63FF]" />
+                <span className="text-[10.5px] uppercase tracking-wider font-bold text-[#8B949E]">
+                  Global Contacts
+                </span>
+              </div>
+              <div className="space-y-0 px-2">
+                {loadingContacts ? (
+                  <p className="text-[12px] text-[#8B949E] text-center py-4">Searching...</p>
+                ) : (
+                  globalContacts.map((contact) => (
+                    <div
+                      key={contact.id}
+                      onClick={async () => {
+                        try {
+                          const conv = await startDirectConversation(contact.id);
+                          handleSelectConv(conv.id);
+                        } catch (e) {
+                          console.error("Failed to start chat:", e);
+                        }
+                      }}
+                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-[#21262D] transition-colors"
+                    >
+                      <Avatar src={contact.avatarUrl} name={contact.name} size="sm" />
+                      <div className="min-w-0">
+                        <p className="text-[12.5px] font-semibold text-[#E6EDF3] truncate">{contact.name}</p>
+                        <p className="text-[11px] text-[#8B949E] truncate">{contact.phone}</p>
+                      </div>
                     </div>
-                  </div>
-                ))
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* Bottom Current User Card in Sidebar */}
-        {user && (
-          <div className="p-3 border-t border-slate-800/80 bg-slate-950/60 flex items-center justify-between">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <Avatar
-                src={user.avatarUrl}
-                name={user.name}
-                size="sm"
-                isOnline={true}
-                showStatus
-              />
-              <div className="min-w-0">
-                <p className="text-xs font-semibold text-slate-100 truncate">{user.name}</p>
-                <p className="text-[10px] text-slate-400 truncate">{user.phone}</p>
+                  ))
+                )}
               </div>
             </div>
-            <button
-              onClick={logout}
-              title="Logout"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
-          </div>
-        )}
+          )}
+        </div>
+
+        {/* Bottom: New Conversation Button */}
+        <div className="p-3 border-t border-[#21262D]">
+          <button
+            onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-[#6C63FF] hover:bg-[#5a52e8] text-white text-[13px] font-semibold shadow-md shadow-[#6C63FF]/25 transition-all hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <Plus className="w-4 h-4" />
+            New Conversation
+          </button>
+        </div>
       </div>
 
-      {/* Backing overlay for mobile sidebar */}
+      {/* Mobile sidebar overlay */}
       {isMobileSidebarOpen && (
         <div
           onClick={() => dispatch(setIsMobileSidebarOpen(false))}
-          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-20 md:hidden"
+          className="fixed inset-0 bg-black/60 z-20 md:hidden"
         />
       )}
 
-      {/* MAIN CHAT CONVERSATION WINDOW */}
-      <main className="flex-1 flex flex-col h-full bg-slate-950 relative min-w-0">
+      {/* ── MAIN CHAT WINDOW ── */}
+      <main className="flex-1 flex flex-col h-full bg-[#0D1117] relative min-w-0 overflow-hidden">
         {activeConversation ? (
           <>
             <ChatHeader conversation={activeConversation} />

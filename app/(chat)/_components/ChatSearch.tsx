@@ -1,8 +1,7 @@
 "use client";
 
 import React from "react";
-import { Search, Plus, Filter, MessageSquare, Users } from "lucide-react";
-import { Input } from "@/components/ui/Input";
+import { Search, Plus, MessageSquare, Users } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setSearchQuery, setFilterType, setIsCreateGroupModalOpen } from "@/store/chat.store";
 
@@ -11,19 +10,23 @@ export const ChatSearch: React.FC = () => {
   const { searchQuery, filterType } = useAppSelector((s) => s.chat);
 
   return (
-    <div className="p-4 space-y-3 border-b border-slate-800/80 bg-slate-950/40">
+    <div className="px-4 pt-3 pb-3 space-y-3 border-b border-[#21262D]">
+      {/* Search Input */}
       <div className="flex items-center gap-2">
-        <Input
-          placeholder="Search conversations..."
-          value={searchQuery}
-          onChange={(e) => dispatch(setSearchQuery(e.target.value))}
-          leftIcon={<Search className="w-4 h-4 text-slate-500" />}
-          className="h-10 text-xs bg-slate-900/60"
-        />
+        <div className="flex-1 flex items-center gap-2 bg-[#161B22] border border-[#30363D] rounded-xl px-3 py-2.5 focus-within:border-[#6C63FF] focus-within:ring-1 focus-within:ring-[#6C63FF]/30 transition-all">
+          <Search className="w-3.5 h-3.5 text-[#8B949E] shrink-0" />
+          <input
+            type="text"
+            placeholder="Search conversations..."
+            value={searchQuery}
+            onChange={(e) => dispatch(setSearchQuery(e.target.value))}
+            className="flex-1 bg-transparent text-[12.5px] text-[#E6EDF3] placeholder-[#8B949E] outline-none"
+          />
+        </div>
         <button
           onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
-          title="Create Group"
-          className="h-10 w-10 flex-shrink-0 flex items-center justify-center rounded-xl bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 border border-blue-500/20 transition-all"
+          title="New Conversation"
+          className="h-[38px] w-[38px] flex-shrink-0 flex items-center justify-center rounded-xl bg-[#6C63FF] hover:bg-[#5a52e8] text-white shadow-md shadow-[#6C63FF]/25 transition-all hover:scale-105 active:scale-95"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -31,38 +34,23 @@ export const ChatSearch: React.FC = () => {
 
       {/* Filter Tabs */}
       <div className="flex items-center gap-1.5">
-        <button
-          onClick={() => dispatch(setFilterType("all"))}
-          className={`text-xs px-3 py-1.5 rounded-lg font-medium transition-all ${
-            filterType === "all"
-              ? "bg-slate-800 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-          }`}
-        >
-          All
-        </button>
-        <button
-          onClick={() => dispatch(setFilterType("direct"))}
-          className={`text-xs px-3 py-1.5 rounded-lg font-medium flex items-center gap-1.5 transition-all ${
-            filterType === "direct"
-              ? "bg-slate-800 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-          }`}
-        >
-          <MessageSquare className="w-3 h-3" />
-          Direct
-        </button>
-        <button
-          onClick={() => dispatch(setFilterType("group"))}
-          className={`text-xs px-3 py-1.5 rounded-lg font-medium flex items-center gap-1.5 transition-all ${
-            filterType === "group"
-              ? "bg-slate-800 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-          }`}
-        >
-          <Users className="w-3 h-3" />
-          Groups
-        </button>
+        {[
+          { label: "All", value: "all" },
+          { label: "Direct", value: "direct" },
+          { label: "Groups", value: "group" },
+        ].map((tab) => (
+          <button
+            key={tab.value}
+            onClick={() => dispatch(setFilterType(tab.value as any))}
+            className={`text-[11.5px] px-3 py-1 rounded-full font-medium transition-all ${
+              filterType === tab.value
+                ? "bg-[#6C63FF] text-white shadow-sm shadow-[#6C63FF]/30"
+                : "text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D]"
+            }`}
+          >
+            {tab.label}
+          </button>
+        ))}
       </div>
     </div>
   );

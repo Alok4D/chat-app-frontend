@@ -59,21 +59,21 @@ export const Modal: React.FC<ModalProps> = ({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative w-full bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl overflow-hidden z-10 animate-scaleUp",
+          "relative w-full bg-[#161B22] border border-[#30363D] rounded-2xl shadow-2xl overflow-hidden z-10 animate-scaleUp",
           maxWidthStyles[maxWidth],
           className
         )}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800/80">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-[#30363D]">
           <div>
-            {title && <h3 className="text-lg font-semibold text-white">{title}</h3>}
-            {description && <p className="text-xs text-slate-400 mt-0.5">{description}</p>}
+            {title && <h3 className="text-[16px] font-bold text-[#E6EDF3]">{title}</h3>}
+            {description && <p className="text-[12px] text-[#8B949E] mt-0.5">{description}</p>}
           </div>
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1.5 rounded-lg text-[#8B949E] hover:text-[#E6EDF3] hover:bg-[#21262D] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

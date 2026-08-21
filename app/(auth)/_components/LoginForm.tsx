@@ -38,61 +38,61 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-[480px] bg-white rounded-[28px] p-8 sm:p-12 shadow-[0_20px_50px_rgba(0,0,0,0.04)] border border-[#F1F5F9]">
+    <div className="w-full max-w-[460px] bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-[#ECEEF2]">
       {/* Title Header */}
-      <div className="mb-8">
-        <h2 className="text-[26px] font-bold text-[#0F172A] tracking-tight">
+      <div className="mb-6">
+        <h2 className="text-[24px] font-bold text-[#0F172A] tracking-tight">
           Sign in to Chatter
         </h2>
-        <p className="text-[13px] text-[#64748B] mt-1 font-normal">
+        <p className="text-[13px] text-[#64748B] mt-1">
           Enter your details to continue
         </p>
       </div>
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Phone Number */}
+        {/* Phone Number Field */}
         <div>
-          <label className="block text-[13px] font-semibold text-[#0F172A] mb-2">
+          <label className="block text-[12.5px] font-semibold text-[#0F172A] mb-1.5">
             Phone Number
           </label>
-          <div className="flex items-center h-[48px] border border-[#E2E8F0] rounded-xl bg-white focus-within:border-[#5B4FE1] focus-within:ring-2 focus-within:ring-[#5B4FE1]/10 transition-all overflow-hidden">
-            {/* Country Selector */}
-            <div className="flex items-center gap-1.5 px-3.5 h-full bg-white border-r border-[#E2E8F0] text-[13px] font-medium text-[#0F172A] shrink-0 select-none">
-              <span className="text-base leading-none">🇧🇩</span>
-              <span>+880</span>
-              <ChevronDown className="w-3.5 h-3.5 text-[#94A3B8]" />
+          <div className="flex items-center h-[46px] border border-[#E2E8F0] rounded-lg bg-white focus-within:border-[#5844ED] transition-colors overflow-hidden">
+            {/* Country Dropdown */}
+            <div className="flex items-center gap-1.5 px-3 h-full bg-white border-r border-[#E2E8F0] text-[13px] text-[#0F172A] shrink-0 select-none">
+              <span className="text-sm leading-none">🇧🇩</span>
+              <span className="font-medium">+880</span>
+              <ChevronDown className="w-3 h-3 text-[#94A3B8]" />
             </div>
             <input
               type="tel"
               placeholder="Enter your phone number"
-              className="flex-1 h-full px-3.5 text-[13.5px] text-[#0F172A] placeholder-[#94A3B8] outline-none bg-transparent"
+              className="flex-1 h-full px-3 text-[13px] text-[#0F172A] placeholder-[#94A3B8] outline-none bg-transparent"
               {...register("phone")}
             />
           </div>
           {errors.phone ? (
-            <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.phone.message}</p>
+            <p className="mt-1 text-xs text-red-500 font-medium">{errors.phone.message}</p>
           ) : (
-            <p className="mt-1.5 text-[11.5px] text-[#94A3B8]">We'll send you a verification code</p>
+            <p className="mt-1 text-[11px] text-[#94A3B8]">We'll send you a verification code</p>
           )}
         </div>
 
-        {/* Your Name */}
-        <div className="mt-5">
-          <label className="block text-[13px] font-semibold text-[#0F172A] mb-2">
+        {/* Your Name Field */}
+        <div className="mt-4">
+          <label className="block text-[12.5px] font-semibold text-[#0F172A] mb-1.5">
             Your Name
           </label>
-          <div className="flex items-center h-[48px] px-3.5 border border-[#E2E8F0] rounded-xl bg-white focus-within:border-[#5B4FE1] focus-within:ring-2 focus-within:ring-[#5B4FE1]/10 transition-all gap-2.5">
+          <div className="flex items-center h-[46px] px-3 border border-[#E2E8F0] rounded-lg bg-white focus-within:border-[#5844ED] transition-colors gap-2">
             <UserIcon className="w-4 h-4 text-[#94A3B8] shrink-0" />
             <input
               type="text"
               placeholder="Enter your name"
-              className="flex-1 h-full text-[13.5px] text-[#0F172A] placeholder-[#94A3B8] outline-none bg-transparent"
+              className="flex-1 h-full text-[13px] text-[#0F172A] placeholder-[#94A3B8] outline-none bg-transparent"
               {...register("name")}
             />
           </div>
           {errors.name && (
-            <p className="mt-1.5 text-xs text-red-500 font-medium">{errors.name.message}</p>
+            <p className="mt-1 text-xs text-red-500 font-medium">{errors.name.message}</p>
           )}
         </div>
 
@@ -100,7 +100,7 @@ export const LoginForm: React.FC = () => {
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-[48px] mt-6 rounded-xl bg-[#5B4FE1] hover:bg-[#4E42D4] text-white text-[14px] font-semibold shadow-md shadow-[#5B4FE1]/25 transition-all hover:scale-[1.005] active:scale-[0.995] disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+          className="w-full h-[46px] mt-5 rounded-lg bg-[#5844ED] hover:bg-[#4E39E0] text-white text-[13.5px] font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
         >
           {isLoading ? (
             <span className="flex items-center gap-2">
@@ -114,11 +114,11 @@ export const LoginForm: React.FC = () => {
       </form>
 
       {/* Divider */}
-      <div className="relative my-7 text-center">
+      <div className="relative my-6 text-center">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full border-t border-[#E2E8F0]" />
         </div>
-        <span className="relative px-3 bg-white text-[12px] text-[#94A3B8]">
+        <span className="relative px-3 bg-white text-[11.5px] text-[#94A3B8]">
           or continue with
         </span>
       </div>
@@ -128,21 +128,21 @@ export const LoginForm: React.FC = () => {
         type="button"
         onClick={handleGuestLogin}
         disabled={isLoading}
-        className="w-full h-[48px] flex items-center justify-center gap-2 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[13.5px] font-medium text-[#0F172A] transition-all hover:border-[#CBD5E1]"
+        className="w-full h-[46px] flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[13px] font-medium text-[#0F172A] transition-colors"
       >
         <UserIcon className="w-4 h-4 text-[#64748B]" />
         <span>Continue as Guest</span>
       </button>
 
       {/* Footer Terms */}
-      <p className="text-center text-[11.5px] text-[#64748B] mt-8 leading-relaxed">
+      <p className="text-center text-[11px] text-[#64748B] mt-7 leading-relaxed">
         By continuing, you agree to our{" "}
-        <a href="#" className="text-[#5B4FE1] font-semibold hover:underline">
+        <a href="#" className="text-[#5844ED] font-medium hover:underline">
           Terms of Service
         </a>{" "}
         <br />
         and{" "}
-        <a href="#" className="text-[#5B4FE1] font-semibold hover:underline">
+        <a href="#" className="text-[#5844ED] font-medium hover:underline">
           Privacy Policy
         </a>
       </p>

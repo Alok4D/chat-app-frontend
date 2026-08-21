@@ -10,7 +10,7 @@ export default function LoginPage() {
   return (
     <main className="min-h-screen w-full bg-[#F5F3FF] flex flex-col lg:flex-row items-center justify-between font-sans selection:bg-[#5B4FE1] selection:text-white overflow-hidden">
       
-      {/* ── LEFT HERO SECTION (55% Width, Perfectly Proportioned) ── */}
+      {/* ── LEFT HERO SECTION (55% Width) ── */}
       <section className="hidden lg:flex lg:w-[55%] xl:w-[56%] relative h-screen overflow-hidden shrink-0">
         {/* Full-Height 3D Background Image */}
         <Image
@@ -48,7 +48,7 @@ export default function LoginPage() {
             {/* Feature Highlights */}
             <div className="space-y-3.5 pt-1">
               <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-2xl bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
                   <Zap className="w-4 h-4 text-[#5B4FE1]" />
                 </div>
                 <div>
@@ -97,11 +97,9 @@ export default function LoginPage() {
         </div>
       </section>
 
-      {/* ── RIGHT SIGN-IN CONTAINER (45% Width) ── */}
-      <section className="flex-1 w-full flex items-center justify-center p-6 sm:p-8 lg:p-10 min-h-screen z-10">
-        <div className="w-full max-w-[480px] bg-[#FAFAFC] rounded-[36px] p-4 sm:p-6 border border-white/60 shadow-[0_30px_70px_rgba(0,0,0,0.03)] flex items-center justify-center">
-          <LoginForm />
-        </div>
+      {/* ── RIGHT SIGN-IN SECTION ── */}
+      <section className="flex-1 w-full flex items-center justify-center p-6 sm:p-10 lg:p-12 min-h-screen z-10">
+        <LoginForm />
       </section>
 
     </main>

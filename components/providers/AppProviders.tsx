@@ -3,7 +3,7 @@
 import React, { ReactNode } from "react";
 import { Provider } from "react-redux";
 import { Toaster } from "react-hot-toast";
-import { store } from "@/store";
+import { store } from "@/redux/store";
 
 export interface AppProvidersProps {
   children: ReactNode;
@@ -27,13 +27,13 @@ export const AppProviders: React.FC<AppProvidersProps> = ({ children }) => {
           },
           success: {
             iconTheme: {
-              primary: "#3b82f6",
+              primary: "#6C63FF",
               secondary: "#ffffff",
             },
           },
           error: {
             iconTheme: {
-              primary: "#f43f5e",
+              primary: "#EF4444",
               secondary: "#ffffff",
             },
           },

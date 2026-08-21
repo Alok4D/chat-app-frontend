@@ -9,7 +9,7 @@ import Image from "next/image";
 export default function LoginPage() {
   return (
     <main className="min-h-screen w-full bg-[#F5F3FF] flex flex-col lg:flex-row items-center justify-between font-sans selection:bg-[#5B4FE1] selection:text-white overflow-hidden">
-      
+
       {/* ── LEFT HERO SECTION (55% Width) ── */}
       <section className="hidden lg:flex lg:w-[55%] xl:w-[56%] relative h-screen overflow-hidden shrink-0">
         {/* Full-Height 3D Background Image */}
@@ -26,12 +26,7 @@ export default function LoginPage() {
         <div className="relative z-10 flex flex-col justify-between h-full p-8 xl:p-12 max-w-[460px] select-none">
           {/* Top Logo */}
           <div>
-            <a href={ROUTES.LANDING} className="inline-flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-2xl bg-[#5B4FE1] flex items-center justify-center shadow-lg shadow-[#5B4FE1]/30 group-hover:scale-105 transition-transform">
-                <MessageSquare className="w-5 h-5 text-white fill-white" />
-              </div>
-              <span className="text-2xl font-bold text-[#0F172A] tracking-tight">Chatter</span>
-            </a>
+           <Image src={"/icons/ChatGPT Image Aug 21, 2026, 10_44_08 PM.png"} alt="Chatter Logo" width={200} height={200} />
           </div>
 
           {/* Middle Title & 3 Features */}

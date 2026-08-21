@@ -1,18 +1,25 @@
-# PulseChat — Real-Time Chat Application Frontend
+# Chatter — Real-Time Chat Application Frontend
 
-A modern, responsive, real-time messaging application built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit**, **React Hook Form**, **Zod**, and **Socket.IO Client**.
+A modern, responsive, real-time messaging application built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit (RTK Query)**, **React Hook Form**, **Zod**, and **Socket.IO Client**.
 
 ---
 
-## 🚀 Key Features
+## 🚀 Implemented Features Overview
 
-- **⚡ Real-Time Socket Architecture**: Real-time message broadcasting, typing indicators, and presence updates.
-- **🎨 Glassmorphic Dark UI**: Custom-tailored design system with micro-animations and zero-clutter focus.
-- **👥 1-on-1 & Multi-User Groups**: Full group creation modal with participant filter and role management.
-- **🔒 Phone & OTP Authentication**: Form validation powered by Zod and React Hook Form with quick demo presets.
-- **📦 Redux State Synchronization**: Clean slice architecture managing conversations, contacts, and message history.
-- **📖 OpenAPI Explorer**: Interactive API documentation viewer for REST & WebSocket endpoints.
-- **🔄 Dual Engine / Mock Mode**: Seamless built-in mock fallback allowing instant interactive use out-of-the-box.
+### Part 1: Real-Time Chat Application
+- **⚡ Authentication**: Phone number + name login with automatic registration for new users (no password required).
+- **🔍 Conversation Discovery**: Real-time directory search by phone number or name to initiate 1:1 direct conversations.
+- **👥 Multi-Participant Groups**: Dedicated group creation flow with persistent multi-member selection and validation.
+- **💬 Real-Time Messaging**: Instant WebSocket bi-directional communication powered by Socket.IO.
+- **🎨 Visual Distinction**: Sent messages (violet `#6C63FF` with delivery receipts) vs. received messages (light slate `#F1F5F9` with avatar).
+- **⏰ Smart Timestamps & Date Chips**: Every message is formatted with exact time, plus a centered "Today" separator.
+- **🛡️ Form & Input Protection**: Whitespace-only or empty messages cannot be sent.
+- **⏳ Loading, Empty & Error States**: Comprehensive feedback across all lists, searches, messages, and network requests.
+- **📜 Intelligent Auto-Scroll**: Automatically scrolls to latest message by default; preserves scroll position if the user has scrolled up to read history.
+- **ℹ️ Conversation Info Drawer**: 4-column layout including right-side details panel (media gallery, status, mute notifications, member list).
+
+### Part 2: Creative Landing Page
+- Responsive showcase landing page featuring Navbar, Hero, Feature highlights, Step-by-step How It Works flow, Interactive Chat Mockup preview, CTA, and Footer.
 
 ---
 
@@ -22,32 +29,49 @@ A modern, responsive, real-time messaging application built with **Next.js (App 
 chat-app-frontend/
 ├── app/
 │   ├── (auth)/
-│   │   ├── _components/ (LoginForm, PhoneInput)
-│   │   └── login/
+│   │   ├── _components/ (LoginForm)
+│   │   └── login/page.tsx
 │   ├── (chat)/
-│   │   ├── _components/ (ChatLayout, ChatHeader, ConversationList, MessageList, MessageBubble, MessageInput, group/)
-│   │   └── chat/
+│   │   ├── _components/
+│   │   │   ├── ChatLayout.tsx
+│   │   │   ├── ChatHeader.tsx
+│   │   │   ├── ChatSearch.tsx
+│   │   │   ├── ConversationList.tsx
+│   │   │   ├── ConversationItem.tsx
+│   │   │   ├── ConversationInfo.tsx
+│   │   │   ├── MessageList.tsx
+│   │   │   ├── MessageBubble.tsx
+│   │   │   ├── MessageInput.tsx
+│   │   │   ├── EmptyChat.tsx
+│   │   │   └── group/ (CreateGroupModal, GroupForm, ParticipantSelector, ParticipantItem)
+│   │   └── chat/page.tsx
 │   ├── landing/
-│   │   ├── _components/ (Navbar, Hero, Features, ChatPreview, CTA, Footer)
+│   │   ├── _components/ (Navbar, Hero, Features, HowItWorks, ChatPreview, CTA, Footer)
 │   │   └── page.tsx
-│   ├── api-docs/
-│   │   ├── _components/ (ApiEndpoint, ApiMethod, ApiResponse)
-│   │   └── page.tsx
+│   ├── not-found.tsx
+│   ├── error.tsx
 │   ├── layout.tsx
 │   ├── page.tsx
 │   └── globals.css
 ├── components/
 │   ├── ui/ (Button, Input, Modal, Avatar, Badge, Card)
-│   ├── feedback/ (LoadingSpinner, ErrorState, EmptyState)
+│   ├── feedback/ (LoadingSpinner)
 │   └── providers/ (AppProviders)
+├── redux/
+│   ├── api/ (baseApi.ts)
+│   ├── features/
+│   │   ├── auth/ (authApi.ts)
+│   │   ├── conversations/ (conversationsApi.ts)
+│   │   ├── messages/ (messagesApi.ts)
+│   │   ├── groups/ (groupsApi.ts)
+│   │   └── users/ (usersApi.ts)
+│   ├── slices/
+│   │   ├── authSlice.ts
+│   │   └── chatSlice.ts
+│   ├── hooks.ts
+│   └── store.ts
 ├── hooks/
 │   ├── useAuth.ts, useConversations.ts, useMessages.ts, useUsers.ts, useGroups.ts, useRealtimeMessages.ts, useAutoScroll.ts
-├── lib/
-│   ├── api/ (client.ts, auth.api.ts, users.api.ts, conversations.api.ts, messages.api.ts, groups.api.ts)
-│   ├── utils/ (cn.ts, formatDate.ts, formatTime.ts, validation.ts)
-│   └── constants/ (routes.ts, config.ts)
-├── store/
-│   ├── auth.store.ts, chat.store.ts, hooks.ts, index.ts
 ├── types/
 │   ├── auth.ts, user.ts, conversation.ts, message.ts, group.ts
 └── docs/
@@ -63,15 +87,25 @@ chat-app-frontend/
 npm install
 ```
 
-### 2. Run Development Server
+### 2. Environment Configuration
+Create a `.env.local` file with the following variables:
+```env
+NEXT_PUBLIC_APP_NAME="Chatter"
+NEXT_PUBLIC_API_BASE_URL="https://frontend-task-chatapp.onrender.com/api"
+NEXT_PUBLIC_SOCKET_URL="https://frontend-task-chatapp.onrender.com"
+NEXT_PUBLIC_ENABLE_MOCK="false"
+```
+
+### 3. Run Development Server
 ```bash
 npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 3. Build for Production
+### 4. Build for Production
 ```bash
 npm run build
+npm run start
 ```
 
 ---
@@ -79,21 +113,25 @@ npm run build
 ## 🧠 Part 3: Thought Process Write-up
 
 ### 1. Architecture, Libraries & Approach (Part 1)
-- **Framework (Next.js App Router)**: We leveraged Next.js App Router for strict path-based route management, optimizing loading performance, and clean component nesting.
-- **State Management (Redux Toolkit)**: Global Redux slices are utilized to synchronize the logged-in profile, conversation metadata, unread counts, and active message streams. This ensures consistency when WebSocket events are received in the background.
-- **Form Management & Validation**: Used `react-hook-form` paired with `zod` schema resolvers. Madagascar. This ensures strong input type safety and validates phone number rules before dispatching any API requests.
-- **Trade-offs**: We chose client-side state mapping helpers instead of modifying the existing high-fidelity UI components. This minimizes regression risks and maps the backend's MongoDB `_id` schemas cleanly to standard frontend model parameters.
+- **Framework (Next.js 14 App Router)**: Next.js App Router was chosen for its file-system routing, automatic code splitting, optimized static generation, and clean route grouping (`(auth)`, `(chat)`, `landing`).
+- **State Management & Data Fetching (Redux Toolkit & RTK Query)**: We organized the state layer using a feature-based architecture (`redux/api`, `redux/features`, `redux/slices`). RTK Query provides automatic request caching, tag-based cache invalidation, and seamless integration with client slices. Madagascar.
+- **Form Management & Validation**: Used `react-hook-form` with `zod` schema resolvers for input type-safety and instant validation before network dispatch.
+- **Trade-offs**: Normalized client-side entity mapping was used to translate backend MongoDB `_id` and legacy fields into standardized TypeScript frontend interfaces without polluting UI components.
 
 ### 2. Design Choices & Visual Aesthetics (Part 2)
-- Built a premium glassmorphic dark-mode palette utilizing tailored Slate-HSL values instead of default browser styles.
-- Integrated rich Lucide icons, pulsing presence indicators, and interactive micro-animations (scale active state, slide-down banners) to establish a premium SaaS vibe.
-- Implemented responsive sidebars for mobile screens with backdrop overlays.
+- Designed a custom **Chatter** aesthetic featuring a modern violet `#6C63FF` primary palette, clean white backgrounds, and a high-contrast dark navy `#0F172A` navigation rail.
+- Crafted a 4-column layout (Rail + Conversations + Chat + Details) matching modern desktop messaging applications.
 
 ### 3. AI Tools Usage & Collaboration
-- **Boilerplate & Directory Scaffolding**: Utilized AI commands to cleanly structure base folders and create reusable UI tokens (`Button.tsx`, `Input.tsx`, `Avatar.tsx`).
-- **Swagger Documentation Extraction**: Used AI to parse the live REST and WebSocket endpoints, identifying properties (such as `/users/search?q=`) and return schemas.
-- **Manual Additions**: All API mapping routines, real-time debounce search controls, Redux state synchronization, and Socket.IO event mapping handlers were customized and thoroughly refined to ensure seamless execution.
+- **Boilerplate & Architecture Scaffolding**: Utilized AI commands to structure folders, create TypeScript schemas, and build reusable UI tokens.
+- **API Mapping & Documentation**: Extracted OpenAPI/Swagger endpoint schemas into [`docs/API.md`](docs/API.md).
+- **Manual Refinement**: Custom error interceptors, scroll threshold detection logic, multi-participant selection caching, and WebSocket event synchronization were implemented and thoroughly tested.
 
-### 4. Future Improvements
-- Implement paginated virtualized list renders (`react-virtual`) for conversation histories containing thousands of messages.
-- Enable end-to-end media compression before sending attachments.
+### 4. Any Issues You Ran Into & Workarounds
+- **Group Creation Participant Validation**: The backend requires at least 3 total members for a group (`participantIds` array must have $\ge 2$ members besides the creator). We added client-side validation to enforce selecting at least 2 participants and updated the API client to surface nested `data.error.details[0].message` error messages.
+- **Participant Search Persistence**: When searching for multiple participants sequentially, unmounted search results cleared previously selected members. We resolved this by implementing an in-memory selection cache so selected users remain visible across searches.
+- **WebSocket Reconnection & Sync**: Handled token retrieval directly from `localStorage` in the WebSocket handshake with automatic resynchronization on reconnection.
+
+### 5. Future Improvements
+- Implement paginated virtualized message history (`@tanstack/react-virtual`).
+- Add client-side image compression for rich media uploads.

@@ -5,8 +5,8 @@ import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatLastSeen } from "@/lib/utils/formatTime";
 import { Phone, Video, MoreVertical, Menu, Info } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsMobileSidebarOpen, toggleInfoPanel } from "@/store/chat.store";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setIsMobileSidebarOpen, toggleInfoPanel } from "@/redux/slices/chatSlice";
 
 export interface ChatHeaderProps {
   conversation: Conversation;

@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { useAppDispatch } from "@/store/hooks";
-import { addConversation, setActiveConversationId, setIsCreateGroupModalOpen } from "@/store/chat.store";
-import { groupsApi } from "@/lib/api/groups.api";
+import { useAppDispatch } from "@/redux/hooks";
+import { addConversation, setActiveConversationId, setIsCreateGroupModalOpen } from "@/redux/slices/chatSlice";
+import { groupsApi } from "@/redux/features/groups/groupsApi";
 import { CreateGroupPayload } from "@/types/group";
 import toast from "react-hot-toast";
 
@@ -15,14 +15,16 @@ export function useGroups() {
     async (payload: CreateGroupPayload) => {
       setIsSubmitting(true);
       try {
-        const newGroup = await groupsApi.createGroup(payload);
+        const newGroup = await dispatch(
+          groupsApi.endpoints.createGroup.initiate(payload)
+        ).unwrap();
         dispatch(addConversation(newGroup));
         dispatch(setActiveConversationId(newGroup.id));
         dispatch(setIsCreateGroupModalOpen(false));
         toast.success(`Group "${payload.name}" created! 🎉`);
         return newGroup;
       } catch (error: any) {
-        toast.error(error.message || "Failed to create group");
+        toast.error(error?.data?.message || error?.message || "Failed to create group");
         throw error;
       } finally {
         setIsSubmitting(false);

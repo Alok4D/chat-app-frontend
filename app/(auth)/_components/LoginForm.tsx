@@ -11,6 +11,7 @@ import { ROUTES } from "@/lib/constants/routes";
 const DEMO_USERS = [
   { label: "User 1", phone: "+15551234567", name: "Alex Morgan" },
   { label: "User 2", phone: "+15551234568", name: "Sarah Chen" },
+  { label: "User 3", phone: "01719277951", name: "ABCD" },
 ];
 
 export const LoginForm: React.FC = () => {

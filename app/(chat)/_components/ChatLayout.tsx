@@ -14,8 +14,9 @@ import { useConversations } from "@/hooks/useConversations";
 import { useMessages } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealtimeMessages } from "@/hooks/useRealtimeMessages";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsMobileSidebarOpen, setIsCreateGroupModalOpen } from "@/store/chat.store";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setIsMobileSidebarOpen, setIsCreateGroupModalOpen } from "@/redux/slices/chatSlice";
+import { usersApi } from "@/redux/features/users/usersApi";
 import {
   MessageSquare,
   Users,
@@ -28,7 +29,6 @@ import {
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
-import { usersApi } from "@/lib/api/users.api";
 import { User } from "@/types/user";
 
 export const ChatLayout: React.FC = () => {
@@ -60,7 +60,9 @@ export const ChatLayout: React.FC = () => {
     const delayDebounce = setTimeout(async () => {
       setLoadingContacts(true);
       try {
-        const res = await usersApi.getUsers({ search: searchQuery });
+        const res = await dispatch(
+          usersApi.endpoints.searchUsers.initiate(searchQuery, { forceRefetch: true })
+        ).unwrap();
         setGlobalContacts(res.filter((u) => u.id !== user?.id));
       } catch (err) {
         console.error("Global search error:", err);
@@ -69,7 +71,7 @@ export const ChatLayout: React.FC = () => {
       }
     }, 400);
     return () => clearTimeout(delayDebounce);
-  }, [searchQuery, user]);
+  }, [searchQuery, user, dispatch]);
 
   const handleSelectConv = (id: string) => {
     selectConversation(id);

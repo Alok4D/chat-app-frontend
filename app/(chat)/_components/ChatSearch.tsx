@@ -2,8 +2,8 @@
 
 import React from "react";
 import { Search } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setSearchQuery, setFilterType } from "@/store/chat.store";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setSearchQuery, setFilterType } from "@/redux/slices/chatSlice";
 import { cn } from "@/lib/utils/cn";
 
 export const ChatSearch: React.FC = () => {

@@ -3,15 +3,15 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   loginStart,
   loginSuccess,
   loginFailure,
   logout as logoutAction,
   updateProfile,
-} from "@/store/auth.store";
-import { authApi } from "@/lib/api/auth.api";
+} from "@/redux/slices/authSlice";
+import { authApi } from "@/redux/features/auth/authApi";
 import { LoginCredentials, AuthUser } from "@/types/auth";
 import { ROUTES } from "@/lib/constants/routes";
 
@@ -24,13 +24,15 @@ export function useAuth() {
     async (credentials: LoginCredentials) => {
       dispatch(loginStart());
       try {
-        const response = await authApi.login(credentials);
+        const response = await dispatch(
+          authApi.endpoints.login.initiate(credentials)
+        ).unwrap();
         dispatch(loginSuccess(response));
         toast.success(`Welcome back, ${response.user.name}!`);
         router.push(ROUTES.CHAT);
         return response;
       } catch (error: any) {
-        const msg = error.message || "Failed to login";
+        const msg = error?.data?.message || error?.message || "Failed to login";
         dispatch(loginFailure(msg));
         toast.error(msg);
         throw error;
@@ -41,7 +43,9 @@ export function useAuth() {
 
   const logout = useCallback(async () => {
     try {
-      await authApi.logout();
+      await dispatch(authApi.endpoints.logout.initiate()).unwrap();
+    } catch {
+      // ignore logout errors
     } finally {
       dispatch(logoutAction());
       toast.success("Logged out successfully");

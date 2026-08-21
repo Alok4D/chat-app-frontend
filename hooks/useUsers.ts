@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setUsers } from "@/store/chat.store";
-import { usersApi } from "@/lib/api/users.api";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setUsers } from "@/redux/slices/chatSlice";
+import { usersApi } from "@/redux/features/users/usersApi";
 import { User, UserFilterParams } from "@/types/user";
 
 export function useUsers(initialFetch = true) {
@@ -16,7 +16,10 @@ export function useUsers(initialFetch = true) {
     async (params?: UserFilterParams) => {
       setIsLoading(true);
       try {
-        const data = await usersApi.getUsers(params);
+        const query = params?.search || "";
+        const data = await dispatch(
+          usersApi.endpoints.searchUsers.initiate(query, { forceRefetch: true })
+        ).unwrap();
         const filtered = data.filter((u) => u.id !== currentUser?.id);
         dispatch(setUsers(filtered));
       } catch (error) {

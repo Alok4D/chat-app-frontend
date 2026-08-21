@@ -4,8 +4,8 @@ import React, { useState, useEffect } from "react";
 import { User } from "@/types/user";
 import { ParticipantItem } from "./ParticipantItem";
 import { Search } from "lucide-react";
-import { usersApi } from "@/lib/api/users.api";
-import { useAppSelector } from "@/store/hooks";
+import { usersApi } from "@/redux/features/users/usersApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 
 export interface ParticipantSelectorProps {
   users?: User[];
@@ -18,6 +18,7 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
   selectedUserIds,
   onToggleParticipant,
 }) => {
+  const dispatch = useAppDispatch();
   const currentUser = useAppSelector((s) => s.auth.user);
   const [search, setSearch] = useState("");
   const [searchResults, setSearchResults] = useState<User[]>([]);
@@ -32,7 +33,9 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
     const delay = setTimeout(async () => {
       setLoading(true);
       try {
-        const res = await usersApi.getUsers({ search });
+        const res = await dispatch(
+          usersApi.endpoints.searchUsers.initiate(search, { forceRefetch: true })
+        ).unwrap();
         const filtered = res.filter((u) => u.id !== currentUser?.id);
         setSearchResults(filtered);
         
@@ -51,7 +54,7 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
       }
     }, 350);
     return () => clearTimeout(delay);
-  }, [search, currentUser]);
+  }, [search, currentUser, dispatch]);
 
   // Combine search results and any previously selected users that are cached
   const displayedUsers: User[] = [];

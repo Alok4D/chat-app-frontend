@@ -2,11 +2,11 @@
 
 import { useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { addMessage, setConversations, updateUserStatus } from "@/store/chat.store";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { addMessage, setConversations, updateUserStatus } from "@/redux/slices/chatSlice";
 import { APP_CONFIG } from "@/lib/constants/config";
 import { mapMessage } from "@/lib/api/messages.api";
-import { conversationsApi } from "@/lib/api/conversations.api";
+import { conversationsApi } from "@/redux/features/conversations/conversationsApi";
 
 export function useRealtimeMessages() {
   const dispatch = useAppDispatch();
@@ -38,7 +38,9 @@ export function useRealtimeMessages() {
       // Live event: conversation:updated
       socket.on("conversation:updated", async () => {
         try {
-          const list = await conversationsApi.getConversations();
+          const list = await dispatch(
+            conversationsApi.endpoints.getConversations.initiate(undefined, { forceRefetch: true })
+          ).unwrap();
           dispatch(setConversations(list));
         } catch (e) {
           console.error("Failed to sync conversations on websocket update:", e);

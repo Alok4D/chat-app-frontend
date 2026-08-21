@@ -16,8 +16,8 @@ import {
   LogOut,
   Users,
 } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
-import { setIsInfoPanelOpen } from "@/store/chat.store";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { setIsInfoPanelOpen } from "@/redux/slices/chatSlice";
 import toast from "react-hot-toast";
 
 export interface ConversationInfoProps {

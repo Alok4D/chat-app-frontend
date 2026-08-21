@@ -3,7 +3,7 @@ import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatDate } from "@/lib/utils/formatDate";
 import { cn } from "@/lib/utils/cn";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 export interface ConversationItemProps {
   conversation: Conversation;

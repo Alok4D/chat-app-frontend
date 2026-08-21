@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "@/store/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import {
   setConversations,
   addConversation,
@@ -9,8 +9,8 @@ import {
   setIsLoadingConversations,
   setSearchQuery,
   setFilterType,
-} from "@/store/chat.store";
-import { conversationsApi } from "@/lib/api/conversations.api";
+} from "@/redux/slices/chatSlice";
+import { conversationsApi } from "@/redux/features/conversations/conversationsApi";
 import { ConversationFilterParams } from "@/types/conversation";
 import toast from "react-hot-toast";
 
@@ -28,10 +28,12 @@ export function useConversations() {
     async (params?: ConversationFilterParams) => {
       dispatch(setIsLoadingConversations(true));
       try {
-        const data = await conversationsApi.getConversations({
-          search: searchQuery,
-          ...params,
-        });
+        const data = await dispatch(
+          conversationsApi.endpoints.getConversations.initiate(
+            { search: searchQuery, ...params },
+            { forceRefetch: true }
+          )
+        ).unwrap();
         dispatch(setConversations(data));
       } catch (error: any) {
         toast.error(error?.message || "Failed to load conversations");
@@ -49,12 +51,11 @@ export function useConversations() {
   const selectConversation = useCallback(
     (id: string) => {
       dispatch(setActiveConversationId(id));
-      conversationsApi.markAsRead(id).catch(console.error);
+      dispatch(conversationsApi.endpoints.markAsRead.initiate(id));
     },
     [dispatch]
   );
 
-  // Filter conversations by filterType
   const filteredConversations = conversations.filter((c) => {
     if (filterType === "direct") return c.type === "direct";
     if (filterType === "group") return c.type === "group";
@@ -68,7 +69,9 @@ export function useConversations() {
   const startDirectConversation = useCallback(
     async (userId: string) => {
       try {
-        const conv = await conversationsApi.createDirectConversation(userId);
+        const conv = await dispatch(
+          conversationsApi.endpoints.createDirectConversation.initiate(userId)
+        ).unwrap();
         dispatch(addConversation(conv));
         dispatch(setActiveConversationId(conv.id));
         return conv;

@@ -5,7 +5,7 @@ import { Message } from "@/types/message";
 import { MessageBubble } from "./MessageBubble";
 import { LoadingSpinner } from "@/components/feedback/LoadingSpinner";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
-import { useAppSelector } from "@/store/hooks";
+import { useAppSelector } from "@/redux/hooks";
 
 export interface MessageListProps {
   messages: Message[];

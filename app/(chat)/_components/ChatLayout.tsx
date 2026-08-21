@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChatSearch } from "./ChatSearch";
 import { ConversationList } from "./ConversationList";
 import { ChatHeader } from "./ChatHeader";
@@ -15,19 +15,54 @@ import { useAuth } from "@/hooks/useAuth";
 import { useRealtimeMessages } from "@/hooks/useRealtimeMessages";
 import { useAppDispatch, useAppSelector } from "@/store/hooks";
 import { setIsMobileSidebarOpen } from "@/store/chat.store";
-import { MessageSquare, LogOut, Code, BookOpen, Sparkles, X } from "lucide-react";
+import { MessageSquare, LogOut, Code, BookOpen, Sparkles, X, UserPlus } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
+import { usersApi } from "@/lib/api/users.api";
+import { User } from "@/types/user";
 
 export const ChatLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const { user, logout } = useAuth();
-  const { conversations, activeConversation, activeConversationId, selectConversation, isLoading } =
-    useConversations();
+  const {
+    conversations,
+    activeConversation,
+    activeConversationId,
+    selectConversation,
+    startDirectConversation,
+    searchQuery,
+    isLoading,
+  } = useConversations();
   const { messages, isLoading: isMessagesLoading, replyTo, sendMessage, reactToMessage, setReplyTo } =
     useMessages();
   const { sendTypingEvent } = useRealtimeMessages();
   const isMobileSidebarOpen = useAppSelector((s) => s.chat.isMobileSidebarOpen);
+
+  const [globalContacts, setGlobalContacts] = useState<User[]>([]);
+  const [loadingContacts, setLoadingContacts] = useState(false);
+
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setGlobalContacts([]);
+      return;
+    }
+
+    const delayDebounce = setTimeout(async () => {
+      setLoadingContacts(true);
+      try {
+        const res = await usersApi.getUsers({ search: searchQuery });
+        // Filter out current user from results (handled by api, but double check)
+        const filtered = res.filter((u) => u.id !== user?.id);
+        setGlobalContacts(filtered);
+      } catch (err) {
+        console.error("Global search error:", err);
+      } finally {
+        setLoadingContacts(false);
+      }
+    }, 400);
+
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery, user]);
 
   const handleSelectConv = (id: string) => {
     selectConversation(id);
@@ -122,6 +157,42 @@ export const ChatLayout: React.FC = () => {
           isLoading={isLoading}
           onSelectConversation={handleSelectConv}
         />
+
+        {/* Global Contacts Search Results */}
+        {(globalContacts.length > 0 || loadingContacts) && (
+          <div className="border-t border-slate-800/60 bg-slate-900/10 backdrop-blur-md pt-2 pb-4">
+            <h3 className="px-4 py-2 text-[10px] uppercase tracking-wider font-bold text-slate-500 font-mono flex items-center gap-1.5">
+              <UserPlus className="w-3 h-3 text-blue-400" />
+              <span>Global Contacts Found</span>
+            </h3>
+            <div className="space-y-1 max-h-48 overflow-y-auto px-2 custom-scrollbar">
+              {loadingContacts ? (
+                <p className="text-xs text-slate-500 text-center py-4">Searching database...</p>
+              ) : (
+                globalContacts.map((contact) => (
+                  <div
+                    key={contact.id}
+                    onClick={async () => {
+                      try {
+                        const newConv = await startDirectConversation(contact.id);
+                        handleSelectConv(newConv.id);
+                      } catch (e) {
+                        console.error("Failed to start chat:", e);
+                      }
+                    }}
+                    className="flex items-center gap-3 p-2.5 rounded-xl cursor-pointer hover:bg-slate-900 transition-colors border border-transparent hover:border-slate-800/60"
+                  >
+                    <Avatar src={contact.avatarUrl} name={contact.name} size="sm" />
+                    <div className="min-w-0 flex-1">
+                      <p className="text-xs font-semibold text-slate-200 truncate">{contact.name}</p>
+                      <p className="text-[10px] text-slate-400 truncate">{contact.phone}</p>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Bottom Current User Card in Sidebar */}
         {user && (

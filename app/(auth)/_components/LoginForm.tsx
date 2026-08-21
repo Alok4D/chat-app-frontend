@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, ArrowRight, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, User as UserIcon } from "lucide-react";
 import { loginFormSchema, LoginFormData } from "@/lib/utils/validation";
 import { useAuth } from "@/hooks/useAuth";
 import { PhoneInput } from "./PhoneInput";
@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 
 export const LoginForm: React.FC = () => {
-  const [authMode, setAuthMode] = useState<"password" | "otp">("password");
   const { login, isLoading } = useAuth();
 
   const {
@@ -22,30 +21,28 @@ export const LoginForm: React.FC = () => {
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
-      phone: "+1 555-0199",
-      password: "password123",
-      otp: "",
+      phone: "+15551234567",
+      name: "Alex Morgan",
     },
   });
 
   const onSubmit = async (data: LoginFormData) => {
     await login({
       phone: data.phone,
-      password: data.password,
-      otp: data.otp,
+      name: data.name,
     });
   };
 
   const handleFillDemo = (type: "alex" | "sarah" | "marcus") => {
     if (type === "alex") {
-      setValue("phone", "+1 555-0199");
-      setValue("password", "password123");
+      setValue("phone", "+15551234567");
+      setValue("name", "Alex Morgan");
     } else if (type === "sarah") {
-      setValue("phone", "+1 555-0102");
-      setValue("password", "password123");
+      setValue("phone", "+15551234568");
+      setValue("name", "Sarah Chen");
     } else {
-      setValue("phone", "+1 555-0103");
-      setValue("password", "password123");
+      setValue("phone", "+15551234569");
+      setValue("name", "Marcus Vance");
     }
   };
 
@@ -60,9 +57,9 @@ export const LoginForm: React.FC = () => {
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 text-white shadow-lg shadow-blue-500/30 mb-4">
           <Sparkles className="w-6 h-6" />
         </div>
-        <h1 className="text-2xl font-bold tracking-tight text-white">Welcome Back</h1>
+        <h1 className="text-2xl font-bold tracking-tight text-white">Welcome to PulseChat</h1>
         <p className="text-sm text-slate-400 mt-1.5">
-          Enter your credentials to access your real-time workspace
+          Enter your name and phone number to sign in or create an account automatically.
         </p>
       </div>
 
@@ -78,49 +75,23 @@ export const LoginForm: React.FC = () => {
             onClick={() => handleFillDemo("alex")}
             className="text-xs py-1.5 px-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition-colors font-medium text-center truncate"
           >
-            Alex (Lead)
+            Alex Morgan
           </button>
           <button
             type="button"
             onClick={() => handleFillDemo("sarah")}
             className="text-xs py-1.5 px-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition-colors font-medium text-center truncate"
           >
-            Sarah (Design)
+            Sarah Chen
           </button>
           <button
             type="button"
             onClick={() => handleFillDemo("marcus")}
             className="text-xs py-1.5 px-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-200 transition-colors font-medium text-center truncate"
           >
-            Marcus (Dev)
+            Marcus Vance
           </button>
         </div>
-      </div>
-
-      {/* Tab Switcher */}
-      <div className="flex bg-slate-950/80 p-1 rounded-xl mb-6 border border-slate-800/80">
-        <button
-          type="button"
-          onClick={() => setAuthMode("password")}
-          className={`flex-1 text-xs font-semibold py-2 rounded-lg transition-all ${
-            authMode === "password"
-              ? "bg-slate-800 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200"
-          }`}
-        >
-          Password Login
-        </button>
-        <button
-          type="button"
-          onClick={() => setAuthMode("otp")}
-          className={`flex-1 text-xs font-semibold py-2 rounded-lg transition-all ${
-            authMode === "otp"
-              ? "bg-slate-800 text-white shadow-sm"
-              : "text-slate-400 hover:text-slate-200"
-          }`}
-        >
-          OTP Verification
-        </button>
       </div>
 
       {/* Form */}
@@ -131,26 +102,14 @@ export const LoginForm: React.FC = () => {
           error={errors.phone?.message}
         />
 
-        {authMode === "password" ? (
-          <Input
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            leftIcon={<Lock className="w-4 h-4" />}
-            {...register("password")}
-            error={errors.password?.message}
-          />
-        ) : (
-          <Input
-            label="6-Digit Verification Code"
-            type="text"
-            placeholder="123456"
-            maxLength={6}
-            leftIcon={<ShieldCheck className="w-4 h-4" />}
-            {...register("otp")}
-            error={errors.otp?.message}
-          />
-        )}
+        <Input
+          label="Display Name"
+          type="text"
+          placeholder="e.g. Ada Lovelace"
+          leftIcon={<UserIcon className="w-4 h-4" />}
+          {...register("name")}
+          error={errors.name?.message}
+        />
 
         <Button
           type="submit"
@@ -158,14 +117,14 @@ export const LoginForm: React.FC = () => {
           isLoading={isLoading}
           className="w-full mt-2 font-semibold shadow-lg shadow-blue-600/30"
         >
-          <span>Sign In to Workspace</span>
+          <span>Enter Workspace</span>
           <ArrowRight className="w-4 h-4 ml-1" />
         </Button>
       </form>
 
       <div className="mt-6 text-center">
         <p className="text-xs text-slate-500">
-          By signing in, you agree to our Terms of Service & Privacy Policy.
+          No password required. New phone numbers are automatically registered.
         </p>
       </div>
     </div>

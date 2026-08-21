@@ -1,0 +1,10 @@
+Next.js
+TypeScript
+Tailwind CSS
+shadcn/ui
+Lucide React
+Redux
+React Hook Form
+Zod
+Socket.IO Client (যদি API support করে)
+react-hot-toast

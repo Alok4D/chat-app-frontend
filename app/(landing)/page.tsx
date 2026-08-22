@@ -9,9 +9,12 @@ import { Footer } from "./_components/Footer";
 import GroupShowcase from "./_components/GroupShowcase";
 
 export const metadata = {
-  title: "Chatter — Real-time Chat Made Simple",
+  title: "Chatter Real-time Chat Made Simple",
   description:
     "Connect with friends, colleagues, and communities instantly with our real-time chat application. Secure, fast, and developer friendly.",
+  icons: {
+    icon: "/icons/favlogo.png",
+  },
 };
 
 export default function LandingPage() {

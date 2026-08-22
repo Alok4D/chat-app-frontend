@@ -3,9 +3,12 @@ import { AppProviders } from "@/components/providers/AppProviders";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "PulseChat — Real-Time Chat & Collaboration",
+  title: "Chatter — Real-Time Chat & Collaboration",
   description:
-    "Enterprise-grade real-time messaging application built with Next.js, TypeScript, Tailwind CSS, and Redux.",
+    "A modern, secure real-time messaging application built with Next.js, TypeScript, Tailwind CSS, and Redux.",
+  icons: {
+    icon: "/icons/favlogo.png",
+  },
 };
 
 export default function RootLayout({

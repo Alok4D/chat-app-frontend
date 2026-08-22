@@ -5,6 +5,7 @@ import { LoginForm } from "../_components/LoginForm";
 import { MessageSquare, Zap, Shield, Users } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function LoginPage() {
   return (
@@ -13,6 +14,7 @@ export default function LoginPage() {
       {/* ── LEFT HERO SECTION (55% Width) ── */}
       <section className="hidden lg:flex lg:w-[55%] xl:w-[56%] relative h-screen overflow-hidden shrink-0">
         {/* Full-Height 3D Background Image */}
+      <Link href={ROUTES.HOME}>
         <Image
           src="/images/ChatGPT Image Aug 21, 2026, 10_53_28 PM copy.png"
           alt="Chatter 3D Showcase"
@@ -21,12 +23,15 @@ export default function LoginPage() {
           className="object-cover object-right"
           sizes="(max-width: 1024px) 100vw, 56vw"
         />
+      </Link>
 
         {/* Content Overlaid on Left Side of the Image */}
         <div className="relative z-10 flex flex-col justify-between h-full p-8 xl:p-12 max-w-[460px] select-none">
           {/* Top Logo */}
           <div>
+           <Link href={ROUTES.HOME}>
            <Image src={"/icons/ChatGPT Image Aug 21, 2026, 10_44_08 PM.png"} alt="Chatter Logo" width={200} height={200} />
+           </Link>
           </div>
 
           {/* Middle Title & 3 Features */}

@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { loginFormSchema, LoginFormData } from "@/lib/utils/validation";
 import { useAuth } from "@/hooks/useAuth";
+import Link from "next/link";
+import { ROUTES } from "@/lib/constants/routes";
 
 export const LoginForm: React.FC = () => {
   const { login, isLoading } = useAuth();
@@ -29,6 +31,7 @@ export const LoginForm: React.FC = () => {
       {/* Centered Brand Logo (Enlarged) */}
       <div className="flex justify-center mb-5">
         {/* Mobile Logo */}
+       <Link href={ROUTES.HOME}>
         <Image
           src="/logo/nav-logo.png"
           alt="Chatter Logo"
@@ -37,7 +40,9 @@ export const LoginForm: React.FC = () => {
           className="block md:hidden h-11 w-auto object-contain"
           priority
         />
+       </Link>
         {/* Tablet & Desktop Logo */}
+       <Link href={ROUTES.HOME}>
         <Image
           src="/icons/favlogo.png"
           alt="Chatter Logo"
@@ -46,6 +51,7 @@ export const LoginForm: React.FC = () => {
           className="hidden md:block h-24 w-auto object-contain"
           priority
         />
+       </Link>
       </div>
 
       {/* Centered Subtitle */}

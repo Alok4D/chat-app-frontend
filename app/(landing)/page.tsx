@@ -6,6 +6,7 @@ import { HowItWorks } from "./_components/HowItWorks";
 import { ChatPreview } from "./_components/ChatPreview";
 import { CTA } from "./_components/CTA";
 import { Footer } from "./_components/Footer";
+import GroupShowcase from "./_components/GroupShowcase";
 
 export const metadata = {
   title: "Chatter — Real-time Chat Made Simple",
@@ -19,9 +20,11 @@ export default function LandingPage() {
       <Navbar />
       <main className="flex-1 pt-16">
         <Hero />
-        <Features />
+        {/* <Features /> */}
         <HowItWorks />
         <ChatPreview />
+        <GroupShowcase />
+        
         <CTA />
       </main>
       <Footer />

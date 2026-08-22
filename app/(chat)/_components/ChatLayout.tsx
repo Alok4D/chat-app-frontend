@@ -141,19 +141,20 @@ export const ChatLayout: React.FC = () => {
 
         {/* ── SIDEBAR BODY ── */}
         <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
-          {/* Search Box */}
-          <div className="p-3 pb-2">
-            <div className="flex items-center h-9 px-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg focus-within:border-[#5B4FE1] focus-within:bg-white transition-colors">
-              <Search className="w-3.5 h-3.5 text-[#9CA3AF] shrink-0 mr-2" />
+          {/* Search Box & New Group */}
+          <div className="p-3 pb-2.5 flex flex-col gap-2.5">
+            {/* Search Box */}
+            <div className="flex items-center h-10 px-3.5 bg-[#F1F3F7] rounded-lg transition-colors">
+              <Search className="w-4 h-4 text-[#8E9AAC] shrink-0 mr-2.5" />
               <input
                 type="text"
                 placeholder="Search by name or phone..."
                 value={searchQuery}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full h-full bg-transparent text-[12.5px] text-[#111827] placeholder-[#9CA3AF] outline-none"
+                className="w-full h-full bg-transparent text-[13px] text-[#111827] placeholder-[#8E9AAC] outline-none"
               />
               {searchQuery && (
-                <button onClick={() => setSearch("")} className="text-[#9CA3AF] hover:text-[#111827]">
+                <button onClick={() => setSearch("")} className="text-[#8E9AAC] hover:text-[#111827]">
                   <X className="w-3.5 h-3.5" />
                 </button>
               )}
@@ -162,9 +163,9 @@ export const ChatLayout: React.FC = () => {
             {/* + New Group Button */}
             <button
               onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
-              className="w-full h-8.5 mt-2 rounded-lg border border-[#E5E7EB] bg-white hover:bg-[#F9FAFB] text-[12px] font-semibold text-[#111827] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+              className="w-full h-9 rounded-lg border border-[#E2E6EE] bg-white hover:bg-[#F9FAFB] text-[13px] font-medium text-[#4B586E] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Plus className="w-3.5 h-3.5 text-[#111827]" />
+              <Plus className="w-3.5 h-3.5 text-[#4B586E]" />
               <span>New Group</span>
             </button>
           </div>

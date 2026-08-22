@@ -5,12 +5,12 @@ import { MessageSquare, Sparkles, CheckCircle2, UserPlus, Shield, Users } from "
 
 export const GroupShowcase: React.FC = () => {
   return (
-    <section className="py-16 md:py-24 xl:py-28 bg-[#FAFAFA] relative overflow-hidden select-none">
+    <section className="py-16 md:py-20 xl:py-20 bg-[#FAFAFA] relative overflow-hidden">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 items-center">
           
-          {/* ── Left Column: Chat Sidebar Mockup Card ── */}
-          <div className="lg:col-span-6 flex items-center justify-center lg:justify-start">
+          {/* ── Left Column: Chat Sidebar Mockup Card (Pushed to bottom on mobile: order-2) ── */}
+          <div className="lg:col-span-6 flex items-center justify-center lg:justify-start order-2 lg:order-1">
             <div className="w-full max-w-[440px] xl:max-w-[500px] bg-white border border-[#E5E7EB] rounded-none shadow-xl shadow-slate-200/50 flex flex-col h-[420px] xl:h-[440px]">
               
               {/* Header */}
@@ -65,11 +65,11 @@ export const GroupShowcase: React.FC = () => {
                 <div className="flex items-center gap-3 xl:gap-3.5 px-3.5 xl:px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
                   {/* Avatar: Blue Circle with A */}
                   <div className="w-10 h-10 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[13px] font-bold shrink-0 shadow-2xs">
-                    A
+                    M
                   </div>
                   <div className="min-w-0 flex-1">
                     <h4 className="text-[13.5px] font-bold text-[#111827] truncate">
-                      Ayesha
+                      Mariya
                     </h4>
                     <p className="text-[12px] text-[#6B7280] truncate mt-0.5">
                       See you at 5
@@ -82,8 +82,8 @@ export const GroupShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* ── Right Column: Text & Content (Responsive on Laptop 1024px & Desktop 1280px+) ── */}
-          <div className="lg:col-span-6 text-left lg:pl-2 xl:pl-0 xl:-ml-10">
+          {/* ── Right Column: Text & Content (Placed on top on mobile: order-1) ── */}
+          <div className="lg:col-span-6 text-center lg:text-left flex flex-col items-center lg:items-start lg:pl-2 xl:pl-0 xl:-ml-10 order-1 lg:order-2">
             {/* Tag Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE] text-[#5B4FE1] text-xs font-bold uppercase tracking-wider mb-4 xl:mb-5 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 fill-[#5B4FE1] text-[#5B4FE1]" />
@@ -91,33 +91,33 @@ export const GroupShowcase: React.FC = () => {
             </div>
 
             {/* Headline */}
-            <h2 className="text-3xl sm:text-4xl lg:text-[38px] xl:text-[50px] font-extrabold text-[#0F172A] tracking-tight leading-[1.12] mb-4 xl:mb-5 font-sans">
+            <h2 className="text-3xl sm:text-4xl lg:text-[38px] xl:text-[50px] font-semibold text-[#0F172A] tracking-tight leading-[1.05] lg:leading-[1.05] mb-4 xl:mb-5 font-sans">
               Connect your team. <br />
               <span className="text-[#5B4FE1]">Keep everyone aligned.</span>
             </h2>
 
             {/* Description */}
-            <p className="text-[14.5px] sm:text-[15.5px] xl:text-[16px] text-[#64748B] leading-relaxed max-w-lg mb-6 xl:mb-8">
+            <p className="text-[14.5px] sm:text-[15.5px] xl:text-[16px] text-[#64748B] leading-relaxed max-w-lg mb-6 xl:mb-8 mx-auto lg:mx-0">
               Create dedicated spaces for your projects, friends, or communities. Share ideas, manage participants seamlessly, and communicate in real-time with zero friction.
             </p>
 
             {/* Features Checkpoints */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 xl:gap-3.5 max-w-md">
-              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
-                <CheckCircle2 className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Instant Live Sync</span>
+            <div className="grid grid-cols-2 gap-2 sm:gap-3 xl:gap-3.5 max-w-md w-full">
+              <div className="flex items-center gap-1.5 sm:gap-2.5 p-2 sm:p-2.5 xl:p-3 rounded-xs bg-white border border-[#E2E8F0] shadow-2xs">
+                <CheckCircle2 className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5B4FE1] shrink-0" />
+                <span className="text-[10.5px] sm:text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A] truncate">Instant Live Sync</span>
               </div>
-              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
-                <UserPlus className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Flexible Member Roles</span>
+              <div className="flex items-center gap-1.5 sm:gap-2.5 p-2 sm:p-2.5 xl:p-3 rounded-xs bg-white border border-[#E2E8F0] shadow-2xs">
+                <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5B4FE1] shrink-0" />
+                <span className="text-[10.5px] sm:text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A] truncate">Flexible Member Roles</span>
               </div>
-              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
-                <Shield className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Secure & Private</span>
+              <div className="flex items-center gap-1.5 sm:gap-2.5 p-2 sm:p-2.5 xl:p-3 rounded-xs bg-white border border-[#E2E8F0] shadow-2xs">
+                <Shield className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5B4FE1] shrink-0" />
+                <span className="text-[10.5px] sm:text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A] truncate">Secure & Private</span>
               </div>
-              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
-                <Users className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Unlimited Members</span>
+              <div className="flex items-center gap-1.5 sm:gap-2.5 p-2 sm:p-2.5 xl:p-3 rounded-xs bg-white border border-[#E2E8F0] shadow-2xs">
+                <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#5B4FE1] shrink-0" />
+                <span className="text-[10.5px] sm:text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A] truncate">Unlimited Members</span>
               </div>
             </div>
           </div>

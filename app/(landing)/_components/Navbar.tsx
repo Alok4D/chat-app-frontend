@@ -72,14 +72,18 @@ export const Navbar: React.FC = () => {
       {/* Mobile Menu */}
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-[#E5E7EB] px-4 py-4 space-y-2 animate-slideDown shadow-lg">
-          {["Features", "How it works", "Live Preview"].map((item) => (
+          {[
+            { label: "Features", href: "/#features" },
+            { label: "How it works", href: "/#howit" },
+            { label: "Live Preview", href: "/#preview" },
+          ].map((item) => (
             <Link
-              key={item}
-              href={`/#${item.toLowerCase().replace(/\s+/g, "")}`}
+              key={item.label}
+              href={item.href}
               className="block px-3 py-2 text-[13px] font-medium text-[#4B5563] hover:text-[#5B4FE1] hover:bg-[#F9FAFB] rounded-xs transition-colors"
               onClick={() => setMenuOpen(false)}
             >
-              {item}
+              {item.label}
             </Link>
           ))}
           <div className="pt-2 flex gap-2">

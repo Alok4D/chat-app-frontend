@@ -19,7 +19,7 @@ export const Footer: React.FC = () => {
             <Link href={ROUTES.HOME} className="flex items-center gap-3 mb-5 group">
               <div className="h-10 px-2.5 py-1 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
                  <Image
-                         src="/logo/nav-logo.png"
+                         src="/logo/footer-logo.png"
                          alt="Chatter logo"
                          width={150}
                          height={44}

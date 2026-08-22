@@ -112,7 +112,7 @@ export const ChatPreview: React.FC = () => {
   }, [hasStarted]);
 
   return (
-    <section ref={sectionRef} id="preview" className="py-14 md:py-20 bg-white select-none">
+    <section ref={sectionRef} id="preview" className="py-14 md:py-20 bg-white select-none scroll-mt-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ── Main Container (Light, Modern, Seamless with project color palette) ── */}

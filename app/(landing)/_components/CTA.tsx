@@ -19,7 +19,7 @@ export const CTA: React.FC = () => {
           <div className="absolute -bottom-12 right-1/3 w-56 h-56 bg-white/10 rounded-full blur-2xl pointer-events-none" />
 
           {/* ── Right Paper Plane & Flight Loop Trail Image ── */}
-          <div className="absolute right-0 sm:right-4 md:right-8 top-1/2 -translate-y-1/2 w-48 sm:w-64 md:w-80 h-36 sm:h-44 md:h-52 pointer-events-none select-none z-0">
+          <div className="absolute right-0 bottom-1 sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2 w-56 sm:w-64 md:w-80 h-40 sm:h-44 md:h-52 pointer-events-none select-none z-0">
             <Image
               src="/images/cta-paper-plane.png"
               alt="Paper airplane"
@@ -34,7 +34,7 @@ export const CTA: React.FC = () => {
             
             {/* Left Headline & Subtitle */}
             <div className="max-w-md text-left">
-              <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-extrabold text-white leading-tight tracking-tight mb-2.5">
+              <h2 className="text-2xl sm:text-3xl lg:text-[32px] font-semibold text-white leading-tight tracking-tight mb-2.5">
                 Ready to start chatting?
               </h2>
               <p className="text-[14px] sm:text-[14.5px] text-white/85 leading-relaxed">
@@ -51,12 +51,12 @@ export const CTA: React.FC = () => {
                 <span>Get Started Now</span>
                 <ArrowRight className="w-4 h-4 text-[#5B4FE1]" />
               </Link>
-              <a
-                href="#features"
+              <Link
+                href={ROUTES.HOME}
                 className="inline-flex items-center text-[14px] font-semibold text-white border border-white/40 bg-white/10 hover:bg-white/20 backdrop-blur-xs px-6 py-3 rounded-xs transition-all whitespace-nowrap cursor-pointer"
               >
                 Learn More
-              </a>
+              </Link>
             </div>
 
           </div>

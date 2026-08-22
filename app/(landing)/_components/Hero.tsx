@@ -57,10 +57,10 @@ export const Hero: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         
         {/* ── Top Hero Grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[500px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center min-h-[500px]">
           
           {/* Left Column: Text + Badges + CTAs (5 Cols) */}
-          <div className="lg:col-span-5 text-left z-10">
+          <div className="lg:col-span-5 text-center lg:text-left flex flex-col items-center lg:items-start z-10">
             {/* Pill Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE]/90 border border-[#DDD6FE] text-[#5B4FE1] text-xs font-semibold mb-6 shadow-2xs">
               <Zap className="w-3.5 h-3.5 fill-[#5B4FE1] text-[#5B4FE1]" />
@@ -79,7 +79,7 @@ export const Hero: React.FC = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap items-center gap-3.5">
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3.5">
               <Link
                 href={ROUTES.CHAT}
                 className="inline-flex items-center justify-center text-[14.5px] font-semibold text-white px-7 py-3 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] shadow-md shadow-[#5B4FE1]/30 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
@@ -98,10 +98,10 @@ export const Hero: React.FC = () => {
           </div>
 
           {/* Right Column: Chat Mockup floating seamlessly on top of background (7 Cols) */}
-          <div className="lg:col-span-7 relative flex items-center justify-center lg:justify-end min-h-[500px]">
+          <div className="lg:col-span-7 relative flex items-center justify-center lg:justify-end min-h-[400px] lg:min-h-[500px]">
             
             {/* Chat Box Card */}
-            <div className="relative z-10 w-full max-w-[450px] bg-white border border-[#E2E8F0] rounded-2xl shadow-xl shadow-[#5B4FE1]/10 p-5 select-none my-4">
+            <div className="relative z-10 w-full max-w-[450px] bg-white border border-[#E2E8F0] rounded-sm shadow-md shadow-[#5B4FE1]/10 p-5 select-none my-4">
               
               {/* Chat Card Header */}
               <div className="flex items-center justify-between pb-4 border-b border-[#F1F5F9]">
@@ -249,7 +249,7 @@ export const Hero: React.FC = () => {
           {FEATURE_CARDS.map((card, idx) => (
             <div
               key={idx}
-              className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs hover:shadow-md hover:border-[#5B4FE1]/30 transition-all text-left group"
+              className="bg-white border border-[#E2E8F0] rounded-xs p-6 shadow-xs hover:shadow-md hover:border-[#5B4FE1]/30 transition-all text-left group"
             >
               <div className="w-10 h-10 rounded-xl bg-[#EDE9FE] flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
                 {card.icon}

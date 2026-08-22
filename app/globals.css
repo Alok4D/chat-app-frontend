@@ -57,20 +57,43 @@ body {
   color: hsl(var(--foreground));
 }
 
-/* ===== CUSTOM SCROLLBAR ===== */
+/* ===== GLOBAL & CUSTOM SCROLLBARS ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #F8FAFC;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(91, 79, 225, 0.25); /* Brand violet low opacity */
+  border-radius: 9999px;
+  border: 2px solid #F8FAFC; /* Inner spacing effect */
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(91, 79, 225, 0.5); /* Stronger violet on hover */
+}
+
+/* Firefox Support */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(91, 79, 225, 0.25) #F8FAFC;
+  scroll-behavior: smooth;
+}
+
 .custom-scrollbar::-webkit-scrollbar {
-  width: 4px;
-  height: 4px;
+  width: 5px;
+  height: 5px;
 }
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(100, 100, 120, 0.25);
+  background: rgba(91, 79, 225, 0.2);
   border-radius: 9999px;
 }
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 100, 120, 0.45);
+  background: rgba(91, 79, 225, 0.4);
 }
 
 /* ===== ANIMATIONS ===== */

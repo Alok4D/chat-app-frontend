@@ -1,5 +1,5 @@
 import { baseApi } from "@/redux/api/baseApi";
-import { CreateGroupPayload, UpdateGroupPayload, GroupDetails } from "@/types/group";
+import { CreateGroupPayload, UpdateGroupPayload } from "@/types/group";
 import { Conversation } from "@/types/conversation";
 import { mapConversation } from "@/lib/api/conversations.api";
 
@@ -63,6 +63,18 @@ export const groupsApi = baseApi.injectEndpoints({
         { type: "Conversations", id: "LIST" },
       ],
     }),
+
+    promoteToAdmin: builder.mutation<any, { groupId: string; userId: string }>({
+      query: ({ groupId, userId }) => ({
+        url: `/conversations/${groupId}/admins`,
+        method: "POST",
+        body: { userId },
+      }),
+      invalidatesTags: (_result, _error, { groupId }) => [
+        { type: "Conversations", id: groupId },
+        { type: "Conversations", id: "LIST" },
+      ],
+    }),
   }),
   overrideExisting: true,
 });
@@ -72,4 +84,5 @@ export const {
   useUpdateGroupMutation,
   useAddParticipantsMutation,
   useRemoveParticipantMutation,
+  usePromoteToAdminMutation,
 } = groupsApi;

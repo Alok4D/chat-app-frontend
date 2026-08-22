@@ -4,7 +4,7 @@ import React from "react";
 import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { formatLastSeen } from "@/lib/utils/formatTime";
-import { Phone, Video, MoreVertical, Menu, Info } from "lucide-react";
+import { Menu, Info, MoreVertical } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setIsMobileSidebarOpen, toggleInfoPanel } from "@/redux/slices/chatSlice";
 
@@ -78,26 +78,14 @@ export const ChatHeader: React.FC<ChatHeaderProps> = ({ conversation }) => {
         </div>
       </div>
 
-      {/* Right: Actions (Call, Video, More/Info) */}
+      {/* Right: Info Panel Toggle Button */}
       <div className="flex items-center gap-2">
-        <button
-          title="Voice call"
-          className="w-10 h-10 rounded-full bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center text-[#475569] hover:text-[#0F172A] transition-all"
-        >
-          <Phone className="w-4 h-4" />
-        </button>
-        <button
-          title="Video call"
-          className="w-10 h-10 rounded-full bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center text-[#475569] hover:text-[#0F172A] transition-all"
-        >
-          <Video className="w-4 h-4" />
-        </button>
         <button
           onClick={() => dispatch(toggleInfoPanel())}
           title="Conversation Info"
           className="w-10 h-10 rounded-full bg-[#F8FAFC] hover:bg-[#F1F5F9] border border-[#E2E8F0] flex items-center justify-center text-[#475569] hover:text-[#0F172A] transition-all"
         >
-          <MoreVertical className="w-4 h-4" />
+          <Info className="w-4 h-4" />
         </button>
       </div>
     </div>

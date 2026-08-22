@@ -18,14 +18,15 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setIsMobileSidebarOpen, setIsCreateGroupModalOpen } from "@/redux/slices/chatSlice";
 import { usersApi } from "@/redux/features/users/usersApi";
 import {
-  MessageSquare,
-  Users,
-  User as UserIcon,
-  Bell,
-  Settings,
+  MessageCircle,
+  Store,
+  MessageSquareText,
+  Archive,
   SquarePen,
   X,
   UserPlus,
+  PanelLeftClose,
+  PanelLeft,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -50,7 +51,11 @@ export const ChatLayout: React.FC = () => {
 
   const [globalContacts, setGlobalContacts] = useState<User[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(false);
-  const [activeNavTab, setActiveNavTab] = useState<"chat" | "groups" | "contacts" | "notifications" | "settings">("chat");
+  const [activeNavTab, setActiveNavTab] = useState<"chats" | "marketplace" | "requests" | "archive">("chats");
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
+  // Total unread count
+  const totalUnreadCount = conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -80,103 +85,136 @@ export const ChatLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-white text-[#0F172A] font-sans">
-      {/* ── 1. LEFT DARK ICON RAIL (exact color from screenshot #0F172A) ── */}
-      <aside className="hidden sm:flex w-[68px] bg-[#0F172A] flex-col items-center justify-between py-5 z-40 shrink-0 border-r border-[#1E293B]">
-        {/* Top Logo + Nav items */}
-        <div className="flex flex-col items-center gap-6 w-full px-2">
-          {/* Brand Logo Button */}
-          <a
-            href={ROUTES.LANDING}
-            title="Chatter"
-            className="w-11 h-11 rounded-2xl bg-[#6C63FF] flex items-center justify-center text-white shadow-lg shadow-[#6C63FF]/30 hover:scale-105 transition-transform"
+      {/* ── 1. MESSENGER STYLE LEFT NAVIGATION RAIL ── */}
+      <aside
+        className={cn(
+          "hidden sm:flex flex-col justify-between py-4 bg-[#F0F2F5] border-r border-[#E4E6EB] z-40 shrink-0 transition-all duration-200 select-none",
+          isSidebarExpanded ? "w-[210px] px-3" : "w-[68px] items-center px-2"
+        )}
+      >
+        {/* Top Navigation Items */}
+        <div className="flex flex-col gap-2 w-full">
+          {/* Chats Tab */}
+          <button
+            onClick={() => setActiveNavTab("chats")}
+            title="Chats"
+            className={cn(
+              "flex items-center rounded-xl transition-all font-semibold text-[14px] relative",
+              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
+              activeNavTab === "chats"
+                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
+                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
+            )}
           >
-            <MessageSquare className="w-5 h-5 fill-white" />
-          </a>
-
-          {/* Navigation Items */}
-          <div className="flex flex-col items-center gap-3 w-full">
-            <button
-              onClick={() => setActiveNavTab("chat")}
-              title="Chats"
-              className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                activeNavTab === "chat"
-                  ? "bg-[#1E293B] text-[#6C63FF]"
-                  : "text-[#94A3B8] hover:text-white hover:bg-[#1E293B]/60"
+            <div className="relative shrink-0">
+              <MessageCircle className="w-5 h-5 fill-current" />
+              {totalUnreadCount > 0 && !isSidebarExpanded && (
+                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#1877F2] ring-2 ring-[#F0F2F5]" />
               )}
-            >
-              <MessageSquare className="w-5 h-5" />
-            </button>
+            </div>
+            {isSidebarExpanded && (
+              <>
+                <span className="truncate flex-1 text-left">Chats</span>
+                {totalUnreadCount > 0 && (
+                  <span className="px-1.5 py-0.5 rounded-full bg-[#1877F2] text-white text-[11px] font-bold">
+                    {totalUnreadCount}
+                  </span>
+                )}
+              </>
+            )}
+          </button>
 
-            <button
-              onClick={() => {
-                setActiveNavTab("groups");
-                dispatch(setIsCreateGroupModalOpen(true));
-              }}
-              title="Groups"
-              className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                activeNavTab === "groups"
-                  ? "bg-[#1E293B] text-[#6C63FF]"
-                  : "text-[#94A3B8] hover:text-white hover:bg-[#1E293B]/60"
-              )}
-            >
-              <Users className="w-5 h-5" />
-            </button>
+          {/* Marketplace Tab */}
+          <button
+            onClick={() => setActiveNavTab("marketplace")}
+            title="Marketplace"
+            className={cn(
+              "flex items-center rounded-xl transition-all font-semibold text-[14px]",
+              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
+              activeNavTab === "marketplace"
+                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
+                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
+            )}
+          >
+            <Store className="w-5 h-5 shrink-0" />
+            {isSidebarExpanded && <span className="truncate flex-1 text-left">Marketplace</span>}
+          </button>
 
-            <button
-              onClick={() => setActiveNavTab("contacts")}
-              title="Contacts"
-              className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                activeNavTab === "contacts"
-                  ? "bg-[#1E293B] text-[#6C63FF]"
-                  : "text-[#94A3B8] hover:text-white hover:bg-[#1E293B]/60"
-              )}
-            >
-              <UserIcon className="w-5 h-5" />
-            </button>
+          {/* Requests Tab */}
+          <button
+            onClick={() => setActiveNavTab("requests")}
+            title="Requests"
+            className={cn(
+              "flex items-center rounded-xl transition-all font-semibold text-[14px]",
+              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
+              activeNavTab === "requests"
+                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
+                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
+            )}
+          >
+            <MessageSquareText className="w-5 h-5 shrink-0" />
+            {isSidebarExpanded && <span className="truncate flex-1 text-left">Requests</span>}
+          </button>
 
-            <button
-              onClick={() => setActiveNavTab("notifications")}
-              title="Notifications"
-              className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                activeNavTab === "notifications"
-                  ? "bg-[#1E293B] text-[#6C63FF]"
-                  : "text-[#94A3B8] hover:text-white hover:bg-[#1E293B]/60"
-              )}
-            >
-              <Bell className="w-5 h-5" />
-            </button>
-
-            <button
-              onClick={() => setActiveNavTab("settings")}
-              title="Settings"
-              className={cn(
-                "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
-                activeNavTab === "settings"
-                  ? "bg-[#1E293B] text-[#6C63FF]"
-                  : "text-[#94A3B8] hover:text-white hover:bg-[#1E293B]/60"
-              )}
-            >
-              <Settings className="w-5 h-5" />
-            </button>
-          </div>
+          {/* Archive Tab */}
+          <button
+            onClick={() => setActiveNavTab("archive")}
+            title="Archive"
+            className={cn(
+              "flex items-center rounded-xl transition-all font-semibold text-[14px]",
+              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
+              activeNavTab === "archive"
+                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
+                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
+            )}
+          >
+            <Archive className="w-5 h-5 shrink-0" />
+            {isSidebarExpanded && <span className="truncate flex-1 text-left">Archive</span>}
+          </button>
         </div>
 
-        {/* Bottom Current User Avatar */}
-        <div className="flex flex-col items-center gap-2">
-          <div className="relative group cursor-pointer" onClick={logout} title="Click to Logout">
+        {/* Bottom Profile & Toggle */}
+        <div className="flex flex-col gap-3 w-full">
+          {/* User Info */}
+          <div
+            onClick={logout}
+            title="Click to logout"
+            className={cn(
+              "flex items-center rounded-xl cursor-pointer hover:bg-[#E4E6EB]/60 transition-all",
+              isSidebarExpanded ? "gap-2.5 px-2 py-1.5" : "justify-center p-1"
+            )}
+          >
             <Avatar
               src={user?.avatarUrl}
-              name={user?.name || "User"}
-              size="md"
+              name={user?.name || "Alok"}
+              size="sm"
               isOnline={true}
               showStatus
-              className="ring-2 ring-[#6C63FF]/40 group-hover:ring-red-400 transition-all"
+              className="ring-2 ring-white shadow-2xs"
             />
+            {isSidebarExpanded && (
+              <div className="min-w-0 flex-1">
+                <p className="text-[13px] font-bold text-[#050505] truncate">{user?.name || "Alok"}</p>
+                <p className="text-[11px] text-[#65676B] truncate">{user?.phone || "Online"}</p>
+              </div>
+            )}
           </div>
+
+          {/* Expand / Collapse Sidebar Toggle */}
+          <button
+            onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+            title={isSidebarExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
+            className={cn(
+              "flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-[#E4E6EB] border border-[#E4E6EB] text-[#050505] transition-all shadow-2xs",
+              isSidebarExpanded ? "ml-auto" : "mx-auto"
+            )}
+          >
+            {isSidebarExpanded ? (
+              <PanelLeftClose className="w-4 h-4" />
+            ) : (
+              <PanelLeft className="w-4 h-4" />
+            )}
+          </button>
         </div>
       </aside>
 
@@ -289,7 +327,7 @@ export const ChatLayout: React.FC = () => {
         )}
       </main>
 
-      {/* ── 4. RIGHT CONVERSATION INFO DRAWER (Optional on desktop / toggled) ── */}
+      {/* ── 4. RIGHT CONVERSATION INFO DRAWER ── */}
       {activeConversation && isInfoPanelOpen && (
         <ConversationInfo conversation={activeConversation} />
       )}

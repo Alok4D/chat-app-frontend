@@ -39,9 +39,9 @@ export const Navbar: React.FC = () => {
 
         {/* Navigation Links - Desktop */}
         <nav className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#4B5563]">
-          <Link href="#features" className="hover:text-[#5B4FE1] transition-colors">Features</Link>
-          <Link href="#howit" className="hover:text-[#5B4FE1] transition-colors">How it works</Link>
-          <Link href="#preview" className="hover:text-[#5B4FE1] transition-colors">Live Preview</Link>
+          <Link href="/#features" className="hover:text-[#5B4FE1] transition-colors">Features</Link>
+          <Link href="/#howit" className="hover:text-[#5B4FE1] transition-colors">How it works</Link>
+          <Link href="/#preview" className="hover:text-[#5B4FE1] transition-colors">Live Preview</Link>
         </nav>
 
         {/* Action Buttons - Desktop */}
@@ -75,7 +75,7 @@ export const Navbar: React.FC = () => {
           {["Features", "How it works", "Live Preview"].map((item) => (
             <Link
               key={item}
-              href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
+              href={`/#${item.toLowerCase().replace(/\s+/g, "")}`}
               className="block px-3 py-2 text-[13px] font-medium text-[#4B5563] hover:text-[#5B4FE1] hover:bg-[#F9FAFB] rounded-xs transition-colors"
               onClick={() => setMenuOpen(false)}
             >

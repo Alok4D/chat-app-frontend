@@ -2,7 +2,7 @@
 
 A sleek, responsive, and production-ready real-time messaging application built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit (RTK Query)**, **React Hook Form**, **Zod**, and **Socket.IO Client**.
 
----
+
 
 ### 🌐 Live Links
 * **Frontend Application**: [https://chatter-live.vercel.app](https://chatter-live.vercel.app)
@@ -25,7 +25,7 @@ A sleek, responsive, and production-ready real-time messaging application built 
 ### Part 2: Creative Landing Page
 - Designed a custom **Chatter** aesthetic featuring a modern violet `#5B4FE1` primary theme, pixel-perfect layouts, responsive navbar, interactive live chat mockup preview with scroll-triggered viewport animations, how-it-works cards, and customizable footer.
 
----
+
 
 ## 🛠️ Getting Started
 
@@ -48,7 +48,7 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
----
+
 
 ## 🧠 Part 3: Thought Process & Technical Decisions
 
@@ -67,7 +67,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 - **Stale Cache on Logout**: Resetting state required clearing all RTK Query slices on user changes to prevent cross-account data leaks. Added dynamic store reset hooks.
 - **Search Participant Validation**: Solved via search state caching, ensuring previously checked members are not lost when modifying search queries.
 
----
+
 
 ## 📄 API Documentation
 Find the documented REST API endpoints and WebSocket architecture inside the [`docs/API.md`](docs/API.md) file.

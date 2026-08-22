@@ -1,4 +1,4 @@
-# <img src="public/icons/favlogo.png" width="30" height="30" align="center" /> Chatter — Real-Time Chat & Collaboration
+# <img src="public/icons/favlogo.png" width="38" height="38" style="vertical-align: middle; margin-right: 8px;" /> Chatter — Real-Time Chat & Collaboration
 
 Welcome to **Chatter** — a powerful, modern, and feature-rich real-time messaging application designed to streamline instant communication, group collaboration, and seamless social connections for teams, friends, and communities.
 

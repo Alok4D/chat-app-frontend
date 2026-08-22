@@ -5,10 +5,13 @@ import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import Image from "next/image";
+import { useAppSelector } from "@/redux/hooks";
+import { Avatar } from "@/components/ui/Avatar";
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const user = useAppSelector((state) => state.auth.user);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -46,18 +49,34 @@ export const Navbar: React.FC = () => {
 
         {/* Action Buttons - Desktop */}
         <div className="hidden md:flex items-center gap-3">
-          <Link
-            href={ROUTES.LOGIN}
-            className="text-[13px] font-semibold text-[#111827] px-3.5 py-2 rounded-xs hover:bg-[#F9FAFB] transition-colors"
-          >
-            Login
-          </Link>
-          <Link
-            href={ROUTES.CHAT}
-            className="inline-flex items-center text-[13px] font-semibold text-white px-4 py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors shadow-2xs"
-          >
-            Get Started
-          </Link>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <Link href={ROUTES.CHAT} className="hover:opacity-90 transition-opacity shrink-0">
+                <Avatar src={user.avatarUrl} name={user.name} size="sm" />
+              </Link>
+              <Link
+                href={ROUTES.CHAT}
+                className="inline-flex items-center text-[13px] font-semibold text-white px-4 py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors shadow-2xs"
+              >
+                Go to Chat
+              </Link>
+            </div>
+          ) : (
+            <>
+              <Link
+                href={ROUTES.LOGIN}
+                className="text-[13px] font-semibold text-[#111827] px-3.5 py-2 rounded-xs hover:bg-[#F9FAFB] transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                href={ROUTES.CHAT}
+                className="inline-flex items-center text-[13px] font-semibold text-white px-4 py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors shadow-2xs"
+              >
+                Get Started
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}
@@ -86,22 +105,38 @@ export const Navbar: React.FC = () => {
               {item.label}
             </Link>
           ))}
-          <div className="pt-2 flex gap-2">
-            <Link
-              href={ROUTES.LOGIN}
-              className="flex-1 text-center text-[13px] font-semibold text-[#111827] border border-[#E5E7EB] py-2 rounded-xs hover:bg-[#F9FAFB] transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Login
-            </Link>
-            <Link
-              href={ROUTES.CHAT}
-              className="flex-1 text-center text-[13px] font-semibold text-white py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors"
-              onClick={() => setMenuOpen(false)}
-            >
-              Get Started
-            </Link>
-          </div>
+          
+          {user ? (
+            <div className="pt-2 flex items-center justify-between gap-3 p-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xs">
+              <Link href={ROUTES.CHAT} className="shrink-0" onClick={() => setMenuOpen(false)}>
+                <Avatar src={user.avatarUrl} name={user.name} size="sm" />
+              </Link>
+              <Link
+                href={ROUTES.CHAT}
+                className="flex-1 text-center text-[13px] font-semibold text-white py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Go to Chat
+              </Link>
+            </div>
+          ) : (
+            <div className="pt-2 flex gap-2">
+              <Link
+                href={ROUTES.LOGIN}
+                className="flex-1 text-center text-[13px] font-semibold text-[#111827] border border-[#E5E7EB] py-2 rounded-xs hover:bg-[#F9FAFB] transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Login
+              </Link>
+              <Link
+                href={ROUTES.CHAT}
+                className="flex-1 text-center text-[13px] font-semibold text-white py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors"
+                onClick={() => setMenuOpen(false)}
+              >
+                Get Started
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </header>

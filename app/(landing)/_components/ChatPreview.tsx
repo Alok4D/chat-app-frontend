@@ -90,7 +90,7 @@ export const ChatPreview: React.FC = () => {
   }, []);
 
   return (
-    <section id="preview" className="py-20 md:py-28 bg-white select-none">
+    <section id="preview" className="py-14 md:py-20 bg-white select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ── Main Container (Light, Modern, Seamless with project color palette) ── */}
@@ -201,16 +201,16 @@ export const ChatPreview: React.FC = () => {
           </div>
 
           {/* Right: Pitch & Feature Highlights Column */}
-          <div className="flex flex-col justify-center px-8 sm:px-12 py-10 lg:max-w-[420px] border-t lg:border-t-0 lg:border-l border-[#E2E8F0] bg-white/70 backdrop-blur-xs">
+          <div className="flex flex-col justify-center px-8 sm:px-12 py-10 lg:max-w-[450px] border-t lg:border-t-0 lg:border-l border-[#E2E8F0] bg-white/70 backdrop-blur-xs">
             {/* Tag Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xs bg-[#EDE9FE] border border-[#DDD6FE] text-[#5B4FE1] text-xs font-bold uppercase tracking-wider mb-5 w-fit shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 fill-[#5B4FE1] text-[#5B4FE1]" />
               <span>LIVE INTERACTIVE DEMO</span>
             </div>
 
-            <h2 className="text-[28px] sm:text-[34px] font-extrabold text-[#0F172A] leading-tight mb-4 font-sans tracking-tight">
-              Real-time messaging, <br />
-              <span className="text-[#5B4FE1]">zero latency.</span>
+            <h2 className="text-[24px] sm:text-[28px] lg:text-[29px] xl:text-[32px] font-semibold text-[#0F172A] leading-[1.2] mb-4 font-sans tracking-tight">
+              <span className="whitespace-nowrap block">Real-time messaging</span>
+              <span className="text-[#5B4FE1] block">zero latency.</span>
             </h2>
 
             <p className="text-[14.5px] text-[#64748B] leading-relaxed mb-7">

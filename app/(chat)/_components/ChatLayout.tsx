@@ -146,6 +146,7 @@ export const ChatLayout: React.FC = () => {
       >
         {/* Header */}
         <div className="h-[60px] px-4 border-b border-[#E5E7EB] flex items-center justify-between relative bg-white">
+       <Link href={ROUTES.HOME}>
           <div className="flex items-center gap-2">
             <Image
               src="/icons/favlogo.png"
@@ -157,6 +158,7 @@ export const ChatLayout: React.FC = () => {
             />
             <h1 className="text-[17px] font-semibold text-[#111827]">Chat</h1>
           </div>
+       </Link>
 
           {/* Three dots menu button with popup dropdown */}
           <div className="relative" ref={menuRef}>

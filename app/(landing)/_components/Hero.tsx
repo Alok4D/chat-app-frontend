@@ -14,6 +14,7 @@ import {
   Layers,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
+import Link from "next/link";
 
 const FEATURE_CARDS = [
   {
@@ -79,20 +80,20 @@ export const Hero: React.FC = () => {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3.5">
-              <a
+              <Link
                 href={ROUTES.CHAT}
-                className="inline-flex items-center justify-center text-[14.5px] font-semibold text-white px-7 py-3 rounded-xl bg-[#5B4FE1] hover:bg-[#4E39E0] shadow-md shadow-[#5B4FE1]/30 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                className="inline-flex items-center justify-center text-[14.5px] font-semibold text-white px-7 py-3 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] shadow-md shadow-[#5B4FE1]/30 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 Start Chatting
-              </a>
-              <a
+              </Link>
+              <Link
                 href="https://frontend-task-chatapp.onrender.com/docs/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center text-[14.5px] font-semibold text-[#0F172A] px-7 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] transition-all shadow-2xs cursor-pointer"
+                className="inline-flex items-center justify-center text-[14.5px] font-semibold text-[#0F172A] px-7 py-3 rounded-xs border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] transition-all shadow-2xs cursor-pointer"
               >
                 View API Docs
-              </a>
+              </Link>
             </div>
           </div>
 

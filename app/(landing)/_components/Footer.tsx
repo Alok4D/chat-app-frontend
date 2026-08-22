@@ -1,94 +1,160 @@
+"use client";
+
 import React from "react";
-import { MessageSquareMore, Twitter, Github, Send } from "lucide-react";
+import Link from "next/link";
+import Image from "next/image";
+import { useAppSelector } from "@/redux/hooks";
 import { ROUTES } from "@/lib/constants/routes";
 
-const FOOTER_LINKS = {
-  Product: ["Features", "How it works", "Live Preview"],
-  Resources: ["Documentation", "Guides", "Help Center"],
-  Company: ["About Us", "Careers", "Privacy Policy"],
-};
-
 export const Footer: React.FC = () => {
+  const user = useAppSelector((state) => state.auth.user);
+
   return (
-    <footer className="bg-[#1A1A2E] text-white py-14">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
-          {/* Brand Column */}
-          <div className="lg:col-span-2">
-            <a href={ROUTES.LANDING} className="flex items-center gap-2.5 mb-4 w-fit group">
-              <div className="w-9 h-9 rounded-xl bg-[#6C63FF] flex items-center justify-center shadow-lg shadow-[#6C63FF]/30 group-hover:scale-105 transition-transform">
-                <MessageSquareMore className="w-5 h-5 text-white" />
+    <footer className="w-full bg-[#1A1A2E] text-white pt-20 pb-10 border-t border-[#2A2A48]">
+      <div className="max-w-7xl mx-auto px-4 md:px-0 ">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 mb-12">
+          
+          {/* Brand & Description (5 Cols) */}
+          <div className="md:col-span-5 flex flex-col items-start">
+            <Link href={ROUTES.HOME} className="flex items-center gap-3 mb-5 group">
+              <div className="h-10 px-2.5 py-1 flex items-center justify-center shadow-md group-hover:scale-105 transition-transform">
+                 <Image
+                         src="/logo/nav-logo.png"
+                         alt="Chatter logo"
+                         width={150}
+                         height={44}
+                         className="h-9 md:h-10 w-auto object-contain transition-transform group-hover:scale-102"
+                         priority
+                       />
               </div>
-              <span className="text-[17px] font-bold tracking-tight">Chatter</span>
-            </a>
-            <p className="text-[13.5px] text-[#9CA3AF] leading-relaxed max-w-xs mb-6">
-              Real-time chat application built for modern teams and communities.
+            </Link>
+            
+            <p className="text-[14.5px] text-[#9CA3AF] leading-[1.7] max-w-sm mb-8">
+              The modern, secure real-time messaging platform built for high-performance teams and communities. Connect instantly with zero latency.
             </p>
-            {/* Social icons */}
-            <div className="flex items-center gap-3">
-              {[Twitter, Github, MessageSquareMore].map((Icon, i) => (
-                <a
-                  key={i}
-                  href="#"
-                  className="w-9 h-9 rounded-xl bg-[#252540] flex items-center justify-center text-[#9CA3AF] hover:bg-[#6C63FF] hover:text-white transition-all"
-                >
-                  <Icon className="w-4 h-4" />
-                </a>
-              ))}
-              {/* Discord placeholder */}
-              <a href="#" className="w-9 h-9 rounded-xl bg-[#252540] flex items-center justify-center text-[#9CA3AF] hover:bg-[#6C63FF] hover:text-white transition-all">
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z" />
+
+            {/* Social Icons */}
+            <div className="flex items-center gap-3.5">
+              <a
+                href="https://x.com/AlokRoy1880109"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Twitter"
+                className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 hover:text-[#8B5CF6] flex items-center justify-center text-slate-300 transition-all cursor-pointer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>
+                </svg>
+              </a>
+              <a
+                href="https://github.com/Alok4D"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="GitHub"
+                className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 hover:text-[#8B5CF6] flex items-center justify-center text-slate-300 transition-all cursor-pointer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.2c3-.3 6-1.5 6-6.5a4.6 4.6 0 0 0-1.3-3.2 4.2 4.2 0 0 0-.1-3.2s-1.1-.3-3.5 1.3a12.3 12.3 0 0 0-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 0 0-.1 3.2A4.6 4.6 0 0 0 4 9.5c0 5 3 6.2 6 6.5a4.8 4.8 0 0 0-1 3.2v4"/>
+                  <path d="M9 18c-4.5 1.5-5-2.5-7-3"/>
+                </svg>
+              </a>
+              <a
+                href="https://www.linkedin.com/in/alok-roy-likedin"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 hover:text-[#8B5CF6] flex items-center justify-center text-slate-300 transition-all cursor-pointer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                  <rect width="4" height="12" x="2" y="9"/>
+                  <circle cx="4" cy="4" r="2"/>
+                </svg>
+              </a>
+              <a
+                href="https://www.facebook.com/alok.roy.738161"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Facebook"
+                className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/15 hover:text-[#8B5CF6] flex items-center justify-center text-slate-300 transition-all cursor-pointer"
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
               </a>
             </div>
           </div>
 
-          {/* Links Columns */}
-          {Object.entries(FOOTER_LINKS).map(([category, links]) => (
-            <div key={category}>
-              <h4 className="text-[12.5px] font-bold text-white uppercase tracking-wider mb-4">{category}</h4>
-              <ul className="space-y-2.5">
-                {links.map((link) => (
-                  <li key={link}>
-                    <a href="#" className="text-[13.5px] text-[#9CA3AF] hover:text-white transition-colors">
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+          {/* Spacer */}
+          <div className="hidden md:block md:col-span-1"></div>
 
-          {/* Newsletter */}
-          <div className="lg:col-span-1 md:col-span-2 lg:col-start-5">
-            <h4 className="text-[12.5px] font-bold text-white uppercase tracking-wider mb-4">
-              Subscribe to our newsletter
-            </h4>
-            <p className="text-[13px] text-[#9CA3AF] mb-4">
-              Get updates about new features and releases.
-            </p>
-            <div className="flex items-center gap-2 bg-[#252540] rounded-xl px-3 py-2.5 border border-[#35356A]">
-              <input
-                type="email"
-                placeholder="Enter your email"
-                className="flex-1 bg-transparent text-[13px] text-white placeholder-[#9CA3AF] outline-none"
-              />
-              <button className="w-8 h-8 rounded-lg bg-[#6C63FF] flex items-center justify-center hover:bg-[#5a52e8] transition-colors shrink-0">
-                <Send className="w-3.5 h-3.5 text-white" />
-              </button>
+          {/* Links Columns Container (6 Cols) */}
+          <div className="md:col-span-6 flex justify-between flex-wrap gap-8 md:flex-nowrap">
+            
+            {/* Column 1: Product */}
+            <div className="flex flex-col">
+              <h4 className="text-[15px] font-bold text-white mb-5 uppercase tracking-wider text-xs">Product</h4>
+              <div className="flex flex-col gap-3 text-[14px]">
+                <Link href="#features" className="text-[#9CA3AF] hover:text-white transition-colors">Features</Link>
+                <Link href="#howit" className="text-[#9CA3AF] hover:text-white transition-colors">How It Works</Link>
+                <Link href="#preview" className="text-[#9CA3AF] hover:text-white transition-colors">Live Preview</Link>
+                <Link href={ROUTES.CHAT} className="text-[#8B5CF6] hover:text-[#A78BFA] font-medium transition-colors">Start Chatting →</Link>
+              </div>
             </div>
+
+            {/* Column 2: Resources */}
+            <div className="flex flex-col">
+              <h4 className="text-[15px] font-bold text-white mb-5 uppercase tracking-wider text-xs">Resources</h4>
+              <div className="flex flex-col gap-3 text-[14px]">
+                <a
+                  href="https://frontend-task-chatapp.onrender.com/docs/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-[#9CA3AF] hover:text-white transition-colors"
+                >
+                  API Docs (Swagger)
+                </a>
+                <Link href="#preview" className="text-[#9CA3AF] hover:text-white transition-colors">WebSocket Guide</Link>
+                <Link href={user ? ROUTES.CHAT : ROUTES.LOGIN} className="text-[#9CA3AF] hover:text-white transition-colors">
+                  {user ? "My Chats" : "User Login"}
+                </Link>
+                <Link href="#" className="text-[#9CA3AF] hover:text-white transition-colors">Documentation</Link>
+              </div>
+            </div>
+
+            {/* Column 3: Company */}
+            <div className="flex flex-col">
+              <h4 className="text-[15px] font-bold text-white mb-5 uppercase tracking-wider text-xs">Company</h4>
+              <div className="flex flex-col gap-3 text-[14px]">
+                <Link href="#" className="text-[#9CA3AF] hover:text-white transition-colors">About Us</Link>
+                <Link href="#" className="text-[#9CA3AF] hover:text-white transition-colors">Privacy Policy</Link>
+                <Link href="#" className="text-[#9CA3AF] hover:text-white transition-colors">Terms of Service</Link>
+                <a href="mailto:support@chatter.app" className="text-[#9CA3AF] hover:text-white transition-colors">Contact Us</a>
+              </div>
+            </div>
+
+          </div>
+          
+        </div>
+
+        {/* Bottom Bar */}
+        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4">
+          <p className="text-[#9CA3AF] text-[13.5px]">
+            © {new Date().getFullYear()} Chatter. All rights reserved.
+          </p>
+          <div className="flex items-center gap-6 text-[13.5px]">
+            <Link href="#" className="text-[#9CA3AF] hover:text-white transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="#" className="text-[#9CA3AF] hover:text-white transition-colors">
+              Terms of Service
+            </Link>
           </div>
         </div>
 
-        {/* Bottom divider */}
-        <div className="border-t border-[#2D2D4E] pt-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[12.5px] text-[#9CA3AF]">
-            © {new Date().getFullYear()} Chatter. All rights reserved.
-          </p>
-        </div>
       </div>
     </footer>
   );
 };
+
+export default Footer;

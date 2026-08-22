@@ -25,6 +25,7 @@ import {
   UserPlus,
   Info,
   ArrowLeft,
+  LogOut,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -294,6 +295,15 @@ export const ChatLayout: React.FC = () => {
                 <span className="text-[#10B981] font-semibold">· Online</span>
               </p>
             </div>
+            
+            {/* Logout Button */}
+            <button
+              onClick={logout}
+              title="Log Out"
+              className="p-2 text-[#94A3B8] hover:text-red-500 hover:bg-red-50 rounded-xl transition-all cursor-pointer shrink-0"
+            >
+              <LogOut className="w-[18px] h-[18px]" />
+            </button>
           </div>
         </div>
       </aside>

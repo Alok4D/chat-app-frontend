@@ -9,6 +9,7 @@ import {
 } from "@/redux/slices/chatSlice";
 import { messagesApi } from "@/redux/features/messages/messagesApi";
 import { SendMessagePayload } from "@/types/message";
+import { playSentSound } from "@/lib/utils/sound";
 import toast from "react-hot-toast";
 
 export function useMessages(conversationId?: string | null) {
@@ -53,6 +54,7 @@ export function useMessages(conversationId?: string | null) {
         ).unwrap();
 
         dispatch(addMessage(sentMsg));
+        playSentSound();
         return sentMsg;
       } catch (error: any) {
         toast.error(error?.message || "Failed to send message");

@@ -1,17 +1,11 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User as UserIcon, ChevronDown } from "lucide-react";
 import { loginFormSchema, LoginFormData } from "@/lib/utils/validation";
 import { useAuth } from "@/hooks/useAuth";
-
-const DEMO_USERS = [
-  { label: "Alex Morgan", phone: "+15551234567", name: "Alex Morgan" },
-  { label: "Sarah Chen", phone: "+15551234568", name: "Sarah Chen" },
-  { label: "Alok Demo", phone: "+8801719277951", name: "Alok" },
-];
 
 export const LoginForm: React.FC = () => {
   const { login, isLoading } = useAuth();
@@ -19,7 +13,6 @@ export const LoginForm: React.FC = () => {
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -30,67 +23,70 @@ export const LoginForm: React.FC = () => {
     await login({ phone: data.phone, name: data.name });
   };
 
-  const handleGuestLogin = async () => {
-    const guestUser = DEMO_USERS[0];
-    setValue("phone", guestUser.phone);
-    setValue("name", guestUser.name);
-    await login({ phone: guestUser.phone, name: guestUser.name });
-  };
-
   return (
-    <div className="w-full max-w-[460px] bg-white rounded-2xl p-8 sm:p-10 shadow-sm border border-[#ECEEF2]">
-      {/* Title Header */}
-      <div className="mb-6">
-        <h2 className="text-[24px] font-bold text-[#0F172A] tracking-tight">
-          Sign in to Chatter
-        </h2>
-        <p className="text-[13px] text-[#64748B] mt-1">
-          Enter your details to continue
-        </p>
+    <div className="w-full max-w-[520px] p-10 sm:p-12">
+      
+      {/* Centered Brand Logo (Enlarged) */}
+      <div className="flex justify-center mb-5">
+        <Image
+          src="/logo/nav-logo.png"
+          alt="Chatter Logo"
+          width={190}
+          height={54}
+          className="h-11 w-auto object-contain"
+          priority
+        />
       </div>
 
+      {/* Centered Subtitle */}
+      <p className="text-center text-[15.5px] text-[#64748B] mb-9 font-medium">
+        Sign in to your Chatter account.
+      </p>
+
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+        
         {/* Phone Number Field */}
-        <div>
-          <label className="block text-[12.5px] font-semibold text-[#0F172A] mb-1.5">
+        <div className="space-y-2 text-left">
+          <label className="block text-[12.5px] font-bold text-[#64748B] uppercase tracking-wider">
             Phone Number
           </label>
-          <div className="flex items-center h-[46px] border border-[#E2E8F0] rounded-lg bg-white focus-within:border-[#5844ED] transition-colors overflow-hidden">
-           
-            <input
-              type="tel"
-              placeholder="Enter your phone number"
-              className="flex-1 h-full px-3 text-[13px] text-[#0F172A] placeholder-[#94A3B8] outline-none bg-transparent"
-              {...register("phone")}
-            />
-          </div>
-        </div>
-
-        {/* Your Name Field */}
-        <div className="mt-4">
-          <label className="block text-[12.5px] font-semibold text-[#0F172A] mb-1.5">
-            Your Name
-          </label>
-          <div className="flex items-center h-[46px] px-3 border border-[#E2E8F0] rounded-lg bg-white focus-within:border-[#5844ED] transition-colors gap-2">
-            <UserIcon className="w-4 h-4 text-[#94A3B8] shrink-0" />
-            <input
-              type="text"
-              placeholder="Enter your name"
-              className="flex-1 h-full text-[13px] text-[#0F172A] placeholder-[#94A3B8] outline-none bg-transparent"
-              {...register("name")}
-            />
-          </div>
-          {errors.name && (
-            <p className="mt-1 text-xs text-red-500 font-medium">{errors.name.message}</p>
+          <input
+            type="tel"
+            placeholder="Enter your phone number"
+            className="w-full h-[54px] px-5 rounded-xs bg-white text-[14.5px] text-[#0F172A] placeholder-[#94A3B8] border border-[#CBD5E1] focus:border-[#5B4FE1] focus:ring-4 focus:ring-[#5B4FE1]/10 shadow-2xs outline-none transition-all"
+            {...register("phone")}
+          />
+          {errors.phone && (
+            <p className="mt-1 text-xs text-red-500 font-medium">
+              {errors.phone.message}
+            </p>
           )}
         </div>
 
-        {/* Send OTP Button */}
+        {/* Your Name Field */}
+        <div className="space-y-2 text-left">
+          <label className="block text-[12.5px] font-bold text-[#64748B] uppercase tracking-wider">
+            Your Name
+          </label>
+          <input
+            type="text"
+            placeholder="Enter your name"
+            className="w-full h-[54px] px-5 rounded-xs bg-white text-[14.5px] text-[#0F172A] placeholder-[#94A3B8] border border-[#CBD5E1] focus:border-[#5B4FE1] focus:ring-4 focus:ring-[#5B4FE1]/10 shadow-2xs outline-none transition-all"
+            {...register("name")}
+          />
+          {errors.name && (
+            <p className="mt-1 text-xs text-red-500 font-medium">
+              {errors.name.message}
+            </p>
+          )}
+        </div>
+
+        {/* Submit Button */}
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full h-[46px] mt-5 rounded-lg bg-[#5844ED] hover:bg-[#4E39E0] text-white text-[13.5px] font-medium transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center"
+          className="w-full h-[54px] mt-8 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] text-white text-[15.5px] font-bold shadow-lg shadow-[#5B4FE1]/15 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
         >
           {isLoading ? (
             <span className="flex items-center gap-2">
@@ -98,44 +94,12 @@ export const LoginForm: React.FC = () => {
               Signing in...
             </span>
           ) : (
-            "Send OTP"
+            "Sign In"
           )}
         </button>
+        
       </form>
-
-      {/* Divider */}
-      <div className="relative my-6 text-center">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full border-t border-[#E2E8F0]" />
-        </div>
-        <span className="relative px-3 bg-white text-[11.5px] text-[#94A3B8]">
-          or continue with
-        </span>
-      </div>
-
-      {/* Continue as Guest Button */}
-      <button
-        type="button"
-        onClick={handleGuestLogin}
-        disabled={isLoading}
-        className="w-full h-[46px] flex items-center justify-center gap-2 rounded-lg border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[13px] font-medium text-[#0F172A] transition-colors"
-      >
-        <UserIcon className="w-4 h-4 text-[#64748B]" />
-        <span>Continue as Guest</span>
-      </button>
-
-      {/* Footer Terms */}
-      <p className="text-center text-[11px] text-[#64748B] mt-7 leading-relaxed">
-        By continuing, you agree to our{" "}
-        <a href="#" className="text-[#5844ED] font-medium hover:underline">
-          Terms of Service
-        </a>{" "}
-        <br />
-        and{" "}
-        <a href="#" className="text-[#5844ED] font-medium hover:underline">
-          Privacy Policy
-        </a>
-      </p>
+      
     </div>
   );
 };

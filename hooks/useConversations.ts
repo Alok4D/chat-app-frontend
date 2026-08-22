@@ -68,6 +68,17 @@ export function useConversations() {
 
   const startDirectConversation = useCallback(
     async (userId: string) => {
+      // 1. Check if conversation already exists in state
+      const existing = conversations.find(
+        (c) =>
+          c.type === "direct" &&
+          c.participants.some((p) => p.id === userId)
+      );
+      if (existing) {
+        dispatch(setActiveConversationId(existing.id));
+        return existing;
+      }
+
       try {
         const conv = await dispatch(
           conversationsApi.endpoints.createDirectConversation.initiate(userId)
@@ -76,11 +87,11 @@ export function useConversations() {
         dispatch(setActiveConversationId(conv.id));
         return conv;
       } catch (error: any) {
-        toast.error(error?.message || "Failed to start conversation");
+        toast.error(error?.data?.message || error?.message || "Failed to start conversation");
         throw error;
       }
     },
-    [dispatch]
+    [conversations, dispatch]
   );
 
   const searchConversations = useCallback(

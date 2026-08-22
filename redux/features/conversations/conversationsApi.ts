@@ -28,10 +28,10 @@ export const conversationsApi = baseApi.injectEndpoints({
     }),
 
     createDirectConversation: builder.mutation<Conversation, string>({
-      query: (participantId) => ({
-        url: "/conversations/direct",
+      query: (userId) => ({
+        url: "/conversations",
         method: "POST",
-        body: { participantId },
+        body: { userId },
       }),
       transformResponse: (response: any) => {
         const currentStoredUser = typeof window !== "undefined" ? localStorage.getItem("auth_user") : null;
@@ -44,8 +44,8 @@ export const conversationsApi = baseApi.injectEndpoints({
 
     markAsRead: builder.mutation<void, string>({
       query: (conversationId) => ({
-        url: `/conversations/${conversationId}/read`,
-        method: "POST",
+        url: `/conversations/${conversationId}`,
+        method: "GET",
       }),
       invalidatesTags: (_result, _error, id) => [{ type: "Conversations", id }],
     }),

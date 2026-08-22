@@ -27,6 +27,7 @@ import {
   UserPlus,
   PanelLeftClose,
   PanelLeft,
+  LogOut,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -92,14 +93,28 @@ export const ChatLayout: React.FC = () => {
           isSidebarExpanded ? "w-[210px] px-3" : "w-[68px] items-center px-2"
         )}
       >
-        {/* Top Navigation Items */}
+        {/* Top Section: Nav Tabs + Toggle */}
         <div className="flex flex-col gap-2 w-full">
+          {/* Header Toggle */}
+          <div className={cn("flex items-center mb-1", isSidebarExpanded ? "justify-between px-2" : "justify-center")}>
+            {isSidebarExpanded && (
+              <span className="text-[12px] font-bold uppercase tracking-wider text-[#65676B]">Menu</span>
+            )}
+            <button
+              onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+              title={isSidebarExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
+              className="p-1.5 rounded-lg text-[#65676B] hover:text-[#050505] hover:bg-[#E4E6EB] transition-colors cursor-pointer"
+            >
+              {isSidebarExpanded ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
+            </button>
+          </div>
+
           {/* Chats Tab */}
           <button
             onClick={() => setActiveNavTab("chats")}
             title="Chats"
             className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px] relative",
+              "flex items-center rounded-xl transition-all font-semibold text-[14px] relative cursor-pointer",
               isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
               activeNavTab === "chats"
                 ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
@@ -129,7 +144,7 @@ export const ChatLayout: React.FC = () => {
             onClick={() => setActiveNavTab("marketplace")}
             title="Marketplace"
             className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px]",
+              "flex items-center rounded-xl transition-all font-semibold text-[14px] cursor-pointer",
               isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
               activeNavTab === "marketplace"
                 ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
@@ -145,7 +160,7 @@ export const ChatLayout: React.FC = () => {
             onClick={() => setActiveNavTab("requests")}
             title="Requests"
             className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px]",
+              "flex items-center rounded-xl transition-all font-semibold text-[14px] cursor-pointer",
               isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
               activeNavTab === "requests"
                 ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
@@ -161,7 +176,7 @@ export const ChatLayout: React.FC = () => {
             onClick={() => setActiveNavTab("archive")}
             title="Archive"
             className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px]",
+              "flex items-center rounded-xl transition-all font-semibold text-[14px] cursor-pointer",
               isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
               activeNavTab === "archive"
                 ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
@@ -173,48 +188,62 @@ export const ChatLayout: React.FC = () => {
           </button>
         </div>
 
-        {/* Bottom Profile & Toggle */}
-        <div className="flex flex-col gap-3 w-full">
-          {/* User Info */}
-          <div
-            onClick={logout}
-            title="Click to logout"
-            className={cn(
-              "flex items-center rounded-xl cursor-pointer hover:bg-[#E4E6EB]/60 transition-all",
-              isSidebarExpanded ? "gap-2.5 px-2 py-1.5" : "justify-center p-1"
-            )}
-          >
-            <Avatar
-              src={user?.avatarUrl}
-              name={user?.name || "Alok"}
-              size="sm"
-              isOnline={true}
-              showStatus
-              className="ring-2 ring-white shadow-2xs"
-            />
-            {isSidebarExpanded && (
-              <div className="min-w-0 flex-1">
-                <p className="text-[13px] font-bold text-[#050505] truncate">{user?.name || "Alok"}</p>
-                <p className="text-[11px] text-[#65676B] truncate">{user?.phone || "Online"}</p>
+        {/* ── Bottom Section (Target Design: Profile + Log out Button) ── */}
+        <div className="w-full">
+          {isSidebarExpanded ? (
+            <div className="flex flex-col gap-2.5 w-full pt-3 border-t border-[#E4E6EB]">
+              {/* User Profile Card */}
+              <div className="flex items-center gap-3 px-1">
+                <Avatar
+                  src={user?.avatarUrl}
+                  name={user?.name || "Prime Alok"}
+                  size="md"
+                  isOnline={true}
+                  showStatus
+                  className="ring-2 ring-white shadow-2xs"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="text-[14px] font-bold text-[#0F172A] truncate leading-tight">
+                    {user?.name || "Prime Alok"}
+                  </p>
+                  <p className="text-[12px] text-[#64748B] font-medium truncate mt-0.5">
+                    User
+                  </p>
+                </div>
               </div>
-            )}
-          </div>
 
-          {/* Expand / Collapse Sidebar Toggle */}
-          <button
-            onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-            title={isSidebarExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
-            className={cn(
-              "flex items-center justify-center w-10 h-10 rounded-xl bg-white hover:bg-[#E4E6EB] border border-[#E4E6EB] text-[#050505] transition-all shadow-2xs",
-              isSidebarExpanded ? "ml-auto" : "mx-auto"
-            )}
-          >
-            {isSidebarExpanded ? (
-              <PanelLeftClose className="w-4 h-4" />
-            ) : (
-              <PanelLeft className="w-4 h-4" />
-            )}
-          </button>
+              {/* Log out Button */}
+              <button
+                onClick={logout}
+                title="Log out"
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[13px] font-medium text-[#475569] hover:text-[#0F172A] transition-all shadow-2xs cursor-pointer"
+              >
+                <LogOut className="w-4 h-4 text-[#64748B]" />
+                <span>Log out</span>
+              </button>
+            </div>
+          ) : (
+            <div className="flex flex-col items-center gap-2.5 w-full pt-3 border-t border-[#E4E6EB]">
+              {/* Centered Avatar */}
+              <Avatar
+                src={user?.avatarUrl}
+                name={user?.name || "Prime Alok"}
+                size="md"
+                isOnline={true}
+                showStatus
+                className="ring-2 ring-white shadow-2xs"
+              />
+
+              {/* Compact Log out Icon Button */}
+              <button
+                onClick={logout}
+                title="Log out"
+                className="w-10 h-10 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] flex items-center justify-center text-[#64748B] hover:text-[#0F172A] transition-all shadow-2xs cursor-pointer"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </div>
+          )}
         </div>
       </aside>
 
@@ -232,13 +261,13 @@ export const ChatLayout: React.FC = () => {
             <button
               onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
               title="New Conversation / Group"
-              className="p-2 rounded-xl text-[#0F172A] hover:text-[#6C63FF] hover:bg-[#F8FAFC] transition-colors"
+              className="p-2 rounded-xl text-[#0F172A] hover:text-[#6C63FF] hover:bg-[#F8FAFC] transition-colors cursor-pointer"
             >
               <SquarePen className="w-5 h-5" />
             </button>
             <button
               onClick={() => dispatch(setIsMobileSidebarOpen(false))}
-              className="md:hidden p-2 rounded-xl text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-all"
+              className="md:hidden p-2 rounded-xl text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-all cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>

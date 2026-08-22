@@ -24,7 +24,6 @@ export default function LandingPage() {
         <HowItWorks />
         <ChatPreview />
         <GroupShowcase />
-        
         <CTA />
       </main>
       <Footer />

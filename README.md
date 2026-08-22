@@ -21,42 +21,6 @@ A sleek, responsive, and production-ready real-time messaging application built 
 
 ---
 
-## 📁 Project Structure
-
-```
-chat-app-frontend/
-├── app/
-│   ├── (auth)/
-│   │   ├── _components/ (LoginForm)
-│   │   └── login/page.tsx
-│   ├── (chat)/
-│   │   ├── _components/
-│   │   │   ├── ChatLayout.tsx
-│   │   │   ├── ConversationList.tsx
-│   │   │   ├── ConversationInfo.tsx
-│   │   │   ├── MessageList.tsx
-│   │   │   ├── MessageInput.tsx
-│   │   │   └── group/ (CreateGroupModal, GroupForm, ParticipantSelector)
-│   │   └── chat/page.tsx
-│   ├── (landing)/
-│   │   ├── _components/ (Navbar, Hero, Features, HowItWorks, ChatPreview, CTA, Footer)
-│   │   └── page.tsx
-│   ├── layout.tsx
-│   └── globals.css
-├── components/
-│   └── ui/ (Avatar, Input, Modal, Skeleton)
-├── redux/
-│   ├── api/ (baseApi.ts)
-│   ├── features/ (authApi.ts, conversationsApi.ts, messagesApi.ts)
-│   └── store.ts
-├── hooks/
-│   ├── useAuth.ts, useConversations.ts, useMessages.ts, useRealtimeMessages.ts
-└── docs/
-    └── API.md
-```
-
----
-
 ## 🛠️ Getting Started
 
 ### 1. Install Dependencies

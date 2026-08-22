@@ -108,7 +108,7 @@ export const Hero: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0">
                     <Image
-                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
+                      src="https://www.perfocal.com/blog/content/images/size/w960/2021/01/Perfocal_17-11-2019_TYWFAQ_100_standard-3.jpg"
                       alt="Team Hub"
                       fill
                       className="object-cover"

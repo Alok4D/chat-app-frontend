@@ -4,6 +4,8 @@ A sleek, responsive, and production-ready real-time messaging application built 
 
 ---
 
+![Chatter Showcase](public/images/image.png)
+
 ## ⚡ Key Implemented Requirements
 
 ### Part 1: Real-Time Chat Application

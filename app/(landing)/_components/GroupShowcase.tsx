@@ -61,9 +61,9 @@ export const GroupShowcase: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 3. Direct Chat: Ayesha */}
+                {/* 3. Direct Chat: Mariya */}
                 <div className="flex items-center gap-3 xl:gap-3.5 px-3.5 xl:px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
-                  {/* Avatar: Blue Circle with A */}
+                  {/* Avatar: Blue Circle with M */}
                   <div className="w-10 h-10 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[13px] font-bold shrink-0 shadow-2xs">
                     M
                   </div>
@@ -73,6 +73,22 @@ export const GroupShowcase: React.FC = () => {
                     </h4>
                     <p className="text-[12px] text-[#6B7280] truncate mt-0.5">
                       See you at 5
+                    </p>
+                  </div>
+                </div>
+
+                {/* 4. Direct Chat: Linaa */}
+                <div className="flex items-center gap-3 xl:gap-3.5 px-3.5 xl:px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
+                  {/* Avatar: Pink Circle with L */}
+                  <div className="w-10 h-10 rounded-full bg-[#EC4899] text-white flex items-center justify-center text-[13px] font-bold shrink-0 shadow-2xs">
+                    L
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-[13.5px] font-bold text-[#111827] truncate">
+                      Linaa
+                    </h4>
+                    <p className="text-[12px] text-[#6B7280] truncate mt-0.5">
+                      hello
                     </p>
                   </div>
                 </div>

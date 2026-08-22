@@ -4,7 +4,11 @@ A sleek, responsive, and production-ready real-time messaging application built 
 
 ---
 
+### 🌐 Live Links
+* **Frontend Application**: [https://chatter-live.vercel.app](https://chatter-live.vercel.app)
+
 ![Chatter Showcase](public/images/image.png)
+
 
 ## ⚡ Key Implemented Requirements
 

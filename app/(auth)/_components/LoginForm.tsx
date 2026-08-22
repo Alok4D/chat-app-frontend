@@ -24,16 +24,26 @@ export const LoginForm: React.FC = () => {
   };
 
   return (
-    <div className="w-full max-w-[520px] p-10 sm:p-12">
+    <div className="w-full max-w-[520px] px-0 py-8 sm:p-10 md:p-12">
       
       {/* Centered Brand Logo (Enlarged) */}
       <div className="flex justify-center mb-5">
+        {/* Mobile Logo */}
         <Image
           src="/logo/nav-logo.png"
           alt="Chatter Logo"
           width={190}
           height={54}
-          className="h-11 w-auto object-contain"
+          className="block md:hidden h-11 w-auto object-contain"
+          priority
+        />
+        {/* Tablet & Desktop Logo */}
+        <Image
+          src="/icons/favlogo.png"
+          alt="Chatter Logo"
+          width={190}
+          height={154}
+          className="hidden md:block h-24 w-auto object-contain"
           priority
         />
       </div>
@@ -46,23 +56,7 @@ export const LoginForm: React.FC = () => {
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
         
-        {/* Phone Number Field */}
-        <div className="space-y-2 text-left">
-          <label className="block text-[12.5px] font-bold text-[#64748B] uppercase tracking-wider">
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            placeholder="Enter your phone number"
-            className="w-full h-[54px] px-5 rounded-xs bg-white text-[14.5px] text-[#0F172A] placeholder-[#94A3B8] border border-[#CBD5E1] focus:border-[#5B4FE1] focus:ring-4 focus:ring-[#5B4FE1]/10 shadow-2xs outline-none transition-all"
-            {...register("phone")}
-          />
-          {errors.phone && (
-            <p className="mt-1 text-xs text-red-500 font-medium">
-              {errors.phone.message}
-            </p>
-          )}
-        </div>
+       
 
         {/* Your Name Field */}
         <div className="space-y-2 text-left">
@@ -78,6 +72,24 @@ export const LoginForm: React.FC = () => {
           {errors.name && (
             <p className="mt-1 text-xs text-red-500 font-medium">
               {errors.name.message}
+            </p>
+          )}
+        </div>
+
+         {/* Phone Number Field */}
+        <div className="space-y-2 text-left">
+          <label className="block text-[12.5px] font-bold text-[#64748B] uppercase tracking-wider">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            placeholder="Enter your phone number"
+            className="w-full h-[54px] px-5 rounded-xs bg-white text-[14.5px] text-[#0F172A] placeholder-[#94A3B8] border border-[#CBD5E1] focus:border-[#5B4FE1] focus:ring-4 focus:ring-[#5B4FE1]/10 shadow-2xs outline-none transition-all"
+            {...register("phone")}
+          />
+          {errors.phone && (
+            <p className="mt-1 text-xs text-red-500 font-medium">
+              {errors.phone.message}
             </p>
           )}
         </div>

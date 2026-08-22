@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { ChatSearch } from "./ChatSearch";
+import React, { useState, useEffect, useRef } from "react";
 import { ConversationList } from "./ConversationList";
-import { ChatHeader } from "./ChatHeader";
 import { MessageList } from "./MessageList";
 import { MessageInput } from "./MessageInput";
 import { EmptyChat } from "./EmptyChat";
@@ -15,19 +13,16 @@ import { useMessages } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealtimeMessages } from "@/hooks/useRealtimeMessages";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setIsMobileSidebarOpen, setIsCreateGroupModalOpen } from "@/redux/slices/chatSlice";
+import { setIsCreateGroupModalOpen, toggleInfoPanel } from "@/redux/slices/chatSlice";
 import { usersApi } from "@/redux/features/users/usersApi";
 import {
-  MessageCircle,
-  Store,
-  MessageSquareText,
-  Archive,
-  SquarePen,
+  MessageSquare,
+  Search,
+  Plus,
+  MoreVertical,
   X,
   UserPlus,
-  PanelLeftClose,
-  PanelLeft,
-  LogOut,
+  Info,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -43,21 +38,35 @@ export const ChatLayout: React.FC = () => {
     selectConversation,
     startDirectConversation,
     searchQuery,
+    setSearch,
+    refreshConversations,
     isLoading,
   } = useConversations();
   const { messages, isLoading: isMessagesLoading, sendMessage } = useMessages();
   useRealtimeMessages();
-  const isMobileSidebarOpen = useAppSelector((s) => s.chat.isMobileSidebarOpen);
+
   const isInfoPanelOpen = useAppSelector((s) => s.chat.isInfoPanelOpen);
 
+  // State for Header dropdown menu
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  // Global search contacts
   const [globalContacts, setGlobalContacts] = useState<User[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(false);
-  const [activeNavTab, setActiveNavTab] = useState<"chats" | "marketplace" | "requests" | "archive">("chats");
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
 
-  // Total unread count
-  const totalUnreadCount = conversations.reduce((sum, c) => sum + (c.unreadCount || 0), 0);
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setIsMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
+  // Global search effect
   useEffect(() => {
     if (!searchQuery.trim()) {
       setGlobalContacts([]);
@@ -75,293 +84,245 @@ export const ChatLayout: React.FC = () => {
       } finally {
         setLoadingContacts(false);
       }
-    }, 400);
+    }, 350);
     return () => clearTimeout(delayDebounce);
   }, [searchQuery, user, dispatch]);
 
   const handleSelectConv = (id: string) => {
     selectConversation(id);
-    dispatch(setIsMobileSidebarOpen(false));
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white text-[#0F172A] font-sans">
-      {/* ── 1. MESSENGER STYLE LEFT NAVIGATION RAIL ── */}
-      <aside
-        className={cn(
-          "hidden sm:flex flex-col justify-between py-4 bg-[#F0F2F5] border-r border-[#E4E6EB] z-40 shrink-0 transition-all duration-200 select-none",
-          isSidebarExpanded ? "w-[210px] px-3" : "w-[68px] items-center px-2"
-        )}
-      >
-        {/* Top Section: Nav Tabs + Toggle */}
-        <div className="flex flex-col gap-2 w-full">
-          {/* Header Toggle */}
-          <div className={cn("flex items-center mb-1", isSidebarExpanded ? "justify-between px-2" : "justify-center")}>
-            {isSidebarExpanded && (
-              <span className="text-[12px] font-bold uppercase tracking-wider text-[#65676B]">Menu</span>
-            )}
+    <div className="flex h-screen w-full overflow-hidden bg-white text-[#111827] font-sans antialiased">
+      {/* ── 1. LEFT SIDEBAR (Pure #FFFFFF Background) ── */}
+      <aside className="w-[300px] lg:w-[320px] bg-[#FFFFFF] border-r border-[#E5E7EB] flex flex-col h-full shrink-0 z-30 select-none">
+        
+        {/* Header */}
+        <div className="h-[60px] px-4 border-b border-[#E5E7EB] flex items-center justify-between relative bg-white">
+          <div className="flex items-center gap-2.5">
+            <div className="w-7 h-7 rounded-lg bg-[#EDE9FE] flex items-center justify-center text-[#5B4FE1]">
+              <MessageSquare className="w-4 h-4 text-[#5B4FE1]" />
+            </div>
+            <h1 className="text-[17px] font-bold text-[#111827] tracking-tight">Chat</h1>
+          </div>
+
+          {/* Three dots menu button with popup dropdown */}
+          <div className="relative" ref={menuRef}>
             <button
-              onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-              title={isSidebarExpanded ? "Collapse Sidebar" : "Expand Sidebar"}
-              className="p-1.5 rounded-lg text-[#65676B] hover:text-[#050505] hover:bg-[#E4E6EB] transition-colors cursor-pointer"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              title="Menu"
+              className="p-1 rounded-lg border border-[#E5E7EB] hover:bg-[#F9FAFB] text-[#6B7280] hover:text-[#111827] transition-colors cursor-pointer"
             >
-              {isSidebarExpanded ? <PanelLeftClose className="w-4 h-4" /> : <PanelLeft className="w-4 h-4" />}
+              <MoreVertical className="w-4 h-4" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {isMenuOpen && (
+              <div className="absolute right-0 top-9 w-32 bg-white border border-[#E5E7EB] rounded-lg shadow-lg py-1 z-50 animate-scaleUp">
+                <a
+                  href={ROUTES.LANDING}
+                  className="block px-3 py-1.5 text-[12.5px] font-medium text-[#111827] hover:bg-[#F9FAFB] transition-colors"
+                >
+                  Home
+                </a>
+                <button
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    logout();
+                  }}
+                  className="w-full text-left px-3 py-1.5 text-[12.5px] font-medium text-red-600 hover:bg-red-50 transition-colors cursor-pointer"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* ── SIDEBAR BODY ── */}
+        <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+          {/* Search Box */}
+          <div className="p-3 pb-2">
+            <div className="flex items-center h-9 px-3 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg focus-within:border-[#5B4FE1] focus-within:bg-white transition-colors">
+              <Search className="w-3.5 h-3.5 text-[#9CA3AF] shrink-0 mr-2" />
+              <input
+                type="text"
+                placeholder="Search by name or phone..."
+                value={searchQuery}
+                onChange={(e) => setSearch(e.target.value)}
+                className="w-full h-full bg-transparent text-[12.5px] text-[#111827] placeholder-[#9CA3AF] outline-none"
+              />
+              {searchQuery && (
+                <button onClick={() => setSearch("")} className="text-[#9CA3AF] hover:text-[#111827]">
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              )}
+            </div>
+
+            {/* + New Group Button */}
+            <button
+              onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
+              className="w-full h-8.5 mt-2 rounded-lg border border-[#E5E7EB] bg-white hover:bg-[#F9FAFB] text-[12px] font-semibold text-[#111827] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+            >
+              <Plus className="w-3.5 h-3.5 text-[#111827]" />
+              <span>New Group</span>
             </button>
           </div>
 
-          {/* Chats Tab */}
-          <button
-            onClick={() => setActiveNavTab("chats")}
-            title="Chats"
-            className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px] relative cursor-pointer",
-              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
-              activeNavTab === "chats"
-                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
-                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
-            )}
-          >
-            <div className="relative shrink-0">
-              <MessageCircle className="w-5 h-5 fill-current" />
-              {totalUnreadCount > 0 && !isSidebarExpanded && (
-                <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-[#1877F2] ring-2 ring-[#F0F2F5]" />
-              )}
-            </div>
-            {isSidebarExpanded && (
-              <>
-                <span className="truncate flex-1 text-left">Chats</span>
-                {totalUnreadCount > 0 && (
-                  <span className="px-1.5 py-0.5 rounded-full bg-[#1877F2] text-white text-[11px] font-bold">
-                    {totalUnreadCount}
+          {/* Conversations Header + Refresh */}
+          <div className="px-3.5 py-1.5 flex items-center justify-between text-[11px] font-bold text-[#9CA3AF] tracking-wider">
+            <span>CONVERSATIONS</span>
+            <button
+              onClick={() => refreshConversations()}
+              className="text-[#6366F1] hover:underline font-semibold tracking-normal cursor-pointer"
+            >
+              Refresh
+            </button>
+          </div>
+
+          {/* Conversation List */}
+          <div className="flex-1 overflow-y-auto custom-scrollbar">
+            <ConversationList
+              conversations={conversations}
+              activeConversationId={activeConversationId}
+              isLoading={isLoading}
+              onSelectConversation={handleSelectConv}
+            />
+
+            {/* Global Search Results */}
+            {(globalContacts.length > 0 || loadingContacts || (searchQuery.trim().length > 0 && globalContacts.length === 0)) && (
+              <div className="border-t border-[#E5E7EB] pt-2 pb-3 px-2">
+                <div className="px-2.5 py-1 flex items-center gap-1.5 mb-1">
+                  <UserPlus className="w-3.5 h-3.5 text-[#6366F1]" />
+                  <span className="text-[10.5px] uppercase tracking-wider font-bold text-[#9CA3AF]">
+                    Global Users Found
                   </span>
-                )}
-              </>
+                </div>
+                <div className="space-y-0.5">
+                  {loadingContacts ? (
+                    <p className="text-[12px] text-[#9CA3AF] text-center py-2.5">Searching...</p>
+                  ) : globalContacts.length === 0 ? (
+                    <p className="text-[12px] text-[#9CA3AF] text-center py-2.5">No users found</p>
+                  ) : (
+                    globalContacts.map((contact) => (
+                      <div
+                        key={contact.id}
+                        onClick={async () => {
+                          try {
+                            const conv = await startDirectConversation(contact.id);
+                            handleSelectConv(conv.id);
+                          } catch (e) {
+                            console.error("Failed to start chat:", e);
+                          }
+                        }}
+                        className="flex items-center gap-2.5 px-2.5 py-2 rounded-lg cursor-pointer hover:bg-[#F9FAFB] transition-colors"
+                      >
+                        <Avatar src={contact.avatarUrl} name={contact.name} size="sm" />
+                        <div className="min-w-0">
+                          <p className="text-[12.5px] font-bold text-[#111827] truncate">{contact.name}</p>
+                          <p className="text-[11px] text-[#6B7280] truncate">{contact.phone}</p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             )}
-          </button>
-
-          {/* Marketplace Tab */}
-          <button
-            onClick={() => setActiveNavTab("marketplace")}
-            title="Marketplace"
-            className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px] cursor-pointer",
-              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
-              activeNavTab === "marketplace"
-                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
-                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
-            )}
-          >
-            <Store className="w-5 h-5 shrink-0" />
-            {isSidebarExpanded && <span className="truncate flex-1 text-left">Marketplace</span>}
-          </button>
-
-          {/* Requests Tab */}
-          <button
-            onClick={() => setActiveNavTab("requests")}
-            title="Requests"
-            className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px] cursor-pointer",
-              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
-              activeNavTab === "requests"
-                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
-                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
-            )}
-          >
-            <MessageSquareText className="w-5 h-5 shrink-0" />
-            {isSidebarExpanded && <span className="truncate flex-1 text-left">Requests</span>}
-          </button>
-
-          {/* Archive Tab */}
-          <button
-            onClick={() => setActiveNavTab("archive")}
-            title="Archive"
-            className={cn(
-              "flex items-center rounded-xl transition-all font-semibold text-[14px] cursor-pointer",
-              isSidebarExpanded ? "gap-3 px-3.5 py-2.5 w-full" : "justify-center w-11 h-11 mx-auto",
-              activeNavTab === "archive"
-                ? "bg-[#E4E6EB] text-[#050505] shadow-2xs"
-                : "text-[#65676B] hover:bg-[#E4E6EB]/60 hover:text-[#050505]"
-            )}
-          >
-            <Archive className="w-5 h-5 shrink-0" />
-            {isSidebarExpanded && <span className="truncate flex-1 text-left">Archive</span>}
-          </button>
+          </div>
         </div>
 
-        {/* ── Bottom Section (Target Design: Profile + Log out Button) ── */}
-        <div className="w-full">
-          {isSidebarExpanded ? (
-            <div className="flex flex-col gap-2.5 w-full pt-3 border-t border-[#E4E6EB]">
-              {/* User Profile Card */}
-              <div className="flex items-center gap-3 px-1">
+        {/* ── SIDEBAR BOTTOM (Height: 60px aligned with input bar) ── */}
+        <div className="h-[60px] px-3.5 border-t border-[#E5E7EB] bg-[#FFFFFF] flex items-center">
+          <div className="flex items-center gap-2.5 w-full">
+            <Avatar
+              src={user?.avatarUrl}
+              name={user?.name || "ABCD"}
+              size="md"
+              isOnline={true}
+              showStatus
+            />
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-bold text-[#111827] truncate leading-tight">
+                {user?.name || "ABCD"}
+              </p>
+              <p className="text-[11px] text-[#6B7280] truncate mt-0.5 font-medium">
+                {user?.phone || "01719277951"}{" "}
+                <span className="text-[#10B981] font-semibold">· Online</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      {/* ── 2. MAIN CHAT WINDOW (Background: #F7F8FA) ── */}
+      <main className="flex-1 flex flex-col h-full bg-[#F7F8FA] relative min-w-0 overflow-hidden">
+        {activeConversation ? (
+          <>
+            {/* Chat Top Header (Height: 60px) */}
+            <div className="h-[60px] px-6 bg-white border-b border-[#E5E7EB] flex items-center justify-between shrink-0 z-20">
+              <div className="flex items-center gap-3">
                 <Avatar
-                  src={user?.avatarUrl}
-                  name={user?.name || "Prime Alok"}
+                  src={activeConversation.avatarUrl}
+                  name={activeConversation.name || "Chat"}
                   size="md"
-                  isOnline={true}
-                  showStatus
-                  className="ring-2 ring-white shadow-2xs"
+                  isGroup={activeConversation.type === "group"}
                 />
-                <div className="min-w-0 flex-1">
-                  <p className="text-[14px] font-bold text-[#0F172A] truncate leading-tight">
-                    {user?.name || "Prime Alok"}
-                  </p>
-                  <p className="text-[12px] text-[#64748B] font-medium truncate mt-0.5">
-                    User
+                <div>
+                  <h3 className="text-[14.5px] font-bold text-[#111827] leading-tight">
+                    {activeConversation.name ||
+                      (activeConversation.type === "direct"
+                        ? activeConversation.participants.find((p) => p.id !== user?.id)?.name || "User"
+                        : "Group Chat")}
+                  </h3>
+                  <p className="text-[11px] text-[#6B7280] font-medium mt-0.5">
+                    {activeConversation.type === "group"
+                      ? `${activeConversation.participants.length} members`
+                      : "Online"}
                   </p>
                 </div>
               </div>
 
-              {/* Log out Button */}
+              {/* Info Button ⓘ */}
               <button
-                onClick={logout}
-                title="Log out"
-                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] text-[13px] font-medium text-[#475569] hover:text-[#0F172A] transition-all shadow-2xs cursor-pointer"
-              >
-                <LogOut className="w-4 h-4 text-[#64748B]" />
-                <span>Log out</span>
-              </button>
-            </div>
-          ) : (
-            <div className="flex flex-col items-center gap-2.5 w-full pt-3 border-t border-[#E4E6EB]">
-              {/* Centered Avatar */}
-              <Avatar
-                src={user?.avatarUrl}
-                name={user?.name || "Prime Alok"}
-                size="md"
-                isOnline={true}
-                showStatus
-                className="ring-2 ring-white shadow-2xs"
-              />
-
-              {/* Compact Log out Icon Button */}
-              <button
-                onClick={logout}
-                title="Log out"
-                className="w-10 h-10 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] flex items-center justify-center text-[#64748B] hover:text-[#0F172A] transition-all shadow-2xs cursor-pointer"
-              >
-                <LogOut className="w-4 h-4" />
-              </button>
-            </div>
-          )}
-        </div>
-      </aside>
-
-      {/* ── 2. CONVERSATIONS LIST SIDEBAR (Light white/slate) ── */}
-      <div
-        className={cn(
-          "fixed inset-y-0 left-0 z-30 w-[300px] sm:w-[320px] bg-white border-r border-[#F1F5F9] flex flex-col transition-transform duration-300 md:static md:translate-x-0 shrink-0",
-          isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        {/* Sidebar Header: "Conversations" + New Group/Chat Icon */}
-        <div className="px-5 pt-5 pb-2.5 flex items-center justify-between bg-white">
-          <h2 className="text-[19px] font-bold text-[#0F172A] tracking-tight">Conversations</h2>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => dispatch(setIsCreateGroupModalOpen(true))}
-              title="New Conversation / Group"
-              className="p-2 rounded-xl text-[#0F172A] hover:text-[#6C63FF] hover:bg-[#F8FAFC] transition-colors cursor-pointer"
-            >
-              <SquarePen className="w-5 h-5" />
-            </button>
-            <button
-              onClick={() => dispatch(setIsMobileSidebarOpen(false))}
-              className="md:hidden p-2 rounded-xl text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-all cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
-
-        {/* Search & Filter Pills */}
-        <ChatSearch />
-
-        {/* Conversation List */}
-        <div className="flex-1 overflow-y-auto custom-scrollbar bg-white">
-          <ConversationList
-            conversations={conversations}
-            activeConversationId={activeConversationId}
-            isLoading={isLoading}
-            onSelectConversation={handleSelectConv}
-          />
-
-          {/* Directory Search Results */}
-          {(globalContacts.length > 0 || loadingContacts || (searchQuery.trim().length > 0 && globalContacts.length === 0)) && (
-            <div className="border-t border-[#F1F5F9] pt-3 pb-4 px-2">
-              <div className="px-3 py-1 flex items-center gap-1.5 mb-1">
-                <UserPlus className="w-3.5 h-3.5 text-[#6C63FF]" />
-                <span className="text-[11px] uppercase tracking-wider font-bold text-[#94A3B8]">
-                  Global Users Found
-                </span>
-              </div>
-              <div className="space-y-0.5">
-                {loadingContacts ? (
-                  <p className="text-[12px] text-[#94A3B8] text-center py-4">Searching...</p>
-                ) : globalContacts.length === 0 ? (
-                  <p className="text-[12px] text-[#94A3B8] text-center py-4">No users found</p>
-                ) : (
-                  globalContacts.map((contact) => (
-                    <div
-                      key={contact.id}
-                      onClick={async () => {
-                        try {
-                          const conv = await startDirectConversation(contact.id);
-                          handleSelectConv(conv.id);
-                        } catch (e) {
-                          console.error("Failed to start chat:", e);
-                        }
-                      }}
-                      className="flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer hover:bg-[#F8FAFC] transition-colors"
-                    >
-                      <Avatar src={contact.avatarUrl} name={contact.name} size="sm" />
-                      <div className="min-w-0">
-                        <p className="text-[13px] font-bold text-[#0F172A] truncate">{contact.name}</p>
-                        <p className="text-[11.5px] text-[#64748B] truncate">{contact.phone}</p>
-                      </div>
-                    </div>
-                  ))
+                onClick={() => dispatch(toggleInfoPanel())}
+                title="Conversation Details"
+                className={cn(
+                  "w-8.5 h-8.5 rounded-full border border-[#E5E7EB] flex items-center justify-center transition-colors cursor-pointer",
+                  isInfoPanelOpen
+                    ? "bg-[#EDE9FE] text-[#5B4FE1] border-[#5B4FE1]/30"
+                    : "bg-white hover:bg-[#F9FAFB] text-[#6B7280] hover:text-[#111827]"
                 )}
-              </div>
+              >
+                <Info className="w-4 h-4" />
+              </button>
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Mobile sidebar overlay */}
-      {isMobileSidebarOpen && (
-        <div
-          onClick={() => dispatch(setIsMobileSidebarOpen(false))}
-          className="fixed inset-0 bg-black/40 z-20 md:hidden backdrop-blur-2xs"
-        />
-      )}
-
-      {/* ── 3. MAIN CHAT WINDOW (Clean White #FFFFFF) ── */}
-      <main className="flex-1 flex flex-col h-full bg-white relative min-w-0 overflow-hidden">
-        {activeConversation ? (
-          <>
-            <ChatHeader conversation={activeConversation} />
+            {/* Message List */}
             <MessageList
               messages={messages}
               isLoading={isMessagesLoading}
             />
-            <MessageInput
-              onSendMessage={async (text) => {
-                await sendMessage({ content: text, contentType: "text" });
-              }}
-            />
+
+            {/* Message Input Container (Height: 60px, border-t border-[#E5E7EB]) */}
+            <div className="h-[60px] px-6 bg-white border-t border-[#E5E7EB] flex items-center shrink-0">
+              <MessageInput
+                onSendMessage={async (text) => {
+                  await sendMessage({ content: text, contentType: "text" });
+                }}
+              />
+            </div>
           </>
         ) : (
           <EmptyChat />
         )}
       </main>
 
-      {/* ── 4. RIGHT CONVERSATION INFO DRAWER ── */}
+      {/* ── 3. RIGHT CONVERSATION INFO DRAWER ── */}
       {activeConversation && isInfoPanelOpen && (
         <ConversationInfo conversation={activeConversation} />
       )}
 
-      {/* Create Group Modal */}
+      {/* ── 4. CREATE GROUP MODAL ── */}
       <CreateGroupModal />
     </div>
   );

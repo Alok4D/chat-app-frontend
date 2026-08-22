@@ -9,7 +9,7 @@ export function mapUser(apiUser: any): AuthUser {
     id,
     name: apiUser.name || "Unknown",
     phone: apiUser.phone || "",
-    avatarUrl: apiUser.avatarUrl || `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(apiUser.name || id)}`,
+    avatarUrl: apiUser.avatarUrl && !apiUser.avatarUrl.includes("dicebear") ? apiUser.avatarUrl : "",
     statusMessage: apiUser.statusMessage || "",
     isOnline: apiUser.isOnline !== undefined ? apiUser.isOnline : true,
     createdAt: apiUser.createdAt || new Date().toISOString(),
@@ -24,8 +24,8 @@ export const authApi = {
         id: "mock-user-001",
         name: credentials.name || "Alex Morgan",
         phone: credentials.phone,
-        avatarUrl: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(credentials.name || "Alex")}`,
-        statusMessage: "Using PulseChat in Mock Mode",
+        avatarUrl: "",
+        statusMessage: "Using Chatter in Mock Mode",
         isOnline: true,
         createdAt: new Date().toISOString(),
       };
@@ -43,18 +43,23 @@ export const authApi = {
     };
 
     const response = await apiClient.post<any>("/auth/login", payload);
-    const mappedUser = mapUser(response.data.user);
-    const token = response.data.token;
+    const data = response.data;
+    const user = mapUser(data.user || data);
+    const token = data.token;
 
-    if (token && typeof window !== "undefined") {
+    if (typeof window !== "undefined" && token) {
       localStorage.setItem("auth_token", token);
-      localStorage.setItem("auth_user", JSON.stringify(mappedUser));
+      localStorage.setItem("auth_user", JSON.stringify(user));
     }
 
-    return {
-      user: mappedUser,
-      token,
-    };
+    return { user, token };
+  },
+
+  async logout(): Promise<void> {
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("auth_token");
+      localStorage.removeItem("auth_user");
+    }
   },
 
   async getCurrentUser(): Promise<AuthUser | null> {
@@ -63,32 +68,11 @@ export const authApi = {
       if (stored) {
         try {
           return JSON.parse(stored);
-        } catch {
-          // ignore
+        } catch (e) {
+          console.error("Error parsing stored auth_user:", e);
         }
       }
     }
-
-    if (APP_CONFIG.enableMock) {
-      return null;
-    }
-
-    try {
-      const response = await apiClient.get<any>("/auth/me");
-      const mappedUser = mapUser(response.data);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("auth_user", JSON.stringify(mappedUser));
-      }
-      return mappedUser;
-    } catch {
-      return null;
-    }
-  },
-
-  async logout(): Promise<void> {
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("auth_token");
-      localStorage.removeItem("auth_user");
-    }
+    return null;
   },
 };

@@ -19,7 +19,7 @@ export function mapMessage(apiMsg: any, participants: any[] = []): Message {
       id: senderId,
       name: "User",
       phone: "",
-      avatarUrl: `https://api.dicebear.com/7.x/adventurer/svg?seed=${encodeURIComponent(senderId)}`,
+      avatarUrl: "",
       isOnline: false,
       createdAt: new Date().toISOString(),
     },

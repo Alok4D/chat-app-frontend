@@ -1,7 +1,7 @@
 import React from "react";
 import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
-import { formatDate } from "@/lib/utils/formatDate";
+import { formatTime } from "@/lib/utils/formatTime";
 import { cn } from "@/lib/utils/cn";
 import { useAppSelector } from "@/redux/hooks";
 
@@ -37,10 +37,10 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
     <div
       onClick={onClick}
       className={cn(
-        "group relative flex items-center gap-3 px-4 py-3 mx-2 my-0.5 rounded-2xl cursor-pointer transition-all duration-150 select-none",
+        "group relative flex items-center gap-3 px-3 py-2.5 mx-2 my-0.5 rounded-lg cursor-pointer transition-colors duration-150 select-none",
         isActive
-          ? "bg-[#F4F3FF] border border-[#6C63FF]/20 shadow-xs"
-          : "hover:bg-[#F8FAFC] border border-transparent"
+          ? "bg-[#EEF0F4]"
+          : "hover:bg-[#F9FAFB] bg-transparent"
       )}
     >
       <Avatar
@@ -54,31 +54,30 @@ export const ConversationItem: React.FC<ConversationItemProps> = ({
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-0.5">
-          <h4
-            className={cn(
-              "text-[13.5px] font-bold truncate transition-colors",
-              isActive ? "text-[#6C63FF]" : "text-[#0F172A]"
-            )}
-          >
+          <h4 className="text-[13.5px] font-bold text-[#111827] truncate">
             {displayName}
           </h4>
           {conversation.lastMessage?.createdAt && (
-            <span className="text-[11px] text-[#94A3B8] shrink-0 font-medium ml-1">
-              {formatDate(conversation.lastMessage.createdAt)}
+            <span className="text-[11px] text-[#9CA3AF] shrink-0 font-medium ml-1">
+              {formatTime(conversation.lastMessage.createdAt)}
             </span>
           )}
         </div>
 
         <div className="flex items-center justify-between gap-1">
-          <p className="text-[12px] text-[#64748B] truncate max-w-[155px]">
+          <p className="text-[12px] text-[#6B7280] truncate max-w-[160px]">
             {conversation.lastMessage?.content || "Started a new conversation"}
           </p>
 
-          {conversation.unreadCount > 0 && (
-            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6C63FF] text-white font-bold text-[10px] shadow-sm shadow-[#6C63FF]/30 shrink-0">
+          {conversation.type === "group" ? (
+            <span className="text-[9.5px] font-bold tracking-wider px-1.5 py-0.5 rounded bg-[#EDE9FE] text-[#6366F1] shrink-0">
+              GROUP
+            </span>
+          ) : conversation.unreadCount > 0 ? (
+            <span className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-[#6366F1] text-white font-bold text-[10px] shrink-0">
               {conversation.unreadCount > 99 ? "99+" : conversation.unreadCount}
             </span>
-          )}
+          ) : null}
         </div>
       </div>
     </div>

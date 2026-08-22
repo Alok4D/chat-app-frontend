@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { Send, Paperclip, Smile } from "lucide-react";
+import { Send, Paperclip } from "lucide-react";
 import { cn } from "@/lib/utils/cn";
 
 export interface MessageInputProps {
@@ -42,59 +42,47 @@ export const MessageInput: React.FC<MessageInputProps> = ({
   };
 
   return (
-    <div className="px-6 py-4 bg-white border-t border-[#F1F5F9] shrink-0">
-      <div className="flex items-center gap-3">
-        {/* Main Pill Input Box */}
-        <div className="flex-1 flex items-center gap-3 bg-[#F8FAFC] border border-[#E2E8F0] rounded-2xl px-4 py-2.5 focus-within:border-[#6C63FF] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#6C63FF]/10 transition-all shadow-2xs">
-          {/* Attachment Icon */}
-          <button
-            type="button"
-            title="Attach file"
-            className="text-[#94A3B8] hover:text-[#64748B] transition-colors shrink-0"
-          >
-            <Paperclip className="w-5 h-5 rotate-45" />
-          </button>
-
-          <textarea
-            ref={textareaRef}
-            value={content}
-            onChange={handleChange}
-            onKeyDown={handleKeyDown}
-            disabled={disabled}
-            placeholder="Type a message..."
-            rows={1}
-            className="flex-1 max-h-32 min-h-[24px] bg-transparent text-[13.5px] text-[#0F172A] placeholder-[#94A3B8] outline-none resize-none custom-scrollbar leading-relaxed py-0.5"
-          />
-
-          {/* Emoji Icon */}
-          <button
-            type="button"
-            title="Emoji"
-            className="text-[#94A3B8] hover:text-[#64748B] transition-colors shrink-0"
-          >
-            <Smile className="w-5 h-5" />
-          </button>
-        </div>
-
-        {/* Circular Purple Send Button */}
+    <div className="w-full flex items-center gap-3">
+      {/* Input container */}
+      <div className="flex-1 flex items-center gap-2.5 bg-[#F9FAFB] border border-[#E5E7EB] rounded-lg px-3.5 py-2 focus-within:border-[#5B4FE1] focus-within:bg-white transition-colors">
         <button
-          onClick={handleSubmit}
-          disabled={!content.trim() || isSending || disabled}
-          aria-label="Send message"
-          className={cn(
-            "w-11 h-11 rounded-full flex items-center justify-center transition-all duration-200 shrink-0",
-            content.trim() && !disabled && !isSending
-              ? "bg-[#6C63FF] text-white shadow-md shadow-[#6C63FF]/30 hover:bg-[#5a52e8] hover:scale-105 active:scale-95 cursor-pointer"
-              : "bg-[#6C63FF]/60 text-white/80 cursor-not-allowed"
-          )}
+          type="button"
+          title="Attach file"
+          className="text-[#9CA3AF] hover:text-[#4B5563] transition-colors shrink-0 cursor-pointer"
         >
-          {isSending ? (
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-          ) : (
-            <Send className="w-4 h-4" />
-          )}
+          <Paperclip className="w-4 h-4 rotate-45" />
         </button>
+
+        <textarea
+          ref={textareaRef}
+          value={content}
+          onChange={handleChange}
+          onKeyDown={handleKeyDown}
+          disabled={disabled}
+          placeholder="Type a message..."
+          rows={1}
+          className="flex-1 max-h-28 min-h-[22px] bg-transparent text-[13px] text-[#111827] placeholder-[#9CA3AF] outline-none resize-none custom-scrollbar leading-relaxed py-0.5"
+        />
       </div>
+
+      {/* Circular purple send button */}
+      <button
+        onClick={handleSubmit}
+        disabled={!content.trim() || isSending || disabled}
+        aria-label="Send message"
+        className={cn(
+          "w-9 h-9 rounded-full flex items-center justify-center transition-all shrink-0",
+          content.trim() && !disabled && !isSending
+            ? "bg-[#5B4FE1] text-white hover:bg-[#4E39E0] cursor-pointer"
+            : "bg-[#5B4FE1]/40 text-white/70 cursor-not-allowed"
+        )}
+      >
+        {isSending ? (
+          <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+        ) : (
+          <Send className="w-3.5 h-3.5" />
+        )}
+      </button>
     </div>
   );
 };

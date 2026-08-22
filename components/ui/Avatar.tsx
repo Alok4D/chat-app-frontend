@@ -22,15 +22,23 @@ export const Avatar: React.FC<AvatarProps> = ({
   isGroup = false,
 }) => {
   const sizeStyles = {
-    xs: "w-6 h-6 text-[10px]",
-    sm: "w-8 h-8 text-xs",
-    md: "w-10 h-10 text-sm",
-    lg: "w-12 h-12 text-base",
-    xl: "w-16 h-16 text-lg",
+    xs: "w-6 h-6 text-[10.5px]",
+    sm: "w-8 h-8 text-[12px]",
+    md: "w-10 h-10 text-[14px]",
+    lg: "w-11 h-11 text-[15px]",
+    xl: "w-14 h-14 text-[18px]",
+  };
+
+  const iconSizes = {
+    xs: "w-3 h-3",
+    sm: "w-4 h-4",
+    md: "w-5 h-5",
+    lg: "w-5 h-5",
+    xl: "w-7 h-7",
   };
 
   const statusSizeStyles = {
-    xs: "w-1.5 h-1.5 ring-1",
+    xs: "w-2 h-2 ring-1",
     sm: "w-2.5 h-2.5 ring-2",
     md: "w-3 h-3 ring-2",
     lg: "w-3.5 h-3.5 ring-2",
@@ -38,41 +46,26 @@ export const Avatar: React.FC<AvatarProps> = ({
   };
 
   const getInitials = (n: string) => {
-    return n
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .toUpperCase()
-      .slice(0, 2);
+    if (!n || !n.trim()) return "U";
+    const parts = n.trim().split(/\s+/);
+    if (parts.length === 1) {
+      return parts[0].slice(0, 1).toUpperCase(); // e.g. "ABCD" -> "A"
+    }
+    return (parts[0][0] + parts[1][0]).toUpperCase(); // e.g. "Lyle Ingram" -> "LI"
   };
 
-  const getBgColor = (n: string) => {
-    const colors = [
-      "from-blue-500 to-indigo-600",
-      "from-emerald-500 to-teal-600",
-      "from-violet-500 to-purple-600",
-      "from-amber-500 to-orange-600",
-      "from-rose-500 to-pink-600",
-      "from-cyan-500 to-blue-600",
-    ];
-    let hash = 0;
-    for (let i = 0; i < n.length; i++) {
-      hash = n.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const index = Math.abs(hash) % colors.length;
-    return colors[index];
-  };
+  const hasValidImage = src && src.trim().length > 0 && !src.includes("dicebear");
 
   return (
     <div className={cn("relative inline-flex flex-shrink-0 items-center justify-center select-none", className)}>
       <div
         className={cn(
-          "rounded-full overflow-hidden flex items-center justify-center font-semibold text-white shadow-inner",
+          "rounded-full overflow-hidden flex items-center justify-center font-bold text-white tracking-wide shadow-2xs",
           sizeStyles[size],
-          !src && (isGroup ? "bg-gradient-to-br from-indigo-500 to-purple-600" : `bg-gradient-to-br ${getBgColor(name)}`)
+          !hasValidImage && (isGroup ? "bg-[#5B4FE1]" : "bg-[#8B5CF6]")
         )}
       >
-        {src ? (
+        {hasValidImage ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={src}
@@ -83,7 +76,7 @@ export const Avatar: React.FC<AvatarProps> = ({
             }}
           />
         ) : isGroup ? (
-          <Users className={cn(size === "xs" ? "w-3 h-3" : size === "sm" ? "w-4 h-4" : "w-5 h-5")} />
+          <Users className={cn(iconSizes[size], "text-white")} />
         ) : (
           getInitials(name)
         )}
@@ -92,9 +85,8 @@ export const Avatar: React.FC<AvatarProps> = ({
       {showStatus && !isGroup && (
         <span
           className={cn(
-            "absolute bottom-0 right-0 rounded-full ring-white",
-            statusSizeStyles[size],
-            isOnline ? "bg-emerald-500" : "bg-slate-400"
+            "absolute bottom-0 right-0 rounded-full ring-white bg-[#10B981]",
+            statusSizeStyles[size]
           )}
           title={isOnline ? "Online" : "Offline"}
         />

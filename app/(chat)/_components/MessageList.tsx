@@ -21,7 +21,7 @@ export const MessageList: React.FC<MessageListProps> = ({
 
   if (isLoading) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-white">
+      <div className="flex-1 flex items-center justify-center bg-[#F7F8FA]">
         <LoadingSpinner size="lg" label="Loading messages..." />
       </div>
     );
@@ -30,11 +30,11 @@ export const MessageList: React.FC<MessageListProps> = ({
   return (
     <div
       ref={scrollRef}
-      className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-white"
+      className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-[#F7F8FA]"
     >
       {/* Date Chip */}
       <div className="flex justify-center my-2">
-        <span className="bg-[#F1F5F9] text-[#64748B] text-[11px] font-semibold px-3 py-1 rounded-full shadow-2xs select-none">
+        <span className="bg-white border border-[#E2E8F0] text-[#64748B] text-[11px] font-semibold px-3 py-1 rounded-full shadow-2xs select-none">
           Today
         </span>
       </div>

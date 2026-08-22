@@ -16,6 +16,7 @@ import toast from "react-hot-toast";
 
 export function useConversations() {
   const dispatch = useAppDispatch();
+  const currentUser = useAppSelector((state) => state.auth.user);
   const {
     conversations,
     activeConversationId,
@@ -26,6 +27,7 @@ export function useConversations() {
 
   const fetchConversations = useCallback(
     async (params?: ConversationFilterParams) => {
+      if (!currentUser?.id) return;
       dispatch(setIsLoadingConversations(true));
       try {
         const data = await dispatch(
@@ -41,12 +43,14 @@ export function useConversations() {
         dispatch(setIsLoadingConversations(false));
       }
     },
-    [dispatch, searchQuery]
+    [dispatch, searchQuery, currentUser?.id]
   );
 
   useEffect(() => {
-    fetchConversations();
-  }, [fetchConversations]);
+    if (currentUser?.id) {
+      fetchConversations();
+    }
+  }, [currentUser?.id, fetchConversations]);
 
   const selectConversation = useCallback(
     (id: string) => {

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { User } from "@/types/user";
 import { ParticipantItem } from "./ParticipantItem";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { Search } from "lucide-react";
 import { usersApi } from "@/redux/features/users/usersApi";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
@@ -91,10 +92,18 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
       </div>
 
       {/* List */}
-      <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-2xl border border-[#E2E8F0] bg-[#F8FAFC]/50 p-1">
+      <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]/50 p-1">
         {loading ? (
-          <div className="flex items-center justify-center py-6">
-            <span className="w-5 h-5 border-2 border-[#6C63FF]/30 border-t-[#6C63FF] rounded-full animate-spin" />
+          <div className="space-y-1 p-1">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-3 px-3 py-2">
+                <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+                <div className="flex-1 space-y-1.5">
+                  <Skeleton className="h-3 w-28 rounded" />
+                  <Skeleton className="h-2.5 w-36 rounded" />
+                </div>
+              </div>
+            ))}
           </div>
         ) : displayedUsers.length === 0 ? (
           <p className="text-[12px] text-[#94A3B8] text-center py-6 font-medium">

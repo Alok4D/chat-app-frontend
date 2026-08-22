@@ -8,6 +8,7 @@ import { EmptyChat } from "./EmptyChat";
 import { ConversationInfo } from "./ConversationInfo";
 import { CreateGroupModal } from "./group/CreateGroupModal";
 import { Avatar } from "@/components/ui/Avatar";
+import { Skeleton } from "@/components/ui/Skeleton";
 import { useConversations } from "@/hooks/useConversations";
 import { useMessages } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,6 +41,8 @@ export const ChatLayout: React.FC = () => {
     searchQuery,
     setSearch,
     refreshConversations,
+    filterType,
+    setFilterType,
     isLoading,
   } = useConversations();
   const { messages, isLoading: isMessagesLoading, sendMessage } = useMessages();
@@ -170,6 +173,31 @@ export const ChatLayout: React.FC = () => {
             </button>
           </div>
 
+          {/* Filter Tabs [All] [Direct] [Groups] */}
+          <div className="flex items-center gap-2 px-3 pb-2 select-none">
+            {[
+              { id: "all", label: "All" },
+              { id: "direct", label: "Direct" },
+              { id: "group", label: "Groups" },
+            ].map((tab) => {
+              const isActive = filterType === tab.id;
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => setFilterType(tab.id as any)}
+                  className={cn(
+                    "px-3.5 py-1 rounded-full text-xs font-semibold transition-all cursor-pointer",
+                    isActive
+                      ? "bg-[#5B4FE1] text-white shadow-2xs"
+                      : "bg-[#F1F3F7] text-[#6B7280] hover:bg-[#E5E7EB] hover:text-[#111827]"
+                  )}
+                >
+                  {tab.label}
+                </button>
+              );
+            })}
+          </div>
+
           {/* Conversations Header + Refresh */}
           <div className="px-3.5 py-1.5 flex items-center justify-between text-[11px] font-bold text-[#9CA3AF] tracking-wider">
             <span>CONVERSATIONS</span>
@@ -201,7 +229,17 @@ export const ChatLayout: React.FC = () => {
                 </div>
                 <div className="space-y-0.5">
                   {loadingContacts ? (
-                    <p className="text-[12px] text-[#9CA3AF] text-center py-2.5">Searching...</p>
+                    <div className="space-y-1 p-1">
+                      {[1, 2, 3].map((i) => (
+                        <div key={i} className="flex items-center gap-2.5 px-2.5 py-2">
+                          <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+                          <div className="flex-1 space-y-1.5">
+                            <Skeleton className="h-3 w-24 rounded" />
+                            <Skeleton className="h-2.5 w-32 rounded" />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   ) : globalContacts.length === 0 ? (
                     <p className="text-[12px] text-[#9CA3AF] text-center py-2.5">No users found</p>
                   ) : (

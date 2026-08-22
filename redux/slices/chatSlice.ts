@@ -35,6 +35,7 @@ export const chatSlice = createSlice({
   name: "chat",
   initialState,
   reducers: {
+    resetChatState: () => initialState,
     setConversations(state, action: PayloadAction<Conversation[]>) {
       state.conversations = action.payload;
     },
@@ -163,6 +164,7 @@ export const chatSlice = createSlice({
 });
 
 export const {
+  resetChatState,
   setConversations,
   addConversation,
   setActiveConversationId,

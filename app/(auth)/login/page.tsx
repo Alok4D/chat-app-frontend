@@ -31,61 +31,61 @@ export default function LoginPage() {
 
           {/* Middle Title & 3 Features */}
           <div className="space-y-5 my-auto">
-            <div>
-              <h1 className="text-3xl xl:text-4xl font-extrabold text-[#0F172A] tracking-tight leading-tight">
+            <div className="font-sans">
+              <h1 className="text-3xl xl:text-5xl font-semibold text-[#0F172A] tracking-tight leading-tight font-sans">
                 Welcome <span className="text-[#5B4FE1]">back!</span>
               </h1>
-              <p className="text-[14px] text-[#64748B] mt-1.5 font-medium">
+              <p className="text-[14px] text-[#64748B] mt-1.5 font-medium font-sans">
                 Sign in to continue to your conversations
               </p>
             </div>
 
             {/* Feature Highlights */}
-            <div className="space-y-3.5 pt-1">
+            <div className="space-y-3.5 pt-1 font-sans">
               <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xs bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
                   <Zap className="w-4 h-4 text-[#5B4FE1]" />
                 </div>
-                <div>
-                  <h3 className="text-[13.5px] font-bold text-[#0F172A]">Real-time messaging</h3>
-                  <p className="text-[12px] text-[#64748B]">Instant delivery of messages</p>
+                <div className="font-sans">
+                  <h3 className="text-[13.5px] font-bold text-[#0F172A] font-sans">Real-time messaging</h3>
+                  <p className="text-[12px] text-[#64748B] font-sans">Instant delivery of messages</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xs bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
                   <Shield className="w-4 h-4 text-[#5B4FE1]" />
                 </div>
-                <div>
-                  <h3 className="text-[13.5px] font-bold text-[#0F172A]">Secure & Private</h3>
-                  <p className="text-[12px] text-[#64748B]">Your conversations are end-to-end encrypted</p>
+                <div className="font-sans">
+                  <h3 className="text-[13.5px] font-bold text-[#0F172A] font-sans">Secure & Private</h3>
+                  <p className="text-[12px] text-[#64748B] font-sans">Your conversations are end-to-end encrypted</p>
                 </div>
               </div>
 
               <div className="flex items-center gap-3.5">
-                <div className="w-9 h-9 rounded-xl bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
+                <div className="w-9 h-9 rounded-xs bg-white/95 backdrop-blur-sm border border-[#E9E4FF] flex items-center justify-center shadow-2xs shrink-0">
                   <Users className="w-4 h-4 text-[#5B4FE1]" />
                 </div>
-                <div>
-                  <h3 className="text-[13.5px] font-bold text-[#0F172A]">Group Conversations</h3>
-                  <p className="text-[12px] text-[#64748B]">Chat with friends, family or teammates</p>
+                <div className="font-sans">
+                  <h3 className="text-[13.5px] font-bold text-[#0F172A] font-sans">Group Conversations</h3>
+                  <p className="text-[12px] text-[#64748B] font-sans">Chat with friends, family or teammates</p>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Bottom Privacy Card */}
-          <div className="relative pt-4">
+          <div className="relative pt-4 font-sans">
             {/* Subtle Dot Grid */}
             <div className="absolute -top-3 -left-2 w-28 h-20 opacity-40 pointer-events-none bg-[radial-gradient(#5B4FE1_1.5px,transparent_1.5px)] [background-size:12px_12px]" />
 
-            <div className="inline-flex items-center gap-3.5 px-4 py-2.5 rounded-2xl bg-white/90 backdrop-blur-md border border-[#E9E4FF] shadow-xs">
-              <div className="w-7 h-7 rounded-xl bg-[#F5F3FF] flex items-center justify-center text-[#5B4FE1] shrink-0">
+            <div className="inline-flex items-center gap-3.5 px-4 py-2.5 rounded-xs bg-white/90 backdrop-blur-md border border-[#E9E4FF] shadow-xs font-sans">
+              <div className="w-7 h-7 rounded-xs bg-[#F5F3FF] flex items-center justify-center text-[#5B4FE1] shrink-0">
                 <Shield className="w-3.5 h-3.5 text-[#5B4FE1]" />
               </div>
-              <div>
-                <h4 className="text-[12px] font-bold text-[#0F172A]">Your privacy is our priority.</h4>
-                <p className="text-[11px] text-[#64748B]">We never share your personal data.</p>
+              <div className="font-sans">
+                <h4 className="text-[12px] font-bold text-[#0F172A] font-sans">Your privacy is our priority.</h4>
+                <p className="text-[11px] text-[#64748B] font-sans">We never share your personal data.</p>
               </div>
             </div>
           </div>

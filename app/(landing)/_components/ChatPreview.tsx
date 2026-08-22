@@ -50,11 +50,33 @@ const CHAT_MSGS = [
 ];
 
 export const ChatPreview: React.FC = () => {
-  // Plays once sequentially on load/refresh, then stays permanently visible
+  const sectionRef = React.useRef<HTMLElement | null>(null);
+  const [hasStarted, setHasStarted] = useState<boolean>(false);
   const [visibleCount, setVisibleCount] = useState<number>(1);
   const [isTyping, setIsTyping] = useState<boolean>(false);
 
+  // Trigger animation ONLY when the section scrolls into viewport
   useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setHasStarted(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.25 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!hasStarted) return;
+
     // 1. Reveal Message 2
     const t1 = setTimeout(() => {
       setIsTyping(true);
@@ -62,7 +84,7 @@ export const ChatPreview: React.FC = () => {
         setIsTyping(false);
         setVisibleCount(2);
       }, 600);
-    }, 800);
+    }, 600);
 
     // 2. Reveal Message 3
     const t2 = setTimeout(() => {
@@ -71,7 +93,7 @@ export const ChatPreview: React.FC = () => {
         setIsTyping(false);
         setVisibleCount(3);
       }, 700);
-    }, 2200);
+    }, 1900);
 
     // 3. Reveal Message 4 (Floats up from bottom and stays)
     const t3 = setTimeout(() => {
@@ -80,17 +102,17 @@ export const ChatPreview: React.FC = () => {
         setIsTyping(false);
         setVisibleCount(4);
       }, 800);
-    }, 3800);
+    }, 3400);
 
     return () => {
       clearTimeout(t1);
       clearTimeout(t2);
       clearTimeout(t3);
     };
-  }, []);
+  }, [hasStarted]);
 
   return (
-    <section id="preview" className="py-14 md:py-20 bg-white select-none">
+    <section ref={sectionRef} id="preview" className="py-14 md:py-20 bg-white select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ── Main Container (Light, Modern, Seamless with project color palette) ── */}

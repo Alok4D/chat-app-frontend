@@ -14,7 +14,7 @@ import { useMessages } from "@/hooks/useMessages";
 import { useAuth } from "@/hooks/useAuth";
 import { useRealtimeMessages } from "@/hooks/useRealtimeMessages";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { setIsCreateGroupModalOpen, toggleInfoPanel } from "@/redux/slices/chatSlice";
+import { setIsCreateGroupModalOpen, toggleInfoPanel, setActiveConversationId } from "@/redux/slices/chatSlice";
 import { usersApi } from "@/redux/features/users/usersApi";
 import {
   MessageSquare,
@@ -24,6 +24,7 @@ import {
   X,
   UserPlus,
   Info,
+  ArrowLeft,
 } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
@@ -97,9 +98,13 @@ export const ChatLayout: React.FC = () => {
 
   return (
     <div className="flex h-screen w-full overflow-hidden bg-white text-[#111827] font-sans antialiased">
-      {/* ── 1. LEFT SIDEBAR (Pure #FFFFFF Background) ── */}
-      <aside className="w-[300px] lg:w-[320px] bg-[#FFFFFF] border-r border-[#E5E7EB] flex flex-col h-full shrink-0 z-30 select-none">
-        
+      {/* ── 1. LEFT SIDEBAR (Native App Mobile Responsive + Desktop Side-by-Side) ── */}
+      <aside
+        className={cn(
+          "bg-[#FFFFFF] border-r border-[#E5E7EB] flex flex-col h-full shrink-0 z-30 select-none",
+          activeConversationId ? "hidden md:flex md:w-[300px] lg:w-[320px]" : "flex w-full md:w-[300px] lg:w-[320px]"
+        )}
+      >
         {/* Header */}
         <div className="h-[60px] px-4 border-b border-[#E5E7EB] flex items-center justify-between relative bg-white">
           <div className="flex items-center gap-2.5">
@@ -293,27 +298,41 @@ export const ChatLayout: React.FC = () => {
         </div>
       </aside>
 
-      {/* ── 2. MAIN CHAT WINDOW (Background: #F7F8FA) ── */}
-      <main className="flex-1 flex flex-col h-full bg-[#F7F8FA] relative min-w-0 overflow-hidden">
+      {/* ── 2. MAIN CHAT WINDOW (Native App Responsive & Desktop Clean #F7F8FA) ── */}
+      <main
+        className={cn(
+          "flex-col h-full bg-[#F7F8FA] relative min-w-0 overflow-hidden",
+          activeConversationId ? "flex flex-1 w-full" : "hidden md:flex md:flex-1"
+        )}
+      >
         {activeConversation ? (
           <>
             {/* Chat Top Header (Height: 60px) */}
-            <div className="h-[60px] px-6 bg-white border-b border-[#E5E7EB] flex items-center justify-between shrink-0 z-20">
-              <div className="flex items-center gap-3">
+            <div className="h-[60px] px-4 md:px-6 bg-white border-b border-[#E5E7EB] flex items-center justify-between shrink-0 z-20">
+              <div className="flex items-center gap-2 md:gap-3 min-w-0">
+                {/* Mobile Back Button ← */}
+                <button
+                  onClick={() => dispatch(setActiveConversationId(null))}
+                  title="Back to conversations"
+                  className="md:hidden -ml-1.5 p-1.5 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#F9FAFB] transition-colors cursor-pointer shrink-0"
+                >
+                  <ArrowLeft className="w-5 h-5" />
+                </button>
+
                 <Avatar
                   src={activeConversation.avatarUrl}
                   name={activeConversation.name || "Chat"}
                   size="md"
                   isGroup={activeConversation.type === "group"}
                 />
-                <div>
-                  <h3 className="text-[14.5px] font-bold text-[#111827] leading-tight">
+                <div className="min-w-0">
+                  <h3 className="text-[14.5px] font-bold text-[#111827] leading-tight truncate">
                     {activeConversation.name ||
                       (activeConversation.type === "direct"
                         ? activeConversation.participants.find((p) => p.id !== user?.id)?.name || "User"
                         : "Group Chat")}
                   </h3>
-                  <p className="text-[11px] text-[#6B7280] font-medium mt-0.5">
+                  <p className="text-[11px] text-[#6B7280] font-medium mt-0.5 truncate">
                     {activeConversation.type === "group"
                       ? `${activeConversation.participants.length} members`
                       : "Online"}
@@ -326,7 +345,7 @@ export const ChatLayout: React.FC = () => {
                 onClick={() => dispatch(toggleInfoPanel())}
                 title="Conversation Details"
                 className={cn(
-                  "w-8.5 h-8.5 rounded-full border border-[#E5E7EB] flex items-center justify-center transition-colors cursor-pointer",
+                  "w-8.5 h-8.5 rounded-full border border-[#E5E7EB] flex items-center justify-center transition-colors cursor-pointer shrink-0",
                   isInfoPanelOpen
                     ? "bg-[#EDE9FE] text-[#5B4FE1] border-[#5B4FE1]/30"
                     : "bg-white hover:bg-[#F9FAFB] text-[#6B7280] hover:text-[#111827]"
@@ -343,7 +362,7 @@ export const ChatLayout: React.FC = () => {
             />
 
             {/* Message Input Container (Height: 60px, border-t border-[#E5E7EB]) */}
-            <div className="h-[60px] px-6 bg-white border-t border-[#E5E7EB] flex items-center shrink-0">
+            <div className="h-[60px] px-3 sm:px-6 bg-white border-t border-[#E5E7EB] flex items-center shrink-0">
               <MessageInput
                 onSendMessage={async (text) => {
                   await sendMessage({ content: text, contentType: "text" });
@@ -356,7 +375,7 @@ export const ChatLayout: React.FC = () => {
         )}
       </main>
 
-      {/* ── 3. RIGHT CONVERSATION INFO DRAWER ── */}
+      {/* ── 3. RIGHT CONVERSATION INFO DRAWER (Full height overlay on mobile, clean drawer on desktop) ── */}
       {activeConversation && isInfoPanelOpen && (
         <ConversationInfo conversation={activeConversation} />
       )}

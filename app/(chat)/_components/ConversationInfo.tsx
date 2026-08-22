@@ -147,13 +147,19 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
 
   return (
     <>
-      <aside className="w-[300px] sm:w-[320px] bg-white border-l border-[#F1F5F9] flex flex-col h-full overflow-y-auto custom-scrollbar select-none z-30 shrink-0">
+      {/* Mobile Backdrop */}
+      <div
+        onClick={() => dispatch(setIsInfoPanelOpen(false))}
+        className="fixed inset-0 bg-black/40 backdrop-blur-2xs z-30 md:hidden"
+      />
+
+      <aside className="fixed inset-y-0 right-0 md:static w-[300px] sm:w-[320px] bg-white border-l border-[#E5E7EB] flex flex-col h-full overflow-y-auto custom-scrollbar select-none z-40 shrink-0 shadow-2xl md:shadow-none animate-fadeIn">
         {/* Header */}
-        <div className="p-4 border-b border-[#F1F5F9] flex items-center justify-between">
-          <h3 className="text-[14.5px] font-bold text-[#0F172A]">Conversation Details</h3>
+        <div className="h-[60px] px-4 border-b border-[#E5E7EB] flex items-center justify-between">
+          <h3 className="text-[14.5px] font-bold text-[#111827]">Conversation Details</h3>
           <button
             onClick={() => dispatch(setIsInfoPanelOpen(false))}
-            className="p-1.5 rounded-full text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
+            className="p-1 rounded-lg text-[#6B7280] hover:text-[#111827] hover:bg-[#F9FAFB] transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>

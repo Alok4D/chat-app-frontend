@@ -41,10 +41,22 @@ const FEATURE_CARDS = [
 export const Hero: React.FC = () => {
   return (
     <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 bg-white overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      {/* ── Panoramic Real Banner Background Image ── */}
+      <div className="absolute inset-0 pointer-events-none z-0">
+        <Image
+          src="/images/real-banner-background.png"
+          alt="Hero background banner"
+          fill
+          priority
+          className="object-cover lg:object-contain object-right"
+        />
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10">
         
         {/* ── Top Hero Grid ── */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[520px]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[500px]">
           
           {/* Left Column: Text + Badges + CTAs (5 Cols) */}
           <div className="lg:col-span-5 text-left z-10">
@@ -84,21 +96,10 @@ export const Hero: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Chat Mockup with background-banner.png (7 Cols) */}
-          <div className="lg:col-span-7 relative flex items-center justify-center lg:justify-end min-h-[520px]">
+          {/* Right Column: Chat Mockup floating seamlessly on top of background (7 Cols) */}
+          <div className="lg:col-span-7 relative flex items-center justify-center lg:justify-end min-h-[500px]">
             
-            {/* Background Purple Cloud Banner (Full large size guaranteed) */}
-            <div className="absolute right-0 top-0 w-[780px] sm:w-[880px] lg:w-[940px] h-[520px] lg:h-[560px] pointer-events-none z-0">
-              <Image
-                src="/images/background-banner.png"
-                alt="Banner background waves"
-                fill
-                priority
-                className="object-contain object-right"
-              />
-            </div>
-
-            {/* Chat Box Card (White Card floating on top of banner) */}
+            {/* Chat Box Card */}
             <div className="relative z-10 w-full max-w-[450px] bg-white border border-[#E2E8F0] rounded-2xl shadow-xl shadow-[#5B4FE1]/10 p-5 select-none my-4">
               
               {/* Chat Card Header */}

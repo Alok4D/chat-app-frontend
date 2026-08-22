@@ -31,6 +31,7 @@ import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
 import { User } from "@/types/user";
 import Image from "next/image";
+import Link from "next/link";
 
 export const ChatLayout: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -170,12 +171,12 @@ export const ChatLayout: React.FC = () => {
             {/* Dropdown Menu */}
             {isMenuOpen && (
               <div className="absolute right-0 top-9 w-32 bg-white border border-[#E5E7EB] rounded-lg shadow-lg py-1 z-50 animate-scaleUp">
-                <a
+                <Link
                   href={ROUTES.LANDING}
                   className="block px-3 py-1.5 text-[12.5px] font-medium text-[#111827] hover:bg-[#F9FAFB] transition-colors"
                 >
                   Home
-                </a>
+                </Link>
                 <button
                   onClick={() => {
                     setIsMenuOpen(false);

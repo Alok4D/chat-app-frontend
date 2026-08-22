@@ -5,16 +5,16 @@ import { MessageSquare, Sparkles, CheckCircle2, UserPlus, Shield, Users } from "
 
 export const GroupShowcase: React.FC = () => {
   return (
-    <section className="py-20 md:py-28 bg-[#FAFAFA] relative overflow-hidden select-none">
+    <section className="py-16 md:py-24 xl:py-28 bg-[#FAFAFA] relative overflow-hidden select-none">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-6 xl:gap-8 items-center">
           
-          {/* ── Left Column: Chat Sidebar Mockup Card (Wider & Rounded-none) ── */}
+          {/* ── Left Column: Chat Sidebar Mockup Card ── */}
           <div className="lg:col-span-6 flex items-center justify-center lg:justify-start">
-            <div className="w-full max-w-[500px] bg-white border border-[#E5E7EB] rounded-none shadow-xl shadow-slate-200/50 flex flex-col h-[440px]">
+            <div className="w-full max-w-[440px] xl:max-w-[500px] bg-white border border-[#E5E7EB] rounded-none shadow-xl shadow-slate-200/50 flex flex-col h-[420px] xl:h-[440px]">
               
               {/* Header */}
-              <div className="px-6 py-4 border-b border-[#E5E7EB] flex items-center gap-2.5 bg-white">
+              <div className="px-5 xl:px-6 py-4 border-b border-[#E5E7EB] flex items-center gap-2.5 bg-white">
                 <div className="w-7 h-7 rounded-md bg-[#EDE9FE] flex items-center justify-center text-[#5B4FE1]">
                   <MessageSquare className="w-4 h-4 text-[#5B4FE1]" />
                 </div>
@@ -22,10 +22,10 @@ export const GroupShowcase: React.FC = () => {
               </div>
 
               {/* Conversation List Items */}
-              <div className="p-3 space-y-1">
+              <div className="p-2.5 xl:p-3 space-y-1">
                 
                 {/* 1. Active Group Item: Design crew */}
-                <div className="flex items-center gap-3.5 px-4 py-3 bg-[#EEF0F4] rounded-lg transition-all cursor-pointer">
+                <div className="flex items-center gap-3 xl:gap-3.5 px-3.5 xl:px-4 py-3 bg-[#EEF0F4] rounded-lg transition-all cursor-pointer">
                   {/* Group Avatar: Sky Blue Circle with DC */}
                   <div className="w-10 h-10 rounded-full bg-[#0284C7] text-white flex items-center justify-center text-[12px] font-bold shrink-0 shadow-2xs">
                     DC
@@ -46,7 +46,7 @@ export const GroupShowcase: React.FC = () => {
                 </div>
 
                 {/* 2. Direct Chat: Alok */}
-                <div className="flex items-center gap-3.5 px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
+                <div className="flex items-center gap-3 xl:gap-3.5 px-3.5 xl:px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
                   {/* Avatar: Sky Blue Circle with A */}
                   <div className="w-10 h-10 rounded-full bg-[#0EA5E9] text-white flex items-center justify-center text-[13px] font-bold shrink-0 shadow-2xs">
                     A
@@ -62,7 +62,7 @@ export const GroupShowcase: React.FC = () => {
                 </div>
 
                 {/* 3. Direct Chat: Ayesha */}
-                <div className="flex items-center gap-3.5 px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
+                <div className="flex items-center gap-3 xl:gap-3.5 px-3.5 xl:px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
                   {/* Avatar: Blue Circle with A */}
                   <div className="w-10 h-10 rounded-full bg-[#2563EB] text-white flex items-center justify-center text-[13px] font-bold shrink-0 shadow-2xs">
                     A
@@ -82,42 +82,42 @@ export const GroupShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* ── Right Column: Text & Content (Shifted towards left on desktop) ── */}
-          <div className="lg:col-span-6 text-left lg:-ml-8 xl:-ml-12">
+          {/* ── Right Column: Text & Content (Responsive on Laptop 1024px & Desktop 1280px+) ── */}
+          <div className="lg:col-span-6 text-left lg:pl-2 xl:pl-0 xl:-ml-10">
             {/* Tag Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE] text-[#5B4FE1] text-xs font-bold uppercase tracking-wider mb-5 shadow-2xs">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE] text-[#5B4FE1] text-xs font-bold uppercase tracking-wider mb-4 xl:mb-5 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 fill-[#5B4FE1] text-[#5B4FE1]" />
               <span>GROUP COLLABORATION</span>
             </div>
 
             {/* Headline */}
-            <h2 className="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-[#0F172A] tracking-tight leading-[1.12] mb-5 font-sans">
+            <h2 className="text-3xl sm:text-4xl lg:text-[38px] xl:text-[50px] font-extrabold text-[#0F172A] tracking-tight leading-[1.12] mb-4 xl:mb-5 font-sans">
               Connect your team. <br />
               <span className="text-[#5B4FE1]">Keep everyone aligned.</span>
             </h2>
 
             {/* Description */}
-            <p className="text-[15.5px] sm:text-[16.5px] text-[#64748B] leading-relaxed max-w-lg mb-8">
+            <p className="text-[14.5px] sm:text-[15.5px] xl:text-[16px] text-[#64748B] leading-relaxed max-w-lg mb-6 xl:mb-8">
               Create dedicated spaces for your projects, friends, or communities. Share ideas, manage participants seamlessly, and communicate in real-time with zero friction.
             </p>
 
             {/* Features Checkpoints */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 max-w-md">
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3 xl:gap-3.5 max-w-md">
+              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
                 <CheckCircle2 className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[13px] font-semibold text-[#0F172A]">Instant Live Sync</span>
+                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Instant Live Sync</span>
               </div>
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
+              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
                 <UserPlus className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[13px] font-semibold text-[#0F172A]">Flexible Member Roles</span>
+                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Flexible Member Roles</span>
               </div>
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
+              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
                 <Shield className="w-4 h-4 text-[#5B4FE1] shrink-0" />
-                <span className="text-[13px] font-semibold text-[#0F172A]">Secure & Private</span>
+                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Secure & Private</span>
               </div>
-              <div className="flex items-center gap-2.5 p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
-                <Users className="w-4 h-4 text-[#5B4FE1]" />
-                <span className="text-[13px] font-semibold text-[#0F172A]">Unlimited Members</span>
+              <div className="flex items-center gap-2.5 p-2.5 xl:p-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs">
+                <Users className="w-4 h-4 text-[#5B4FE1] shrink-0" />
+                <span className="text-[12.5px] xl:text-[13px] font-semibold text-[#0F172A]">Unlimited Members</span>
               </div>
             </div>
           </div>

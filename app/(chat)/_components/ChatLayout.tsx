@@ -30,6 +30,7 @@ import {
 import { ROUTES } from "@/lib/constants/routes";
 import { cn } from "@/lib/utils/cn";
 import { User } from "@/types/user";
+import Image from "next/image";
 
 export const ChatLayout: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -108,11 +109,16 @@ export const ChatLayout: React.FC = () => {
       >
         {/* Header */}
         <div className="h-[60px] px-4 border-b border-[#E5E7EB] flex items-center justify-between relative bg-white">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#EDE9FE] flex items-center justify-center text-[#5B4FE1]">
-              <MessageSquare className="w-4 h-4 text-[#5B4FE1]" />
-            </div>
-            <h1 className="text-[17px] font-bold text-[#111827] tracking-tight">Chat</h1>
+          <div className="flex items-center gap-2">
+            <Image
+              src="/icons/favlogo.png"
+              alt="Chatter Logo"
+              width={28}
+              height={28}
+              className="w-10 h-10 object-contain shrink-0"
+              priority
+            />
+            <h1 className="text-[17px] font-semibold text-[#111827]">Chat</h1>
           </div>
 
           {/* Three dots menu button with popup dropdown */}

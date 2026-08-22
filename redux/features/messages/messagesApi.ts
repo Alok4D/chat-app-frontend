@@ -8,7 +8,13 @@ export const messagesApi = baseApi.injectEndpoints({
       query: (conversationId) => `/conversations/${conversationId}/messages`,
       transformResponse: (response: any) => {
         const rawMessages = response.messages || response.data || (Array.isArray(response) ? response : []);
-        return rawMessages.map((m: any) => mapMessage(m));
+        // Map and sort chronologically (Oldest first at top -> Newest last at bottom)
+        return rawMessages
+          .map((m: any) => mapMessage(m))
+          .sort(
+            (a: Message, b: Message) =>
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          );
       },
       providesTags: (_result, _error, conversationId) => [
         { type: "Messages", id: conversationId },

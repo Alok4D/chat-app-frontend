@@ -55,16 +55,45 @@ export const chatSlice = createSlice({
       state,
       action: PayloadAction<{ conversationId: string; messages: Message[] }>
     ) {
-      state.messages[action.payload.conversationId] = action.payload.messages;
+      const conv = state.conversations.find((c) => c.id === action.payload.conversationId);
+      const participants = conv ? conv.participants : [];
+
+      const enrichedMessages = action.payload.messages.map((m) => {
+        if (!m.sender || m.sender.name === "User") {
+          const participant = participants.find((p) => p.id === m.senderId);
+          if (participant) {
+            return { ...m, sender: participant };
+          }
+        }
+        return m;
+      });
+
+      state.messages[action.payload.conversationId] = enrichedMessages.sort(
+        (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
     },
     addMessage(state, action: PayloadAction<Message>) {
       const convId = action.payload.conversationId;
       if (!state.messages[convId]) {
         state.messages[convId] = [];
       }
-      const exists = state.messages[convId].some((m) => m.id === action.payload.id);
+      const conv = state.conversations.find((c) => c.id === convId);
+      const participants = conv ? conv.participants : [];
+      let msg = action.payload;
+
+      if (!msg.sender || msg.sender.name === "User") {
+        const participant = participants.find((p) => p.id === msg.senderId);
+        if (participant) {
+          msg = { ...msg, sender: participant };
+        }
+      }
+
+      const exists = state.messages[convId].some((m) => m.id === msg.id);
       if (!exists) {
-        state.messages[convId].push(action.payload);
+        state.messages[convId].push(msg);
+        state.messages[convId].sort(
+          (a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        );
       }
 
       // Update conversation lastMessage & move to top
@@ -72,8 +101,8 @@ export const chatSlice = createSlice({
       if (convIdx !== -1) {
         const updatedConv = {
           ...state.conversations[convIdx],
-          lastMessage: action.payload,
-          updatedAt: action.payload.createdAt,
+          lastMessage: msg,
+          updatedAt: msg.createdAt,
           unreadCount:
             state.activeConversationId === convId
               ? 0
@@ -121,6 +150,9 @@ export const chatSlice = createSlice({
     setIsMobileSidebarOpen(state, action: PayloadAction<boolean>) {
       state.isMobileSidebarOpen = action.payload;
     },
+    toggleMobileSidebar(state) {
+      state.isMobileSidebarOpen = !state.isMobileSidebarOpen;
+    },
     setIsInfoPanelOpen(state, action: PayloadAction<boolean>) {
       state.isInfoPanelOpen = action.payload;
     },
@@ -144,6 +176,7 @@ export const {
   setIsLoadingMessages,
   setIsCreateGroupModalOpen,
   setIsMobileSidebarOpen,
+  toggleMobileSidebar,
   setIsInfoPanelOpen,
   toggleInfoPanel,
 } = chatSlice.actions;

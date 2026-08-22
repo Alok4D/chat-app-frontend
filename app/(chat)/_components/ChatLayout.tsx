@@ -61,6 +61,16 @@ export const ChatLayout: React.FC = () => {
   const [globalContacts, setGlobalContacts] = useState<User[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(false);
 
+  // Prevent page scroll / browser bar shifting on mobile devices when keyboard opens
+  useEffect(() => {
+    document.documentElement.classList.add("overflow-hidden", "h-full");
+    document.body.classList.add("overflow-hidden", "h-full");
+    return () => {
+      document.documentElement.classList.remove("overflow-hidden", "h-full");
+      document.body.classList.remove("overflow-hidden", "h-full");
+    };
+  }, []);
+
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

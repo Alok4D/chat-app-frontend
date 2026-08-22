@@ -400,13 +400,13 @@ export const ChatLayout: React.FC = () => {
                 onClick={() => dispatch(toggleInfoPanel())}
                 title="Conversation Details"
                 className={cn(
-                  "w-8.5 h-8.5 rounded-full border border-[#E5E7EB] flex items-center justify-center transition-colors cursor-pointer shrink-0",
+                  "w-9 h-9 rounded-xs border flex items-center justify-center transition-all duration-200 cursor-pointer shrink-0",
                   isInfoPanelOpen
-                    ? "bg-[#EDE9FE] text-[#5B4FE1] border-[#5B4FE1]/30"
-                    : "bg-white hover:bg-[#F9FAFB] text-[#6B7280] hover:text-[#111827]"
+                    ? "bg-[#EDE9FE] text-[#5B4FE1] border-[#5B4FE1]/30 shadow-sm"
+                    : "bg-white border-[#E2E8F0] hover:bg-[#F8FAFC] text-[#64748B] hover:text-[#0F172A] hover:border-[#CBD5E1]"
                 )}
               >
-                <Info className="w-4 h-4" />
+                <Info className="w-[18px] h-[18px]" />
               </button>
             </div>
 

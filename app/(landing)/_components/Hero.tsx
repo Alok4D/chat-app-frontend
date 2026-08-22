@@ -1,210 +1,267 @@
+"use client";
+
 import React from "react";
-import { ArrowRight, Zap, ShieldCheck, Users, Code2, MessageSquareMore, CheckCheck, Send } from "lucide-react";
+import Image from "next/image";
+import {
+  Zap,
+  MessageSquare,
+  Users,
+  ShieldCheck,
+  Paperclip,
+  Smile,
+  Send,
+  MoreVertical,
+  Layers,
+} from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
 
-const DEMO_CONVERSATIONS = [
-  { name: "Alice Johnson", msg: "Hey! How are you doing?", time: "2:30 PM", badge: 2, color: "#6C63FF", initials: "AJ" },
-  { name: "Team Project 🚀", msg: "Bob: Can you share the update?", time: "2:25 PM", badge: 5, color: "#8B5CF6", initials: "TP" },
-  { name: "Design Team", msg: "You: Thanks everyone! 🎉", time: "1:45 PM", badge: 0, color: "#06B6D4", initials: "DT" },
-  { name: "John Doe", msg: "Sounds good!", time: "1:30 PM", badge: 0, color: "#10B981", initials: "JD" },
-  { name: "Random Group 😄😄😄", msg: "Someone: 😂😂😂", time: "12:20 PM", badge: 12, color: "#F59E0B", initials: "RG" },
-  { name: "Sarah Wilson", msg: "See you tomorrow!", time: "11:15 AM", badge: 0, color: "#EC4899", initials: "SW" },
-  { name: "Dev Squad", msg: "Let's deploy it!", time: "Yesterday", badge: 0, color: "#6C63FF", initials: "DS" },
-];
-
-const DEMO_MESSAGES = [
-  { text: "Hey! How are you doing?", from: "them", time: "2:30 PM", name: "Alice Johnson" },
-  { text: "I'm doing great! How about you?", from: "me", time: "2:31 PM" },
-  { text: "I'm good too! Just working on a new project.", from: "them", time: "2:31 PM", name: "Alice Johnson" },
-  { text: "That's awesome! What kind of project?", from: "me", time: "2:32 PM" },
-  { text: "It's a real-time chat application similar to WhatsApp.", from: "them", time: "2:33 PM", name: "Alice Johnson" },
-  { text: "Want to see the UI design?", from: "them", time: "2:33 PM", name: "Alice Johnson" },
-  { text: "Sure! Show me... 🎨", from: "me", time: "2:33 PM" },
-];
-
-const TRUST_ITEMS = [
-  { icon: <Zap className="w-4 h-4" />, label: "Real-time Messaging" },
-  { icon: <ShieldCheck className="w-4 h-4" />, label: "Secure & Private" },
-  { icon: <Users className="w-4 h-4" />, label: "Group Conversations" },
-  { icon: <Code2 className="w-4 h-4" />, label: "Developer Friendly" },
+const FEATURE_CARDS = [
+  {
+    icon: <MessageSquare className="w-5 h-5 text-[#5B4FE1]" />,
+    title: "Real-time Messaging",
+    description: "Instant message delivery with real-time updates",
+  },
+  {
+    icon: <Users className="w-5 h-5 text-[#5B4FE1]" />,
+    title: "Group Conversations",
+    description: "Create groups and chat with multiple members",
+  },
+  {
+    icon: <ShieldCheck className="w-5 h-5 text-[#5B4FE1]" />,
+    title: "Secure & Private",
+    description: "Your conversations are encrypted and secure",
+  },
+  {
+    icon: <Layers className="w-5 h-5 text-[#5B4FE1]" />,
+    title: "Developer Friendly",
+    description: "Well-documented APIs for seamless integration",
+  },
 ];
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative pt-24 pb-16 md:pt-32 md:pb-20 bg-white overflow-hidden">
-      {/* Soft background blobs */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#EEF0FF] rounded-full blur-[100px] opacity-60 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[300px] h-[300px] bg-[#F0EDFF] rounded-full blur-[80px] opacity-40 pointer-events-none" />
-
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
-          {/* Left: Text Content */}
-          <div className="flex-1 text-left max-w-xl">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#F4F3FF] border border-[#DDD8FF] text-[#6C63FF] text-xs font-semibold mb-7 animate-fadeIn">
-              <span className="flex h-1.5 w-1.5 rounded-full bg-[#6C63FF]" />
-              Real-time · Secure · Simple
+    <section className="relative pt-12 pb-16 md:pt-16 md:pb-24 bg-white overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {/* ── Top Hero Grid ── */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center min-h-[520px]">
+          
+          {/* Left Column: Text + Badges + CTAs (5 Cols) */}
+          <div className="lg:col-span-5 text-left z-10">
+            {/* Pill Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE]/90 border border-[#DDD6FE] text-[#5B4FE1] text-xs font-semibold mb-6 shadow-2xs">
+              <Zap className="w-3.5 h-3.5 fill-[#5B4FE1] text-[#5B4FE1]" />
+              <span>Real-time • Secure • Simple</span>
             </div>
 
-            {/* Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-[52px] font-extrabold text-[#1A1A2E] leading-[1.12] tracking-tight mb-5">
-              Real-time Chat{" "}
-              <br />
-              Made{" "}
-              <span className="text-[#6C63FF]">Simple</span>
+            {/* Main Headline */}
+            <h1 className="text-4xl sm:text-5xl lg:text-[56px] font-extrabold text-[#0F172A] tracking-tight leading-[1.08] mb-5 font-sans">
+              Real-time Chat <br />
+              Made <span className="text-[#5B4FE1]">Simple</span>
             </h1>
 
-            <p className="text-[15.5px] text-[#6B6B80] leading-relaxed mb-8 max-w-lg">
+            {/* Subtitle Description */}
+            <p className="text-[15px] sm:text-[16px] text-[#475569] leading-relaxed mb-8 max-w-md">
               Connect with friends, colleagues, and communities instantly with our real-time chat application.
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-wrap gap-3 mb-10">
+            <div className="flex flex-wrap items-center gap-3.5">
               <a
                 href={ROUTES.CHAT}
-                className="inline-flex items-center gap-2 text-[14px] font-semibold text-white px-6 py-3 rounded-xl bg-[#6C63FF] hover:bg-[#5a52e8] shadow-lg shadow-[#6C63FF]/30 transition-all hover:scale-105 active:scale-95"
+                className="inline-flex items-center justify-center text-[14.5px] font-semibold text-white px-7 py-3 rounded-xl bg-[#5B4FE1] hover:bg-[#4E39E0] shadow-md shadow-[#5B4FE1]/30 transition-all hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
               >
                 Start Chatting
-                <ArrowRight className="w-4 h-4" />
               </a>
               <a
-                href="#preview"
-                className="inline-flex items-center gap-2 text-[14px] font-semibold text-[#1A1A2E] px-6 py-3 rounded-xl border border-[#E0DFFE] bg-white hover:bg-[#F4F3FF] transition-all"
+                href="https://frontend-task-chatapp.onrender.com/docs/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center text-[14.5px] font-semibold text-[#0F172A] px-7 py-3 rounded-xl border border-[#E2E8F0] bg-white hover:bg-[#F8FAFC] transition-all shadow-2xs cursor-pointer"
               >
-                View Demo
+                View API Docs
               </a>
-            </div>
-
-            {/* Trust Badges */}
-            <div className="flex flex-wrap gap-5">
-              {TRUST_ITEMS.map((item, i) => (
-                <div key={i} className="flex items-center gap-1.5 text-[12.5px] text-[#6B6B80] font-medium">
-                  <span className="text-[#6C63FF]">{item.icon}</span>
-                  {item.label}
-                </div>
-              ))}
             </div>
           </div>
 
-          {/* Right: Chat App Preview */}
-          <div className="flex-1 w-full max-w-[520px] animate-float">
-            <div className="rounded-3xl overflow-hidden shadow-2xl shadow-[#6C63FF]/15 border border-[#EEEEFC] bg-[#0D1117]">
-              {/* Window bar */}
-              <div className="h-9 px-4 bg-[#161B22] border-b border-[#21262D] flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FEBC2E]" />
-                <span className="w-2.5 h-2.5 rounded-full bg-[#27C840]" />
-                <span className="ml-4 text-[11px] font-mono text-[#8B949E]">Chatter</span>
-              </div>
+          {/* Right Column: Chat Mockup with background-banner.png (7 Cols) */}
+          <div className="lg:col-span-7 relative flex items-center justify-center lg:justify-end min-h-[520px]">
+            
+            {/* Background Purple Cloud Banner (Full large size guaranteed) */}
+            <div className="absolute right-0 top-0 w-[780px] sm:w-[880px] lg:w-[940px] h-[520px] lg:h-[560px] pointer-events-none z-0">
+              <Image
+                src="/images/background-banner.png"
+                alt="Banner background waves"
+                fill
+                priority
+                className="object-contain object-right"
+              />
+            </div>
 
-              {/* Chat grid */}
-              <div className="flex h-[360px] sm:h-[400px]">
-                {/* Sidebar */}
-                <div className="hidden sm:flex flex-col w-[200px] border-r border-[#21262D] bg-[#0D1117] overflow-y-auto custom-scrollbar">
-                  <div className="p-3 border-b border-[#21262D]">
-                    <div className="flex items-center gap-1.5 px-2 py-1.5 bg-[#161B22] rounded-lg">
-                      <span className="text-[10px] text-[#8B949E] flex-1">Search conversations...</span>
-                    </div>
-                    {/* Tabs */}
-                    <div className="flex gap-1 mt-2">
-                      {["All", "Direct", "Groups"].map((tab, i) => (
-                        <span
-                          key={tab}
-                          className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${
-                            i === 0
-                              ? "bg-[#6C63FF] text-white"
-                              : "text-[#8B949E] hover:text-white"
-                          }`}
-                        >
-                          {tab}
-                        </span>
-                      ))}
-                    </div>
+            {/* Chat Box Card (White Card floating on top of banner) */}
+            <div className="relative z-10 w-full max-w-[450px] bg-white border border-[#E2E8F0] rounded-2xl shadow-xl shadow-[#5B4FE1]/10 p-5 select-none my-4">
+              
+              {/* Chat Card Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-[#F1F5F9]">
+                <div className="flex items-center gap-3">
+                  <div className="relative w-10 h-10 rounded-full overflow-hidden shrink-0">
+                    <Image
+                      src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face"
+                      alt="Team Hub"
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-
-                  <div className="flex-1 space-y-0.5 p-1.5">
-                    {DEMO_CONVERSATIONS.map((conv, i) => (
-                      <div
-                        key={i}
-                        className={`flex items-center gap-2 p-2 rounded-lg ${i === 0 ? "bg-[#21262D]" : "hover:bg-[#161B22]"} transition-colors`}
-                      >
-                        <div
-                          className="w-7 h-7 rounded-full flex items-center justify-center text-white text-[9px] font-bold shrink-0"
-                          style={{ background: conv.color }}
-                        >
-                          {conv.initials}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-semibold text-[#E6EDF3] truncate max-w-[90px]">{conv.name}</span>
-                            <span className="text-[9px] text-[#8B949E] shrink-0">{conv.time}</span>
-                          </div>
-                          <div className="flex items-center justify-between mt-0.5">
-                            <span className="text-[9px] text-[#8B949E] truncate max-w-[90px]">{conv.msg}</span>
-                            {conv.badge > 0 && (
-                              <span className="bg-[#6C63FF] text-white text-[8px] font-bold rounded-full w-4 h-4 flex items-center justify-center shrink-0">
-                                {conv.badge}
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                  <div>
+                    <h3 className="text-[15px] font-bold text-[#0F172A] leading-tight">Team Hub</h3>
+                    <p className="text-[11.5px] text-[#64748B] font-medium mt-0.5">8 members</p>
                   </div>
                 </div>
 
-                {/* Main Chat */}
-                <div className="flex-1 flex flex-col bg-[#0D1117]">
-                  {/* Chat Header */}
-                  <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#21262D]">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-full bg-[#6C63FF] flex items-center justify-center text-white text-[10px] font-bold">AJ</div>
-                      <div>
-                        <p className="text-[11px] font-semibold text-[#E6EDF3]">Alice Johnson</p>
-                        <p className="text-[9px] text-[#3FB950]">Online</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Messages */}
-                  <div className="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
-                    {DEMO_MESSAGES.map((msg, i) => (
-                      <div key={i} className={`flex ${msg.from === "me" ? "justify-end" : "justify-start"}`}>
-                        <div
-                          className={`max-w-[75%] px-3 py-2 rounded-2xl text-[10.5px] leading-relaxed ${
-                            msg.from === "me"
-                              ? "bg-[#6C63FF] text-white rounded-br-sm"
-                              : "bg-[#21262D] text-[#E6EDF3] rounded-bl-sm"
-                          }`}
-                        >
-                          <p>{msg.text}</p>
-                          <div className={`flex items-center gap-1 mt-0.5 ${msg.from === "me" ? "justify-end" : "justify-start"}`}>
-                            <span className={`text-[8.5px] ${msg.from === "me" ? "text-[#C8C3FF]" : "text-[#8B949E]"}`}>{msg.time}</span>
-                            {msg.from === "me" && <CheckCheck className="w-2.5 h-2.5 text-[#C8C3FF]" />}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Input */}
-                  <div className="px-3 pb-3">
-                    <div className="flex items-center gap-2 bg-[#161B22] border border-[#30363D] rounded-xl px-3 py-2">
-                      <input
-                        readOnly
-                        placeholder="Type a message..."
-                        className="flex-1 bg-transparent text-[10px] text-[#8B949E] outline-none"
+                <div className="flex items-center gap-2">
+                  {/* Overlapping Avatar Stack */}
+                  <div className="flex items-center -space-x-2">
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden ring-2 ring-white">
+                      <Image
+                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=60&h=60&fit=crop&crop=face"
+                        alt="Member 1"
+                        fill
+                        className="object-cover"
                       />
-                      <button className="w-6 h-6 rounded-lg bg-[#6C63FF] flex items-center justify-center">
-                        <Send className="w-3 h-3 text-white" />
-                      </button>
                     </div>
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden ring-2 ring-white">
+                      <Image
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&h=60&fit=crop&crop=face"
+                        alt="Member 2"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="relative w-6 h-6 rounded-full overflow-hidden ring-2 ring-white">
+                      <Image
+                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=60&h=60&fit=crop&crop=face"
+                        alt="Member 3"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <span className="w-6 h-6 rounded-full bg-[#F1F5F9] text-[#64748B] text-[10px] font-bold flex items-center justify-center ring-2 ring-white">
+                      +2
+                    </span>
+                  </div>
+
+                  <button className="text-[#94A3B8] hover:text-[#0F172A] p-1">
+                    <MoreVertical className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Chat Messages */}
+              <div className="py-4 space-y-4">
+                
+                {/* 1. Received Message (Alice Johnson) */}
+                <div className="flex items-start gap-3">
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 mt-0.5">
+                    <Image
+                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=80&h=80&fit=crop&crop=face"
+                      alt="Alice Johnson"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[12.5px] font-bold text-[#0F172A]">Alice Johnson</span>
+                      <span className="text-[11px] text-[#94A3B8]">2:30 PM</span>
+                    </div>
+                    <p className="text-[13px] text-[#334155] mt-0.5">
+                      Hey everyone! How&apos;s the project going?
+                    </p>
+                  </div>
+                </div>
+
+                {/* 2. Sent Message (You) */}
+                <div className="flex items-start gap-3">
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 mt-0.5">
+                    <Image
+                      src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"
+                      alt="You"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="flex-1 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl p-3 shadow-2xs">
+                    <div className="flex items-center gap-2 mb-1">
+                      <span className="text-[12px] font-bold text-[#0F172A]">You</span>
+                      <span className="text-[10.5px] text-[#94A3B8]">2:31 PM</span>
+                    </div>
+                    <p className="text-[13px] text-[#0F172A] leading-relaxed">
+                      Going great! Just finished the UI design. 🎉
+                    </p>
+                  </div>
+                </div>
+
+                {/* 3. Received Message (Bob Smith) */}
+                <div className="flex items-start gap-3">
+                  <div className="relative w-8 h-8 rounded-full overflow-hidden shrink-0 mt-0.5">
+                    <Image
+                      src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face"
+                      alt="Bob Smith"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[12.5px] font-bold text-[#0F172A]">Bob Smith</span>
+                      <span className="text-[11px] text-[#94A3B8]">2:32 PM</span>
+                    </div>
+                    <p className="text-[13px] text-[#334155] mt-0.5">
+                      Looks amazing! Can&apos;t wait to see the final result.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Chat Mockup Input Bar */}
+              <div className="pt-2">
+                <div className="flex items-center gap-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2">
+                  <button type="button" className="text-[#94A3B8]">
+                    <Paperclip className="w-4 h-4 rotate-45" />
+                  </button>
+                  <span className="flex-1 text-[12.5px] text-[#94A3B8]">Type a message...</span>
+                  <button type="button" className="text-[#94A3B8]">
+                    <Smile className="w-4 h-4" />
+                  </button>
+                  <div className="w-7 h-7 rounded-full bg-[#5B4FE1] flex items-center justify-center text-white shrink-0">
+                    <Send className="w-3.5 h-3.5 -rotate-12" />
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* ── Bottom 4 Feature Cards (Attached flush under background shape) ── */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-4 sm:mt-6 relative z-10">
+          {FEATURE_CARDS.map((card, idx) => (
+            <div
+              key={idx}
+              className="bg-white border border-[#E2E8F0] rounded-2xl p-6 shadow-xs hover:shadow-md hover:border-[#5B4FE1]/30 transition-all text-left group"
+            >
+              <div className="w-10 h-10 rounded-xl bg-[#EDE9FE] flex items-center justify-center mb-4 transition-transform group-hover:scale-105">
+                {card.icon}
+              </div>
+              <h4 className="text-[15px] font-bold text-[#0F172A] mb-1.5">
+                {card.title}
+              </h4>
+              <p className="text-[13px] text-[#64748B] leading-relaxed">
+                {card.description}
+              </p>
+            </div>
+          ))}
+        </div>
+
       </div>
     </section>
   );

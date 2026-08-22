@@ -8,11 +8,11 @@ import { ROUTES } from "@/lib/constants/routes";
 
 export const CTA: React.FC = () => {
   return (
-    <section className="py-14 sm:py-16 md:py-20 bg-white">
+    <section className="pb-14 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* ── Gradient Card Container ── */}
-        <div className="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#D946EF] px-8 sm:px-12 md:px-16 py-10 sm:py-12 shadow-xl shadow-[#7C3AED]/20">
+        <div className="relative rounded-md sm:rounded-md overflow-hidden bg-gradient-to-r from-[#4F46E5] via-[#7C3AED] to-[#D946EF] px-8 sm:px-12 md:px-16 py-12 sm:py-16 shadow-xl shadow-[#7C3AED]/20">
           
           {/* Subtle Background Glows */}
           <div className="absolute -top-12 -left-12 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none" />
@@ -25,7 +25,7 @@ export const CTA: React.FC = () => {
               alt="Paper airplane"
               fill
               priority
-              className="object-contain object-right"
+              className="object-contain object-right p-5"
             />
           </div>
 
@@ -43,17 +43,17 @@ export const CTA: React.FC = () => {
             </div>
 
             {/* Right Buttons (Positioned to the left of the paper airplane) */}
-            <div className="flex flex-wrap items-center gap-3 sm:gap-3.5 z-10 mr-0 lg:mr-36">
+            <div className="flex flex-wrap items-center gap-3 sm:gap-3.5 z-10 mr-0 lg:mr-64">
               <Link
                 href={ROUTES.CHAT}
-                className="inline-flex items-center gap-2 text-[14px] font-bold text-[#5B4FE1] bg-white px-6 py-3 rounded-xl shadow-lg shadow-black/10 hover:bg-slate-50 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap cursor-pointer"
+                className="inline-flex items-center gap-2 text-[14px] font-bold text-[#5B4FE1] bg-white px-6 py-3 rounded-xs shadow-lg shadow-black/10 hover:bg-slate-50 transition-all hover:scale-[1.02] active:scale-[0.98] whitespace-nowrap cursor-pointer"
               >
                 <span>Get Started Now</span>
                 <ArrowRight className="w-4 h-4 text-[#5B4FE1]" />
               </Link>
               <a
                 href="#features"
-                className="inline-flex items-center text-[14px] font-semibold text-white border border-white/40 bg-white/10 hover:bg-white/20 backdrop-blur-xs px-6 py-3 rounded-xl transition-all whitespace-nowrap cursor-pointer"
+                className="inline-flex items-center text-[14px] font-semibold text-white border border-white/40 bg-white/10 hover:bg-white/20 backdrop-blur-xs px-6 py-3 rounded-xs transition-all whitespace-nowrap cursor-pointer"
               >
                 Learn More
               </a>

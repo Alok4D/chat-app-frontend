@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { MessageSquareMore, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { ROUTES } from "@/lib/constants/routes";
+import Image from "next/image";
 
 export const Navbar: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -16,39 +17,43 @@ export const Navbar: React.FC = () => {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-200 ${
         scrolled
-          ? "bg-white/95 backdrop-blur-xl shadow-sm border-b border-[#EEEEFC]"
-          : "bg-transparent"
+          ? "bg-white/95 backdrop-blur-md shadow-xs border-b border-[#E5E7EB]"
+          : "bg-white border-b border-[#E5E7EB]/60"
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Brand */}
-        <a href={ROUTES.LANDING} className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-[#6C63FF] flex items-center justify-center shadow-md shadow-[#6C63FF]/25 group-hover:scale-105 transition-transform">
-            <MessageSquareMore className="w-5 h-5 text-white" />
-          </div>
-          <span className="text-[17px] font-bold text-[#1A1A2E] tracking-tight">Chatter</span>
+        {/* Brand Logo */}
+        <a href={ROUTES.LANDING} className="flex items-center group">
+          <Image
+            src="/logo/nav-logo.png"
+            alt="Chatter logo"
+            width={150}
+            height={44}
+            className="h-9 md:h-10 w-auto object-contain transition-transform group-hover:scale-102"
+            priority
+          />
         </a>
 
         {/* Navigation Links - Desktop */}
-        <nav className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#444466]">
-          <a href="#features" className="hover:text-[#6C63FF] transition-colors">Features</a>
-          <a href="#howit" className="hover:text-[#6C63FF] transition-colors">How it works</a>
-          <a href="#preview" className="hover:text-[#6C63FF] transition-colors">Live Preview</a>
+        <nav className="hidden md:flex items-center gap-8 text-[13.5px] font-medium text-[#4B5563]">
+          <a href="#features" className="hover:text-[#5B4FE1] transition-colors">Features</a>
+          <a href="#howit" className="hover:text-[#5B4FE1] transition-colors">How it works</a>
+          <a href="#preview" className="hover:text-[#5B4FE1] transition-colors">Live Preview</a>
         </nav>
 
         {/* Action Buttons - Desktop */}
         <div className="hidden md:flex items-center gap-3">
           <a
             href={ROUTES.LOGIN}
-            className="text-[13.5px] font-semibold text-[#1A1A2E] px-4 py-2 rounded-lg hover:bg-[#F4F3FF] transition-colors"
+            className="text-[13px] font-semibold text-[#111827] px-3.5 py-2 rounded-xs hover:bg-[#F9FAFB] transition-colors"
           >
             Login
           </a>
           <a
             href={ROUTES.CHAT}
-            className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-white px-4 py-2 rounded-lg bg-[#6C63FF] hover:bg-[#5a52e8] shadow-md shadow-[#6C63FF]/30 transition-all hover:scale-105 active:scale-95"
+            className="inline-flex items-center text-[13px] font-semibold text-white px-4 py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors shadow-2xs"
           >
             Get Started
           </a>
@@ -57,7 +62,7 @@ export const Navbar: React.FC = () => {
         {/* Mobile Menu Toggle */}
         <button
           onClick={() => setMenuOpen(!menuOpen)}
-          className="md:hidden p-2 rounded-lg text-[#444466] hover:bg-[#F4F3FF] transition-colors"
+          className="md:hidden p-2 rounded-xs text-[#4B5563] hover:bg-[#F9FAFB] transition-colors"
         >
           {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -65,22 +70,28 @@ export const Navbar: React.FC = () => {
 
       {/* Mobile Menu */}
       {menuOpen && (
-        <div className="md:hidden bg-white border-t border-[#EEEEFC] px-4 py-4 space-y-2 animate-slideDown shadow-lg">
+        <div className="md:hidden bg-white border-t border-[#E5E7EB] px-4 py-4 space-y-2 animate-slideDown shadow-lg">
           {["Features", "How it works", "Live Preview"].map((item) => (
             <a
               key={item}
               href={`#${item.toLowerCase().replace(/\s+/g, "")}`}
-              className="block px-3 py-2 text-sm font-medium text-[#444466] hover:text-[#6C63FF] hover:bg-[#F4F3FF] rounded-lg transition-colors"
+              className="block px-3 py-2 text-[13px] font-medium text-[#4B5563] hover:text-[#5B4FE1] hover:bg-[#F9FAFB] rounded-xs transition-colors"
               onClick={() => setMenuOpen(false)}
             >
               {item}
             </a>
           ))}
           <div className="pt-2 flex gap-2">
-            <a href={ROUTES.LOGIN} className="flex-1 text-center text-sm font-semibold text-[#1A1A2E] border border-[#E0DFFE] py-2.5 rounded-lg hover:bg-[#F4F3FF] transition-colors">
+            <a
+              href={ROUTES.LOGIN}
+              className="flex-1 text-center text-[13px] font-semibold text-[#111827] border border-[#E5E7EB] py-2 rounded-xs hover:bg-[#F9FAFB] transition-colors"
+            >
               Login
             </a>
-            <a href={ROUTES.CHAT} className="flex-1 text-center text-sm font-semibold text-white py-2.5 rounded-lg bg-[#6C63FF] hover:bg-[#5a52e8] transition-colors">
+            <a
+              href={ROUTES.CHAT}
+              className="flex-1 text-center text-[13px] font-semibold text-white py-2 rounded-xs bg-[#5B4FE1] hover:bg-[#4E39E0] transition-colors"
+            >
               Get Started
             </a>
           </div>

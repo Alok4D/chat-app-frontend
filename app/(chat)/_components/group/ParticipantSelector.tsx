@@ -80,7 +80,7 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
   return (
     <div className="space-y-2.5">
       {/* Search Bar */}
-      <div className="flex items-center gap-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-3.5 py-2.5 focus-within:border-[#6C63FF] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#6C63FF]/10 transition-all">
+      <div className="flex items-center gap-2.5 bg-[#F8FAFC] border border-[#E2E8F0] rounded-xs px-3.5 py-2.5 focus-within:border-[#6C63FF] focus-within:bg-white focus-within:ring-2 focus-within:ring-[#6C63FF]/10 transition-all">
         <Search className="w-4 h-4 text-[#94A3B8] shrink-0" />
         <input
           type="text"
@@ -92,7 +92,7 @@ export const ParticipantSelector: React.FC<ParticipantSelectorProps> = ({
       </div>
 
       {/* List */}
-      <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-xl border border-[#E2E8F0] bg-[#F8FAFC]/50 p-1">
+      <div className="max-h-52 overflow-y-auto custom-scrollbar rounded-xs border border-[#E2E8F0] bg-[#F8FAFC]/50 p-1">
         {loading ? (
           <div className="space-y-1 p-1">
             {[1, 2, 3].map((i) => (

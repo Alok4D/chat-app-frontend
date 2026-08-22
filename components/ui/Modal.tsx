@@ -59,7 +59,7 @@ export const Modal: React.FC<ModalProps> = ({
         role="dialog"
         aria-modal="true"
         className={cn(
-          "relative w-full bg-white border border-[#E2E8F0] rounded-3xl shadow-2xl overflow-hidden z-10 animate-scaleUp",
+          "relative w-full bg-white border border-[#E2E8F0] rounded-xs shadow-md overflow-hidden z-10 animate-scaleUp",
           maxWidthStyles[maxWidth],
           className
         )}
@@ -73,7 +73,7 @@ export const Modal: React.FC<ModalProps> = ({
           <button
             onClick={onClose}
             aria-label="Close modal"
-            className="p-1.5 rounded-full text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
+            className="p-1.5 rounded-xs text-[#94A3B8] hover:text-[#0F172A] hover:bg-[#F1F5F9] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>

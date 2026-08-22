@@ -47,7 +47,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             ref={ref}
             disabled={disabled}
             className={cn(
-              "w-full h-11 bg-slate-900/90 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xl px-3.5 py-2 transition-all duration-200",
+              "w-full h-11 bg-slate-900/90 border border-slate-800 text-slate-100 placeholder-slate-500 text-sm rounded-xs px-3.5 py-2 transition-all duration-200",
               "focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500",
               "hover:border-slate-700",
               leftIcon && "pl-10",

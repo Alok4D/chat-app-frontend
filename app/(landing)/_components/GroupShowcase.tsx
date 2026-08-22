@@ -7,7 +7,7 @@ export const GroupShowcase: React.FC = () => {
   return (
     <section className="py-20 md:py-28 bg-[#FAFAFA] relative overflow-hidden select-none">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
           
           {/* ── Left Column: Chat Sidebar Mockup Card (Wider & Rounded-none) ── */}
           <div className="lg:col-span-6 flex items-center justify-center lg:justify-start">
@@ -45,9 +45,9 @@ export const GroupShowcase: React.FC = () => {
                   </div>
                 </div>
 
-                {/* 2. Direct Chat: Nazmul */}
+                {/* 2. Direct Chat: Alok */}
                 <div className="flex items-center gap-3.5 px-4 py-3 hover:bg-[#F9FAFB] rounded-lg transition-all cursor-pointer">
-                  {/* Avatar: Sky Blue Circle with N */}
+                  {/* Avatar: Sky Blue Circle with A */}
                   <div className="w-10 h-10 rounded-full bg-[#0EA5E9] text-white flex items-center justify-center text-[13px] font-bold shrink-0 shadow-2xs">
                     A
                   </div>
@@ -82,8 +82,8 @@ export const GroupShowcase: React.FC = () => {
             </div>
           </div>
 
-          {/* ── Right Column: Text & Content (6 Cols) ── */}
-          <div className="lg:col-span-6 text-left">
+          {/* ── Right Column: Text & Content (Shifted towards left on desktop) ── */}
+          <div className="lg:col-span-6 text-left lg:-ml-8 xl:-ml-12">
             {/* Tag Badge */}
             <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#EDE9FE] text-[#5B4FE1] text-xs font-bold uppercase tracking-wider mb-5 shadow-2xs">
               <Sparkles className="w-3.5 h-3.5 fill-[#5B4FE1] text-[#5B4FE1]" />

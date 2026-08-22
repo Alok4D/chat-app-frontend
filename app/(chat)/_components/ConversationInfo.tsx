@@ -4,9 +4,9 @@ import React, { useState } from "react";
 import { Conversation } from "@/types/conversation";
 import { Avatar } from "@/components/ui/Avatar";
 import { AddMemberModal } from "./group/AddMemberModal";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import {
   X,
-  Trash2,
   LogOut,
   Edit2,
   Check,
@@ -33,6 +33,11 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
   const [groupName, setGroupName] = useState(conversation.name || "");
   const [isSavingName, setIsSavingName] = useState(false);
   const [isAddMemberOpen, setIsAddMemberOpen] = useState(false);
+
+  // Custom Confirmation Dialog States
+  const [memberToRemove, setMemberToRemove] = useState<{ id: string; name: string } | null>(null);
+  const [isLeaveGroupOpen, setIsLeaveGroupOpen] = useState(false);
+  const [isActionLoading, setIsActionLoading] = useState(false);
 
   const otherParticipant =
     conversation.type === "direct"
@@ -82,19 +87,23 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
     }
   };
 
-  // Handle Remove Member
-  const handleRemoveMember = async (userId: string, memberName: string) => {
-    if (!confirm(`Are you sure you want to remove ${memberName} from this group?`)) return;
+  // Handle Remove Member Confirmation
+  const confirmRemoveMember = async () => {
+    if (!memberToRemove) return;
+    setIsActionLoading(true);
     try {
       await dispatch(
         groupsApi.endpoints.removeParticipant.initiate({
           groupId: conversation.id,
-          userId,
+          userId: memberToRemove.id,
         })
       ).unwrap();
-      toast.success(`${memberName} removed from group`);
+      toast.success(`${memberToRemove.name} removed from group`);
+      setMemberToRemove(null);
     } catch (error: any) {
       toast.error(error?.data?.message || error?.message || "Failed to remove member");
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -113,9 +122,9 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
     }
   };
 
-  // Handle Leave Group
-  const handleLeaveGroup = async () => {
-    if (!confirm("Are you sure you want to leave this group?")) return;
+  // Handle Leave Group Confirmation
+  const confirmLeaveGroup = async () => {
+    setIsActionLoading(true);
     try {
       if (currentUser?.id) {
         await dispatch(
@@ -126,10 +135,13 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
         ).unwrap();
       }
       toast.success("You left the group");
+      setIsLeaveGroupOpen(false);
       dispatch(setActiveConversationId(null));
       dispatch(setIsInfoPanelOpen(false));
     } catch (error: any) {
       toast.error(error?.data?.message || error?.message || "Failed to leave group");
+    } finally {
+      setIsActionLoading(false);
     }
   };
 
@@ -292,7 +304,7 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
                             </button>
                           )}
                           <button
-                            onClick={() => handleRemoveMember(member.id, member.name)}
+                            onClick={() => setMemberToRemove({ id: member.id, name: member.name })}
                             title="Remove Member"
                             className="p-1 rounded-md text-[#64748B] hover:text-red-500 hover:bg-white transition-colors"
                           >
@@ -311,8 +323,8 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
           {conversation.type === "group" && (
             <div className="pt-3 border-t border-[#F1F5F9]">
               <button
-                onClick={handleLeaveGroup}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-red-200 bg-red-50/50 hover:bg-red-100 text-[12.5px] font-semibold text-red-600 transition-colors"
+                onClick={() => setIsLeaveGroupOpen(true)}
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-red-200 bg-red-50/50 hover:bg-red-100 text-[12.5px] font-semibold text-red-600 transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Leave Group</span>
@@ -331,6 +343,34 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
           existingParticipantIds={conversation.participants.map((p) => p.id)}
         />
       )}
+
+      {/* Custom Confirmation Modal: Remove Member */}
+      <ConfirmDialog
+        isOpen={Boolean(memberToRemove)}
+        onClose={() => setMemberToRemove(null)}
+        onConfirm={confirmRemoveMember}
+        title="Remove Member"
+        message={`Are you sure you want to remove ${memberToRemove?.name} from this group? They will no longer be able to send or view messages.`}
+        confirmText="Remove Member"
+        cancelText="Cancel"
+        iconType="removeUser"
+        variant="danger"
+        isLoading={isActionLoading}
+      />
+
+      {/* Custom Confirmation Modal: Leave Group */}
+      <ConfirmDialog
+        isOpen={isLeaveGroupOpen}
+        onClose={() => setIsLeaveGroupOpen(false)}
+        onConfirm={confirmLeaveGroup}
+        title="Leave Group"
+        message="Are you sure you want to leave this group? You won't be able to send or receive messages in this group unless someone re-invites you."
+        confirmText="Leave Group"
+        cancelText="Stay in Group"
+        iconType="leaveGroup"
+        variant="danger"
+        isLoading={isActionLoading}
+      />
     </>
   );
 };

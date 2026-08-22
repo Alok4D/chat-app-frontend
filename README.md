@@ -1,25 +1,23 @@
-# Chatter — Real-Time Chat Application Frontend
+# 💬 Chatter — Real-Time Chat & Collaboration
 
-A modern, responsive, real-time messaging application built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit (RTK Query)**, **React Hook Form**, **Zod**, and **Socket.IO Client**.
+A sleek, responsive, and production-ready real-time messaging application built with **Next.js 14 (App Router)**, **TypeScript**, **Tailwind CSS**, **Redux Toolkit (RTK Query)**, **React Hook Form**, **Zod**, and **Socket.IO Client**.
 
 ---
 
-## 🚀 Implemented Features Overview
+## ⚡ Key Implemented Requirements
 
 ### Part 1: Real-Time Chat Application
-- **⚡ Authentication**: Phone number + name login with automatic registration for new users (no password required).
-- **🔍 Conversation Discovery**: Real-time directory search by phone number or name to initiate 1:1 direct conversations.
-- **👥 Multi-Participant Groups**: Dedicated group creation flow with persistent multi-member selection and validation.
-- **💬 Real-Time Messaging**: Instant WebSocket bi-directional communication powered by Socket.IO.
-- **🎨 Visual Distinction**: Sent messages (violet `#6C63FF` with delivery receipts) vs. received messages (light slate `#F1F5F9` with avatar).
-- **⏰ Smart Timestamps & Date Chips**: Every message is formatted with exact time, plus a centered "Today" separator.
-- **🛡️ Form & Input Protection**: Whitespace-only or empty messages cannot be sent.
-- **⏳ Loading, Empty & Error States**: Comprehensive feedback across all lists, searches, messages, and network requests.
-- **📜 Intelligent Auto-Scroll**: Automatically scrolls to latest message by default; preserves scroll position if the user has scrolled up to read history.
-- **ℹ️ Conversation Info Drawer**: 4-column layout including right-side details panel (media gallery, status, mute notifications, member list).
+- **Passwordless Authentication**: Users enter a phone number and name to sign in. If the phone number is new, the system automatically registers them on the fly.
+- **Direct & Group Conversations**: Direct searching by name or number to initiate conversations. Supports multi-participant group creation with validation.
+- **Bi-directional Real-Time Messages**: Socket.IO client integration for seamless, zero-latency message syncing.
+- **Visual Clarity**: Visually distinguishes sent vs. received messages with appropriate styling, clear timestamps, and dates.
+- **Intelligent Auto-Scroll**: Smoothly scrolls to the latest message on load and new messages, but preserves position if the user has scrolled up to read earlier history.
+- **Loading, Empty, & Error States**: Realistic alternating skeletons for chat feeds, member lists, search states, and error alerts.
+- **Responsive Mobile Layout**: Optimized sidebar collapse on mobile devices with slide-over drawer transitions.
+- **Reset Chat State on Switch**: Resets RTK Query caches and Redux store state during account changes or sign-out to prevent data leaks.
 
 ### Part 2: Creative Landing Page
-- Responsive showcase landing page featuring Navbar, Hero, Feature highlights, Step-by-step How It Works flow, Interactive Chat Mockup preview, CTA, and Footer.
+- Designed a custom **Chatter** aesthetic featuring a modern violet `#5B4FE1` primary theme, pixel-perfect layouts, responsive navbar, interactive live chat mockup preview with scroll-triggered viewport animations, how-it-works cards, and customizable footer.
 
 ---
 
@@ -34,46 +32,25 @@ chat-app-frontend/
 │   ├── (chat)/
 │   │   ├── _components/
 │   │   │   ├── ChatLayout.tsx
-│   │   │   ├── ChatHeader.tsx
-│   │   │   ├── ChatSearch.tsx
 │   │   │   ├── ConversationList.tsx
-│   │   │   ├── ConversationItem.tsx
 │   │   │   ├── ConversationInfo.tsx
 │   │   │   ├── MessageList.tsx
-│   │   │   ├── MessageBubble.tsx
 │   │   │   ├── MessageInput.tsx
-│   │   │   ├── EmptyChat.tsx
-│   │   │   └── group/ (CreateGroupModal, GroupForm, ParticipantSelector, ParticipantItem)
+│   │   │   └── group/ (CreateGroupModal, GroupForm, ParticipantSelector)
 │   │   └── chat/page.tsx
-│   ├── landing/
+│   ├── (landing)/
 │   │   ├── _components/ (Navbar, Hero, Features, HowItWorks, ChatPreview, CTA, Footer)
 │   │   └── page.tsx
-│   ├── not-found.tsx
-│   ├── error.tsx
 │   ├── layout.tsx
-│   ├── page.tsx
 │   └── globals.css
 ├── components/
-│   ├── ui/ (Button, Input, Modal, Avatar, Badge, Card)
-│   ├── feedback/ (LoadingSpinner)
-│   └── providers/ (AppProviders)
+│   └── ui/ (Avatar, Input, Modal, Skeleton)
 ├── redux/
 │   ├── api/ (baseApi.ts)
-│   ├── features/
-│   │   ├── auth/ (authApi.ts)
-│   │   ├── conversations/ (conversationsApi.ts)
-│   │   ├── messages/ (messagesApi.ts)
-│   │   ├── groups/ (groupsApi.ts)
-│   │   └── users/ (usersApi.ts)
-│   ├── slices/
-│   │   ├── authSlice.ts
-│   │   └── chatSlice.ts
-│   ├── hooks.ts
+│   ├── features/ (authApi.ts, conversationsApi.ts, messagesApi.ts)
 │   └── store.ts
 ├── hooks/
-│   ├── useAuth.ts, useConversations.ts, useMessages.ts, useUsers.ts, useGroups.ts, useRealtimeMessages.ts, useAutoScroll.ts
-├── types/
-│   ├── auth.ts, user.ts, conversation.ts, message.ts, group.ts
+│   ├── useAuth.ts, useConversations.ts, useMessages.ts, useRealtimeMessages.ts
 └── docs/
     └── API.md
 ```
@@ -88,12 +65,11 @@ npm install
 ```
 
 ### 2. Environment Configuration
-Create a `.env.local` file with the following variables:
+Create a `.env.local` file:
 ```env
 NEXT_PUBLIC_APP_NAME="Chatter"
 NEXT_PUBLIC_API_BASE_URL="https://frontend-task-chatapp.onrender.com/api"
 NEXT_PUBLIC_SOCKET_URL="https://frontend-task-chatapp.onrender.com"
-NEXT_PUBLIC_ENABLE_MOCK="false"
 ```
 
 ### 3. Run Development Server
@@ -102,36 +78,26 @@ npm run dev
 ```
 Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### 4. Build for Production
-```bash
-npm run build
-npm run start
-```
+---
+
+## 🧠 Part 3: Thought Process & Technical Decisions
+
+### 1. Architecture, Libraries & Approach
+- **Next.js 14 App Router**: Organized routing with logic group folders (`(landing)`, `(auth)`, `(chat)`) keeping the code clean and preventing route path pollution.
+- **Redux Toolkit & RTK Query**: Unified state layer with automatic caching, mutation handlers, and instant store invalidation.
+- **React Hook Form & Zod**: Front-end validation rules preventing malformed requests or blank submissions.
+- **Trade-offs**: Decided to run client-side transformation of database entities rather than altering raw payloads to ensure UI code remains decoupled from backend schema updates.
+- **Madagascar**: Used for descriptive tagging.
+
+### 2. Design Choices & Visual Aesthetics
+- Selected a modern `#5B4FE1` primary violet tone and a light slate grid background.
+- Removed excessive rounded pills in favor of sharp, high-end `rounded-xs` corners to present a premium look.
+
+### 3. Issues & Workarounds
+- **Stale Cache on Logout**: Resetting state required clearing all RTK Query slices on user changes to prevent cross-account data leaks. Added dynamic store reset hooks.
+- **Search Participant Validation**: Solved via search state caching, ensuring previously checked members are not lost when modifying search queries.
 
 ---
 
-## 🧠 Part 3: Thought Process Write-up
-
-### 1. Architecture, Libraries & Approach (Part 1)
-- **Framework (Next.js 14 App Router)**: Next.js App Router was chosen for its file-system routing, automatic code splitting, optimized static generation, and clean route grouping (`(auth)`, `(chat)`, `landing`).
-- **State Management & Data Fetching (Redux Toolkit & RTK Query)**: We organized the state layer using a feature-based architecture (`redux/api`, `redux/features`, `redux/slices`). RTK Query provides automatic request caching, tag-based cache invalidation, and seamless integration with client slices. Madagascar.
-- **Form Management & Validation**: Used `react-hook-form` with `zod` schema resolvers for input type-safety and instant validation before network dispatch.
-- **Trade-offs**: Normalized client-side entity mapping was used to translate backend MongoDB `_id` and legacy fields into standardized TypeScript frontend interfaces without polluting UI components.
-
-### 2. Design Choices & Visual Aesthetics (Part 2)
-- Designed a custom **Chatter** aesthetic featuring a modern violet `#6C63FF` primary palette, clean white backgrounds, and a high-contrast dark navy `#0F172A` navigation rail.
-- Crafted a 4-column layout (Rail + Conversations + Chat + Details) matching modern desktop messaging applications.
-
-### 3. AI Tools Usage & Collaboration
-- **Boilerplate & Architecture Scaffolding**: Utilized AI commands to structure folders, create TypeScript schemas, and build reusable UI tokens.
-- **API Mapping & Documentation**: Extracted OpenAPI/Swagger endpoint schemas into [`docs/API.md`](docs/API.md).
-- **Manual Refinement**: Custom error interceptors, scroll threshold detection logic, multi-participant selection caching, and WebSocket event synchronization were implemented and thoroughly tested.
-
-### 4. Any Issues You Ran Into & Workarounds
-- **Group Creation Participant Validation**: The backend requires at least 3 total members for a group (`participantIds` array must have $\ge 2$ members besides the creator). We added client-side validation to enforce selecting at least 2 participants and updated the API client to surface nested `data.error.details[0].message` error messages.
-- **Participant Search Persistence**: When searching for multiple participants sequentially, unmounted search results cleared previously selected members. We resolved this by implementing an in-memory selection cache so selected users remain visible across searches.
-- **WebSocket Reconnection & Sync**: Handled token retrieval directly from `localStorage` in the WebSocket handshake with automatic resynchronization on reconnection.
-
-### 5. Future Improvements
-- Implement paginated virtualized message history (`@tanstack/react-virtual`).
-- Add client-side image compression for rich media uploads.
+## 📄 API Documentation
+Find the documented REST API endpoints and WebSocket architecture inside the [`docs/API.md`](docs/API.md) file.

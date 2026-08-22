@@ -99,7 +99,7 @@ export const ChatLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-white text-[#111827] font-sans antialiased">
+    <div className="flex h-[100dvh] w-full overflow-hidden bg-white text-[#111827] font-sans antialiased">
       {/* ── 1. LEFT SIDEBAR (Native App Mobile Responsive + Desktop Side-by-Side) ── */}
       <aside
         className={cn(
@@ -222,7 +222,10 @@ export const ChatLayout: React.FC = () => {
           </div>
 
           {/* Conversation List */}
-          <div className="flex-1 overflow-y-auto custom-scrollbar">
+          <div className={cn(
+            "flex-1 overflow-y-auto custom-scrollbar",
+            conversations.length === 0 && !isLoading && "flex flex-col"
+          )}>
             <ConversationList
               conversations={conversations}
               activeConversationId={activeConversationId}

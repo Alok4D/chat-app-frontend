@@ -61,6 +61,29 @@ export const ChatLayout: React.FC = () => {
   const [globalContacts, setGlobalContacts] = useState<User[]>([]);
   const [loadingContacts, setLoadingContacts] = useState(false);
 
+  // Dynamic viewport height to adapt perfectly to mobile keyboard popups
+  const [viewportHeight, setViewportHeight] = useState<string>("100dvh");
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.visualViewport) return;
+
+    const handleViewportChange = () => {
+      // Set root layout height to the exact visible viewport (excludes virtual keyboard area)
+      setViewportHeight(`${window.visualViewport!.height}px`);
+    };
+
+    window.visualViewport.addEventListener("resize", handleViewportChange);
+    window.visualViewport.addEventListener("scroll", handleViewportChange);
+    
+    // Initial sync
+    handleViewportChange();
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", handleViewportChange);
+      window.visualViewport?.removeEventListener("scroll", handleViewportChange);
+    };
+  }, []);
+
   // Prevent page scroll / browser bar shifting on mobile devices when keyboard opens
   useEffect(() => {
     document.documentElement.classList.add("overflow-hidden", "h-full");
@@ -109,7 +132,10 @@ export const ChatLayout: React.FC = () => {
   };
 
   return (
-    <div className="flex h-[100dvh] w-full overflow-hidden bg-white text-[#111827] font-sans antialiased">
+    <div
+      style={{ height: viewportHeight }}
+      className="flex w-full overflow-hidden bg-white text-[#111827] font-sans antialiased"
+    >
       {/* ── 1. LEFT SIDEBAR (Native App Mobile Responsive + Desktop Side-by-Side) ── */}
       <aside
         className={cn(

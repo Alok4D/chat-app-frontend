@@ -37,6 +37,7 @@ export function mapConversation(apiConv: any, currentUserId: string): Conversati
     participants,
     lastMessage,
     unreadCount: apiConv.unreadCount || 0,
+    admins: apiConv.admins || (apiConv.createdBy ? [apiConv.createdBy] : []),
     createdBy: apiConv.createdBy,
     createdAt: apiConv.createdAt || new Date().toISOString(),
     updatedAt: apiConv.updatedAt || new Date().toISOString(),

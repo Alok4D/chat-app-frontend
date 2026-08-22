@@ -10,6 +10,7 @@ export interface Conversation {
   avatarUrl?: string;
   description?: string;
   participants: User[];
+  admins?: string[];
   lastMessage?: Message;
   unreadCount: number;
   isPinned?: boolean;

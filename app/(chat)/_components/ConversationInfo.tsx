@@ -14,8 +14,8 @@ import {
   ShieldCheck,
   UserMinus,
   Phone,
-  Calendar,
   User as UserIcon,
+  Crown,
 } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { setIsInfoPanelOpen, setActiveConversationId } from "@/redux/slices/chatSlice";
@@ -48,6 +48,16 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
     conversation.type === "group" ? conversation.avatarUrl : otherParticipant?.avatarUrl;
 
   const isOnline = otherParticipant?.isOnline ?? true;
+
+  // Helper to check if a user is an admin of this group
+  const isUserAdmin = (userId: string) => {
+    if (conversation.type !== "group") return false;
+    if (conversation.admins && conversation.admins.includes(userId)) return true;
+    if (conversation.createdBy === userId) return true;
+    return false;
+  };
+
+  const isCurrentUserAdmin = currentUser ? isUserAdmin(currentUser.id) : false;
 
   // Handle Rename Group
   const handleRenameGroup = async () => {
@@ -179,7 +189,7 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
           ) : (
             <div className="flex items-center gap-1.5 mb-0.5 group/name">
               <h4 className="text-[16px] font-bold text-[#0F172A]">{displayName}</h4>
-              {conversation.type === "group" && (
+              {conversation.type === "group" && isCurrentUserAdmin && (
                 <button
                   onClick={() => setIsEditingName(true)}
                   title="Rename Group"
@@ -229,52 +239,70 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
                   <span>Group Members</span>
                   <span>({conversation.participants.length})</span>
                 </h5>
-                <button
-                  onClick={() => setIsAddMemberOpen(true)}
-                  className="text-[11.5px] font-bold text-[#6C63FF] hover:underline flex items-center gap-1"
-                >
-                  <UserPlus className="w-3.5 h-3.5" />
-                  <span>Add Member</span>
-                </button>
+                {isCurrentUserAdmin && (
+                  <button
+                    onClick={() => setIsAddMemberOpen(true)}
+                    className="text-[11.5px] font-bold text-[#6C63FF] hover:underline flex items-center gap-1"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" />
+                    <span>Add Member</span>
+                  </button>
+                )}
               </div>
 
               <div className="space-y-1.5 max-h-56 overflow-y-auto custom-scrollbar pr-1">
-                {conversation.participants.map((member) => (
-                  <div
-                    key={member.id}
-                    className="flex items-center justify-between gap-2 p-2 rounded-xl hover:bg-[#F8FAFC] border border-transparent hover:border-[#F1F5F9] group transition-colors"
-                  >
-                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
-                      <Avatar src={member.avatarUrl} name={member.name} size="xs" />
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[12px] font-semibold text-[#0F172A] truncate">
-                          {member.name} {member.id === currentUser?.id && "(You)"}
-                        </p>
-                        <p className="text-[10.5px] text-[#94A3B8] truncate">{member.phone}</p>
-                      </div>
-                    </div>
+                {conversation.participants.map((member) => {
+                  const memberIsAdmin = isUserAdmin(member.id);
+                  const isYou = member.id === currentUser?.id;
 
-                    {/* Member actions for admin */}
-                    {member.id !== currentUser?.id && (
-                      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => handlePromoteAdmin(member.id, member.name)}
-                          title="Promote to Admin"
-                          className="p-1 rounded-md text-[#64748B] hover:text-[#6C63FF] hover:bg-white"
-                        >
-                          <ShieldCheck className="w-3.5 h-3.5" />
-                        </button>
-                        <button
-                          onClick={() => handleRemoveMember(member.id, member.name)}
-                          title="Remove Member"
-                          className="p-1 rounded-md text-[#64748B] hover:text-red-500 hover:bg-white"
-                        >
-                          <UserMinus className="w-3.5 h-3.5" />
-                        </button>
+                  return (
+                    <div
+                      key={member.id}
+                      className="flex items-center justify-between gap-2 p-2 rounded-xl hover:bg-[#F8FAFC] border border-transparent hover:border-[#F1F5F9] group transition-colors"
+                    >
+                      <div className="flex items-center gap-2.5 min-w-0 flex-1">
+                        <Avatar src={member.avatarUrl} name={member.name} size="xs" />
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5">
+                            <p className="text-[12px] font-semibold text-[#0F172A] truncate">
+                              {member.name} {isYou && "(You)"}
+                            </p>
+                            {/* Admin Badge */}
+                            {memberIsAdmin && (
+                              <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded-md bg-[#6C63FF]/10 text-[#6C63FF] text-[10px] font-bold tracking-wide shrink-0">
+                                <Crown className="w-2.5 h-2.5" />
+                                Admin
+                              </span>
+                            )}
+                          </div>
+                          <p className="text-[10.5px] text-[#94A3B8] truncate">{member.phone}</p>
+                        </div>
                       </div>
-                    )}
-                  </div>
-                ))}
+
+                      {/* Member actions for Admin (only on other members) */}
+                      {isCurrentUserAdmin && !isYou && (
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                          {!memberIsAdmin && (
+                            <button
+                              onClick={() => handlePromoteAdmin(member.id, member.name)}
+                              title="Promote to Admin"
+                              className="p-1 rounded-md text-[#64748B] hover:text-[#6C63FF] hover:bg-white transition-colors"
+                            >
+                              <ShieldCheck className="w-3.5 h-3.5" />
+                            </button>
+                          )}
+                          <button
+                            onClick={() => handleRemoveMember(member.id, member.name)}
+                            title="Remove Member"
+                            className="p-1 rounded-md text-[#64748B] hover:text-red-500 hover:bg-white transition-colors"
+                          >
+                            <UserMinus className="w-3.5 h-3.5" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
             </div>
           )}

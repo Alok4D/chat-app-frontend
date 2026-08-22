@@ -299,7 +299,7 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
 
                       {/* Member actions for Admin (only on other members) */}
                       {isCurrentUserAdmin && !isYou && (
-                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="flex items-center gap-1 shrink-0">
                           {!memberIsAdmin && (
                             <button
                               onClick={() => handlePromoteAdmin(member.id, member.name)}
@@ -330,7 +330,7 @@ export const ConversationInfo: React.FC<ConversationInfoProps> = ({ conversation
             <div className="pt-3 border-t border-[#F1F5F9]">
               <button
                 onClick={() => setIsLeaveGroupOpen(true)}
-                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl border border-red-200 bg-red-50/50 hover:bg-red-100 text-[12.5px] font-semibold text-red-600 transition-colors cursor-pointer"
+                className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xs border border-red-200 bg-red-50/50 hover:bg-red-100 text-[12.5px] font-semibold text-red-600 transition-colors cursor-pointer"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Leave Group</span>
